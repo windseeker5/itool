@@ -1,4 +1,4 @@
-A Simple python tool to play with IPTV and re/streaming with nginx
+A Simple python tool to play with IPTV :tv: and re/streaming with nginx
 
 # How to use it
 
@@ -14,12 +14,6 @@ config.yml :
   m3u_file_downsized: small.m3u
   db_file: smartersiptv.db
 ```
-
-
-  
-
-
-
 
 4. Files and SQlite database are stored in folder iptv_dat/ created by this tool
    
