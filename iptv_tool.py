@@ -32,6 +32,7 @@ if __name__ == '__main__':
         print("  [3] Convert m3u file to Sqlite db")
         print("  [4] Export your filtered \ smaller m3u file")
         print("  [5] Start local web service for your m3u files")
+        print("  [6] re/streaming IPTV")
         print("  [x] Exit ")
         print("")
         choice = input("  Enter Choice > ")
@@ -64,19 +65,21 @@ if __name__ == '__main__':
             exp = ExportPlaylist( folder+"/"+conf['m3u_expt'], 
                                   folder+"/"+conf['sql_db'], 
                                   "categories", ip )
-            time.sleep(10) 
+            time.sleep(15) 
 
         #5
         elif (choice == "5"):
             ip = Header(streams)
             StartWeb(folder)
 
+        #6
+        elif (choice == "6"):
+            ip = Header(streams)
+            print( "> Re/Streaming IPTV assets.....")
 
         #X
         elif (choice == "x"):
             sys.exit()
-        
-
         
         
         

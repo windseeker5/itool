@@ -26,26 +26,34 @@ def Header(video_cnt):
 
 
 def LoadConfig():
-    # loading config from confi.yml file
-    with open("config.yml","r") as file_object:
-        config = yaml.load(file_object,Loader=yaml.SafeLoader)
 
-    m3u_serv = (config['m3u_service']) 
-    m3u_orig = (config['m3u_file_fullsize'])
-    m3u_expt = (config['m3u_file_downsized'])
-    sql_db = (config['db_file'])
+    config_file = "config.yml"
 
-    # Extract the schema from filename
-    db_schema = sql_db.split("/")[-1].split(".db")[0]
+    if os.path.exists(config_file):
+        print(f"The file {config_file} exists.")
 
-    d = dict()
-    d['m3u_serv'] = m3u_serv
-    d['m3u_orig'] = m3u_orig
-    d['m3u_expt'] = m3u_expt
-    d['sql_db'] = sql_db
-    d['db_schema'] = db_schema
+        # loading config from confi.yml file
+        with open("config.yml","r") as file_object:
+            config = yaml.load(file_object,Loader=yaml.SafeLoader)
 
-    
+        m3u_serv = (config['m3u_service']) 
+        m3u_orig = (config['m3u_file_fullsize'])
+        m3u_expt = (config['m3u_file_downsized'])
+        sql_db = (config['db_file'])
+
+        # Extract the schema from filename
+        db_schema = sql_db.split("/")[-1].split(".db")[0]
+
+        d = dict()
+        d['m3u_serv'] = m3u_serv
+        d['m3u_orig'] = m3u_orig
+        d['m3u_expt'] = m3u_expt
+        d['sql_db'] = sql_db
+        d['db_schema'] = db_schema
+
+    else:
+        print(f"""\n  > The file {config_file} does not exist! \n  > You need to create a config.yml with your setings\n""")
+        sys.exit()
 
     return(d)
 
@@ -255,4 +263,6 @@ def StartWeb(folder):
     httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
 
     print('  * Listening at http://127.0.0.1:8000/     > ctrl+c to quit <', flush=True)
+    print(" ")
+    
     httpd.serve_forever()
