@@ -10,7 +10,7 @@ from util import DowloadPlaylist
 from util import ExportPlaylist
 from util import Header
 from util import LoadConfig
-
+from util import StartWeb
 
 if __name__ == '__main__':
 
@@ -31,8 +31,8 @@ if __name__ == '__main__':
         print("  [2] Download m3u file from service provider(SP)")
         print("  [3] Convert m3u file to Sqlite db")
         print("  [4] Export your filtered \ smaller m3u file")
-        print("  [5] Download VOD from your SP ")
-        print("  [6] Start local web service for your m3u files")
+        print("  [5] Start local web service for your m3u files")
+        print("  [x] Exit ")
         print("")
         choice = input("  Enter Choice > ")
         choice = choice.strip()
@@ -66,15 +66,17 @@ if __name__ == '__main__':
                                   "categories", ip )
             time.sleep(10) 
 
-        
         #5
         elif (choice == "5"):
-            print("Running function 5")
+            ip = Header(streams)
+            StartWeb(folder)
+
+
+        #X
+        elif (choice == "x"):
+            sys.exit()
         
-        #6
-        elif (choice == "6"):
-            print("Running function 6")
-            break
+
         
         
         

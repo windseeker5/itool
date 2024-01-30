@@ -17,7 +17,7 @@ def Header(video_cnt):
     hostname = socket.gethostname()
     ip_address = socket.gethostbyname(hostname)
     os.system('clear')
-    title = pyfiglet.figlet_format("ITOOL!", font = "isometric1" ) 
+    title = pyfiglet.figlet_format("ITOOL", font = "isometric1" ) 
     print(title) 
     print(f"~ ip : {ip_address}      Edit > config.yml      Streams : {video_cnt}")
     print("")
@@ -244,19 +244,15 @@ def ExportPlaylist(export_file, db_file, db_table, ip):
 
 
 
+def StartWeb(folder):
 
+    os.chdir(folder)
+    print(f'  * Serving /{folder}/', flush=True)
 
-    cwd=os.getcwd() 
-    print(cwd)
-    try:
-        subprocess.Popen(
-            [sys.executable, '-m', 'http.server', str(port)],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            stdin=subprocess.PIPE,
-            text=True,
-            #cwd=os.getcwd()  # Set the working directory to the current script's directory
-        )
-        print(f"HTTP server ({cwd}) started on http://localhost:{port}")
-    except Exception as e:
-        print(f"Error starting HTTP server: {e}")
+    from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+    server_address = ('', 8000)
+    httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
+
+    print('  * Listening at http://127.0.0.1:8000/     > ctrl+c to quit <', flush=True)
+    httpd.serve_forever()
