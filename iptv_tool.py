@@ -19,6 +19,12 @@ if __name__ == '__main__':
     streams = '-'
     choice = ""
 
+    folder = "iptv_data"
+
+    if not os.path.exists(folder): 
+        os.makedirs(folder) 
+
+
     while True:
         Header(streams)
         print("  [1] Install Docker & Nginx-rmtp")
@@ -39,20 +45,25 @@ if __name__ == '__main__':
         #2
         elif (choice == "2"):
             ip = Header(streams)
-            pl = DowloadPlaylist( conf['m3u_serv'] , conf['m3u_orig'] )
+            pl = DowloadPlaylist( conf['m3u_serv'] , 
+                                  folder+"/"+conf['m3u_orig'] )
             time.sleep(7)  
 
         #3
         elif (choice == "3"):
             ip = Header(streams)
-            stat = PlaylistToDb( conf['m3u_orig'], conf['sql_db'], conf['db_schema'])
+            stat = PlaylistToDb( folder+"/"+conf['m3u_orig'], 
+                                 folder+"/"+conf['sql_db'], 
+                                 conf['db_schema'])
             streams = stat['stream']
             time.sleep(15) 
           
         #4    
         elif (choice == "4"):
             ip = Header(streams)
-            exp = ExportPlaylist( conf['m3u_expt'], conf['sql_db'], "categories", ip )
+            exp = ExportPlaylist( folder+"/"+conf['m3u_expt'], 
+                                  folder+"/"+conf['sql_db'], 
+                                  "categories", ip )
             time.sleep(10) 
 
         

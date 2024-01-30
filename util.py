@@ -45,6 +45,8 @@ def LoadConfig():
     d['sql_db'] = sql_db
     d['db_schema'] = db_schema
 
+    
+
     return(d)
 
 
@@ -223,7 +225,7 @@ def ExportPlaylist(export_file, db_file, db_table, ip):
 
     # Open the file in write mode to add a line at the top
     with open("export_file.tmp", 'w') as file:
-        new_line = f"""#EXTM3U\n#EXTINF:-1 tvg-id="" tvg-name="CA: KD" tvg-logo="http://{ip}/mylogo.png" group-title="CA| CANADA HD",CA: KDLive\nhttp://{ip}:80/live/kdc\n"""
+        new_line = f"""#EXTM3U\n#EXTINF:-1 tvg-id="" tvg-name="CA: KD Sport Live" tvg-logo="http://{ip}:8000/kdcmedia.jpg" group-title="CA| DRESDELL HD",CA: KD Live Sport\nhttp://{ip}:8080/hls/sport.m3u8\n#EXTINF:-1 tvg-id="" tvg-name="CA: KD Doorbell" tvg-logo="http://{ip}:8000/kdcmedia.jpg" group-title="CA| DRESDELL HD",CA: KD Doorbell\nhttp://{ip}:8080/hls/door.m3u8\n"""
         file.write(new_line + existing_content)
         # Adding my own streaming or restreaming server
 
