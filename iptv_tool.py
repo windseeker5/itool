@@ -94,50 +94,14 @@ if __name__ == '__main__':
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 """
 
-== Recette Gagnant a date
-
-# Voici la recette pour encoder le fichier 
-
-ffmpeg -i input.mkv -c:v libx264 -preset medium -b:v 3000k -maxrate 3000k -bufsize 6000k \
--vf "scale=1280:-1,format=yuv420p" -g 50 -c:a aac -b:a 128k -ac 2 -ar 44100 file.flv
-
-
-# pour streamer sur nginx un fichier bien encode
-
-ffmpeg -re -i file2.flv -c copy -f flv rtmp://127.0.0.1/live/test2  
-
-
-# Recette pour faire restreaming one-shot - a tester
-
-# RDS
+ffmpeg -i rtsp://admin:'mFrance&2012phileli'@192.168.1.174:554 \
+-c copy \
+-f flv rtmp://127.0.0.1/live/door 
 
 ffmpeg -i http://slip50863.cdngold.me:80/c8bb0d2998/297afed6ea/412907 \
--c:v libx264 -preset medium \
--b:v 3000k -maxrate 3000k -bufsize 6000k \
--vf "scale=1280:-1,format=yuv420p" -g 50 -c:a aac -b:a 128k -ac 2 -ar 44100 \
--f flv rtmp://127.0.0.1/live/test1 
-
-
-# CRAVE1
-ffmpeg -i http://slip50863.cdngold.me:80/c8bb0d2998/297afed6ea/414054 \
--c:v libx264 -preset medium \
--b:v 3000k -maxrate 3000k -bufsize 6000k \
--vf "scale=1280:-1,format=yuv420p" -g 50 -c:a aac -b:a 128k -ac 2 -ar 44100 \
--f flv rtmp://127.0.0.1/live/test2
-
+-c copy \
+-f flv rtmp://127.0.0.1/live/sport
 
 """
