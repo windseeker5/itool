@@ -7,7 +7,7 @@ A Simple python tool to play with IPTV and re/streaming with nginx
 3. Edit or create a config.yml file with your service provider and where to store files and database
 
   config.yml :
-  \---
+  \n---
   m3u_service: http://....../get.php?username=...&password=...&type=m3u_plus&output=ts
   m3u_file_fullsize: Smartersiptv.m3u
   m3u_file_downsized: small.m3u
