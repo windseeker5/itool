@@ -266,18 +266,48 @@ def Restreaming(streams) :
     print(type(streams))
     print(" >")
 
-    # List of commands
-    commands = [
-        "ls -l",
-        "echo 'Hello, World!'",
-        "pwd"
-    ]
+    import shlex
 
     # Execute each command in the list
-    for command in commands:
+    for ffmpeg_command in streams:
+
+        # Your ffmpeg command
+        #ffmpeg_command = "ffmpeg -i rtsp://admin:'mFrance&2012phileli'@192.168.1.174:554 -c copy -f flv rtmp://127.0.0.1/live/door"
+
+        # Split the command into a list using shlex.split
+        ffmpeg_command_list = shlex.split(ffmpeg_command)
+        print(ffmpeg_command_list)
+        print(type(ffmpeg_command_list))
+
+
+        # Run ffmpeg in the background
         try:
-            subprocess.run(command, shell=True, check=True)
-        except subprocess.CalledProcessError as e:
-            print(f"Error executing command '{command}': {e}")
+            process = subprocess.Popen(ffmpeg_command_list, 
+                                       stdout=subprocess.PIPE, 
+                                       stderr=subprocess.PIPE, 
+                                       stdin=subprocess.PIPE, 
+                                       text=True)
+
+    process = subprocess.Popen(ffmpeg_command_list, 
+    stdout=subprocess.PIPE, 
+    stderr=subprocess.PIPE, 
+    stdin=subprocess.PIPE, 
+    text=True)
+
+
+            print(f"ffmpeg process ID: {process.pid}")
+            
+            # Print stdout and stderr
+            #stdout, stderr = process.communicate()
+            #print(f"ffmpeg stdout: {stdout}")
+            #print(f"ffmpeg stderr: {stderr}")
+            
+            # Check the return code
+            #return_code = process.returncode
+            #print(f"ffmpeg return code: {return_code}")
+        except Exception as e:
+            print(f"Error starting ffmpeg process: {e}")
+
+
 
     sys.exit()
