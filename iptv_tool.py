@@ -15,7 +15,6 @@ from util import StartWeb
 if __name__ == '__main__':
 
     conf = LoadConfig()
-
     streams = '-'
     choice = ""
 
@@ -89,18 +88,3 @@ if __name__ == '__main__':
 
  
 
-
-
-
-
-"""
-
-ffmpeg -i rtsp://admin:'mFrance&2012phileli'@192.168.1.174:554 \
--c copy \
--f flv rtmp://127.0.0.1/live/door 
-
-ffmpeg -i http://slip50863.cdngold.me:80/c8bb0d2998/297afed6ea/412907 \
--c copy \
--f flv rtmp://127.0.0.1/live/sport
-
-"""

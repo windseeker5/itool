@@ -36,26 +36,20 @@ def LoadConfig():
         with open("config.yml","r") as file_object:
             config = yaml.load(file_object,Loader=yaml.SafeLoader)
 
-        m3u_serv = (config['m3u_service']) 
-        m3u_orig = (config['m3u_file_fullsize'])
-        m3u_expt = (config['m3u_file_downsized'])
-        sql_db = (config['db_file'])
-
         # Extract the schema from filename
-        db_schema = sql_db.split("/")[-1].split(".db")[0]
-
-        d = dict()
-        d['m3u_serv'] = m3u_serv
-        d['m3u_orig'] = m3u_orig
-        d['m3u_expt'] = m3u_expt
-        d['sql_db'] = sql_db
-        d['db_schema'] = db_schema
+        db_schema = config['db_file'].split("/")[-1].split(".db")[0]
+        config["db_schema"] = db_schema
 
     else:
         print(f"""\n  > The file {config_file} does not exist! \n  > You need to create a config.yml with your setings\n""")
         sys.exit()
 
-    return(d)
+    return(config)
+
+
+
+
+
 
 
 
