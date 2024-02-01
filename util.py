@@ -48,11 +48,6 @@ def LoadConfig():
 
 
 
-
-
-
-
-
 def DowloadPlaylist(m3u_url, pl_name):
     
     url = m3u_url
@@ -260,3 +255,29 @@ def StartWeb(folder):
     print(" ")
     
     httpd.serve_forever()
+
+
+
+def Restreaming(streams) :
+
+    print( "  > Re/Streaming IPTV assets.....")
+
+    print(streams)
+    print(type(streams))
+    print(" >")
+
+    # List of commands
+    commands = [
+        "ls -l",
+        "echo 'Hello, World!'",
+        "pwd"
+    ]
+
+    # Execute each command in the list
+    for command in commands:
+        try:
+            subprocess.run(command, shell=True, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing command '{command}': {e}")
+
+    sys.exit()

@@ -11,6 +11,21 @@ from util import ExportPlaylist
 from util import Header
 from util import LoadConfig
 from util import StartWeb
+from util import Restreaming
+
+# Next improvements :
+
+#  - GUI choice for filtered streams before export
+#  - Export name 
+#  - possibility to export multiple based on diff filters
+#  - Show submenu with Categories , type  and names
+#  
+#  - Download the socker images +nginx config
+#
+#  - Pass the retream name for the export from YAML config instead of
+#    hardcoded like it is.
+
+
 
 if __name__ == '__main__':
 
@@ -44,15 +59,15 @@ if __name__ == '__main__':
         # MENU OPTION 2
         elif (choice == "2"):
             ip = Header(streams)
-            pl = DowloadPlaylist( conf['m3u_serv'] , 
-                                  folder+"/"+conf['m3u_orig'] )
+            pl = DowloadPlaylist( conf['m3u_service'] , 
+                                  folder+"/"+ conf['m3u_file_fullsize'] )
             time.sleep(7)  
 
         # MENU OPTION 3
         elif (choice == "3"):
             ip = Header(streams)
-            stat = PlaylistToDb( folder+"/"+conf['m3u_orig'], 
-                                 folder+"/"+conf['sql_db'], 
+            stat = PlaylistToDb( folder+"/"+conf['m3u_file_fullsize'], 
+                                 folder+"/"+conf['db_file'], 
                                  conf['db_schema'])
             streams = stat['stream']
             time.sleep(15) 
@@ -60,8 +75,8 @@ if __name__ == '__main__':
         # MENU OPTION 4    
         elif (choice == "4"):
             ip = Header(streams)
-            exp = ExportPlaylist( folder+"/"+conf['m3u_expt'], 
-                                  folder+"/"+conf['sql_db'], 
+            exp = ExportPlaylist( folder+"/"+conf['m3u_file_downsized'], 
+                                  folder+"/"+conf['db_file'], 
                                   "categories", ip )
             time.sleep(15) 
 
@@ -73,7 +88,8 @@ if __name__ == '__main__':
         # MENU OPTION 6
         elif (choice == "6"):
             ip = Header(streams)
-            print( "> Re/Streaming IPTV assets.....")
+            rstr = Restreaming(conf['restreams'])
+
 
         # MENU OPTION X
         elif (choice == "x"):
