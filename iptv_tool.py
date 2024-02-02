@@ -20,7 +20,7 @@ from util import Restreaming
 #  - possibility to export multiple based on diff filters
 #  - Show submenu with Categories , type  and names
 #  
-#  - Download the socker images +nginx config
+#  - Download the docker images +nginx config
 #
 #  - Pass the retream name for the export from YAML config instead of
 #    hardcoded like it is.
@@ -31,6 +31,7 @@ if __name__ == '__main__':
 
     conf = LoadConfig()
     streams = '-'
+    rst_info = '-'
     choice = ""
 
     folder = "iptv_data"
@@ -39,7 +40,7 @@ if __name__ == '__main__':
         os.makedirs(folder) 
 
     while True:
-        Header(streams)
+        Header(streams, rst_info)
         print("  [1] Install Docker & Nginx-rmtp")
         print("  [2] Download m3u file from service provider(SP)")
         print("  [3] Convert m3u file to Sqlite db")
@@ -58,14 +59,14 @@ if __name__ == '__main__':
 
         # MENU OPTION 2
         elif (choice == "2"):
-            ip = Header(streams)
+            ip = Header(streams, rst_info)
             pl = DowloadPlaylist( conf['m3u_service'] , 
                                   folder+"/"+ conf['m3u_file_fullsize'] )
             time.sleep(7)  
 
         # MENU OPTION 3
         elif (choice == "3"):
-            ip = Header(streams)
+            ip = Header(streams, rst_info)
             stat = PlaylistToDb( folder+"/"+conf['m3u_file_fullsize'], 
                                  folder+"/"+conf['db_file'], 
                                  conf['db_schema'])
@@ -74,7 +75,7 @@ if __name__ == '__main__':
           
         # MENU OPTION 4    
         elif (choice == "4"):
-            ip = Header(streams)
+            ip = Header(streams, rst_info)
             exp = ExportPlaylist( folder+"/"+conf['m3u_file_downsized'], 
                                   folder+"/"+conf['db_file'], 
                                   "categories", ip )
@@ -82,13 +83,13 @@ if __name__ == '__main__':
 
         # MENU OPTION 5
         elif (choice == "5"):
-            ip = Header(streams)
+            ip = Header(streams, rst_info)
             StartWeb(folder)
 
         # MENU OPTION 6
         elif (choice == "6"):
-            ip = Header(streams)
-            rstr = Restreaming(conf['restreams'])
+            ip = Header(streams, rst_info)
+            rst_info = Restreaming(conf['restreams'])
 
 
         # MENU OPTION X

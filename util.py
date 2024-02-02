@@ -10,16 +10,19 @@ import datetime
 import os
 import socket
 import yaml
-
-
+import time
+import shlex
  
-def Header(video_cnt):
+
+
+
+def Header(video_cnt, rst_info):
     hostname = socket.gethostname()
     ip_address = socket.gethostbyname(hostname)
     os.system('clear')
     title = pyfiglet.figlet_format("ITOOL", font = "isometric1" ) 
     print(title) 
-    print(f"~ ip : {ip_address}      Edit > config.yml      Streams : {video_cnt}")
+    print(f"~ ip:{ip_address} | Streams:{video_cnt} | Restreaming:{rst_info}")
     print("")
 
     return(ip_address)
@@ -260,54 +263,27 @@ def StartWeb(folder):
 
 def Restreaming(streams) :
 
-    print( "  > Re/Streaming IPTV assets.....")
+    lpid = []
 
-    print(streams)
-    print(type(streams))
-    print(" >")
+    for stream in streams:
+        ffmpeg_command = stream['ffmpeg']
+        #process = subprocess.Popen(ffmpeg_command, shell=True, 
+        #                                           stdout=subprocess.PIPE, 
+        #                                           stderr=subprocess.PIPE, 
+        #                                           preexec_fn=os.setsid)
 
-    import shlex
+        # Run the command with preexec_fn=os.setpgrp for Unix-like systems
+        process = subprocess.Popen(ffmpeg_command, shell=True, 
+                                                stdout=subprocess.PIPE, 
+                                                stderr=subprocess.PIPE, 
+                                                preexec_fn=os.setpgrp)
 
-    # Execute each command in the list
-    for ffmpeg_command in streams:
+        pid = process.pid
+        print(f"  > Restreaming {stream['name']} with PID: {pid}")
+        lpid.append(pid)
 
-        # Your ffmpeg command
-        #ffmpeg_command = "ffmpeg -i rtsp://admin:'mFrance&2012phileli'@192.168.1.174:554 -c copy -f flv rtmp://127.0.0.1/live/door"
-
-        # Split the command into a list using shlex.split
-        ffmpeg_command_list = shlex.split(ffmpeg_command)
-        print(ffmpeg_command_list)
-        print(type(ffmpeg_command_list))
-
-
-        # Run ffmpeg in the background
-        try:
-            process = subprocess.Popen(ffmpeg_command_list, 
-                                       stdout=subprocess.PIPE, 
-                                       stderr=subprocess.PIPE, 
-                                       stdin=subprocess.PIPE, 
-                                       text=True)
-
-    process = subprocess.Popen(ffmpeg_command_list, 
-    stdout=subprocess.PIPE, 
-    stderr=subprocess.PIPE, 
-    stdin=subprocess.PIPE, 
-    text=True)
+        time.sleep(5)
+        
+    return(lpid)
 
 
-            print(f"ffmpeg process ID: {process.pid}")
-            
-            # Print stdout and stderr
-            #stdout, stderr = process.communicate()
-            #print(f"ffmpeg stdout: {stdout}")
-            #print(f"ffmpeg stderr: {stderr}")
-            
-            # Check the return code
-            #return_code = process.returncode
-            #print(f"ffmpeg return code: {return_code}")
-        except Exception as e:
-            print(f"Error starting ffmpeg process: {e}")
-
-
-
-    sys.exit()
