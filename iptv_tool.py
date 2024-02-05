@@ -12,6 +12,7 @@ from util import Header
 from util import LoadConfig
 from util import StartWeb
 from util import Restreaming
+from util import RandomStream
 
 # Next improvements :
 
@@ -22,7 +23,7 @@ from util import Restreaming
 #  
 #  - Download the docker images +nginx config
 #
-#  - Pass the retream name for the export from YAML config instead of
+#  - Pass the restream name for the export from YAML config instead of
 #    hardcoded like it is.
 
 
@@ -47,7 +48,7 @@ if __name__ == '__main__':
         print("  [4] Export your filtered \ smaller m3u file")
         print("  [5] Start local web service for your m3u files")
         print("  [6] re/streaming IPTV")
-        print("  [x] Exit ")
+        print("  [q] Exit ")
         print("")
         choice = input("  Enter Choice > ")
         choice = choice.strip()
@@ -92,12 +93,16 @@ if __name__ == '__main__':
             rst_info = Restreaming(conf['restreams'])
 
 
-        # MENU OPTION X
-        elif (choice == "x"):
+        # MENU OPTION q
+        elif (choice == "q"):
             sys.exit()
         
-        
-        
+        # MENU OPTION 6
+        elif (choice == "x"):
+            ip = Header(streams, rst_info)
+            RDM_ST = RandomStream(folder+"/"+conf['db_file'], 
+                                  conf['db_schema'])
+
         else:    
             print("Invalid Option. Please Try Again.")
             sys.exit()

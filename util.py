@@ -12,7 +12,7 @@ import socket
 import yaml
 import time
 import shlex
- 
+import random
 
 
 
@@ -287,3 +287,81 @@ def Restreaming(streams) :
     return(lpid)
 
 
+
+def RandomStream(db_file, db_table):
+    # Connect to the SQLite database
+    conn = sqlite3.connect(db_file)  # Replace 'your_database.db' with your database file
+
+    ##
+    ## Few Question to build the SQL query and filter selection
+    ##
+
+    print(" > What type of streaming your are looking for: 1=>live chanel 2=> Video on demand ) ?")
+    choice = input("   Enter Choice > ")
+    choice = choice.strip()
+            
+    # MENU OPTION 1
+    if (choice == "1"):
+        print('   * Setting query for live streaming....')
+        vodtype = 'LIV'
+    else:
+        vodtype = 'VOD'
+
+
+    print(" > What categories are looking for ? Here are the top 25 ....")
+
+    SQL = """SELECT 
+    group_title,
+    count
+    from categories limit 26"""
+
+    df_cat = pd.read_sql(SQL, conn)
+
+    print("")
+    print(f"   {df_cat}")
+    print("")
+
+    choice = input("   Enter your category > ")
+    vodcat = choice.strip()
+
+    print("")
+    choice = input("   Enter your filters for stream name  > ")
+    filters = choice.strip()
+
+
+    filters_list = filters.split()
+
+    # Build the string using a list comprehension and join
+    filters_string = ' OR '.join([f"tvg_name like '%{item}%'" for item in filters_list])
+
+    # Add the necessary parentheses if needed
+    final_string = f"({filters_string})"
+
+    SQL = f"""SELECT st_uri, tvg_name FROM {db_table} WHERE st_type = '{vodtype}' AND group_title LIKE '%{vodcat}%'
+    AND ( {filters_string} )"""
+
+    df_rdm = pd.read_sql(SQL, conn)
+    conn.close()
+
+    print("")
+    print(f"  * Your SQL Query is : {SQL}")
+    print('')
+
+    stat = df_rdm.shape[0]
+    print(f"  > Your Query Result : {stat}")
+
+    vod_list = df_rdm['st_uri'].tolist()
+
+    for i in range(1, 11):
+        print(i)
+
+        random_item = random.choice(vod_list)
+
+        print(" > Playing a random video asset from your Query....")
+        print("   * Random item:", random_item)
+
+        # Define the mpv command with options (e.g., --no-fullscreen)
+        mpv_command = ['mpv', '--no-fullscreen', '--start=00:05:00', random_item]
+
+        # Use subprocess to run the mpv command
+        subprocess.run(mpv_command)
