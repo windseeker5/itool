@@ -344,8 +344,9 @@ def RandomStream(db_file, db_table):
     conn.close()
 
     print("")
-    print(f"  * Your SQL Query is : {SQL}")
+    print("  * Your SQL Query :")
     print('')
+    print(SQL)
 
     stat = df_rdm.shape[0]
     print(f"  > Your Query Result : {stat}")
