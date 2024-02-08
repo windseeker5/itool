@@ -358,6 +358,9 @@ def RandomStream(db_file, db_table):
 
         random_item = random.choice(vod_list)
 
+        # Remove the selected item from the list
+        vod_list.remove(random_item)
+
         print(" > Playing a random video asset from your Query....")
         print("   * Random item:", random_item)
 
@@ -366,3 +369,5 @@ def RandomStream(db_file, db_table):
 
         # Use subprocess to run the mpv command
         subprocess.run(mpv_command)
+
+
