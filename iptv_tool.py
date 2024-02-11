@@ -13,18 +13,14 @@ from util import LoadConfig
 from util import StartWeb
 from util import Restreaming
 from util import RandomStream
+from util import BatchDownload
+
+
 
 # Next improvements :
-
-#  - GUI choice for filtered streams before export
-#  - Export name 
-#  - possibility to export multiple based on diff filters
-#  - Show submenu with Categories , type  and names
-#  
+#
 #  - Download the docker images +nginx config
 #
-#  - Pass the restream name for the export from YAML config instead of
-#    hardcoded like it is.
 
 
 
@@ -35,7 +31,7 @@ if __name__ == '__main__':
     rst_info = '-'
     choice = ""
 
-    folder = "iptv_data"
+    folder = "iptv_data"  # Data Folder 
 
     if not os.path.exists(folder): 
         os.makedirs(folder) 
@@ -48,6 +44,7 @@ if __name__ == '__main__':
         print("  [4] Export your filtered \ smaller m3u file")
         print("  [5] Start local web service for your m3u files")
         print("  [6] re/streaming IPTV")
+        print("  [7] Download VOD flaged 1 in DB")
         print("  [q] Exit ")
         print("")
         choice = input("  Enter Choice > ")
@@ -91,6 +88,14 @@ if __name__ == '__main__':
         elif (choice == "6"):
             ip = Header(streams, rst_info)
             rst_info = Restreaming(conf['restreams'])
+
+        # MENU OPTION 7
+        elif (choice == "7"):
+            ip = Header(streams, rst_info)
+            MyDownload = BatchDownload( folder+"/"+conf['db_file'], 
+                                        conf['db_schema'],
+                                        folder )
+            time.sleep(15) 
 
 
         # MENU OPTION q

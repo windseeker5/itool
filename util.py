@@ -353,7 +353,7 @@ def RandomStream(db_file, db_table):
 
     vod_list = df_rdm['st_uri'].tolist()
 
-    for i in range(1, 11):
+    for i in range(0, stat):
         print(i)
 
         random_item = random.choice(vod_list)
@@ -369,5 +369,51 @@ def RandomStream(db_file, db_table):
 
         # Use subprocess to run the mpv command
         subprocess.run(mpv_command)
+
+
+
+
+
+
+
+def BatchDownload(db_file, db_table, folder):
+    # Connect to the SQLite database
+    conn = sqlite3.connect(db_file)  
+
+    print(" > Looking for VOD flag as to_dowload in database....")
+
+    SQL = f"""SELECT tvg_name, st_uri
+             FROM {db_table}
+             WHERE  to_download_ind = 1"""
+
+    df_down = pd.read_sql(SQL, conn)
+
+    print("")
+    print(f"   {df_down}")
+    print("")
+
+    max_item = df_down.shape[0]
+
+    for i in range(0, max_item):
+
+        file_type = df_down.iloc[i]['st_uri']
+        file_extension = os.path.splitext(file_type)[1]
+
+        file_nm = folder + "/" + df_down.iloc[i]['tvg_name'] + file_extension
+        file_url = df_down.iloc[i]['st_uri']
+
+        print("")
+        print(f"""  > Downloading VOD {i}/{max_item} |  {file_nm}...""")
+        print("")
+
+        # Define the mpv command with options (e.g., --no-fullscreen)
+        linux_command = ['wget', '-O', file_nm, file_url]
+
+        # Use subprocess to run the mpv command
+        subprocess.run(linux_command)
+        
+    
+    
+    return(df_down)
 
 

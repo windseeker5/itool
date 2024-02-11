@@ -2,3 +2,4 @@ pyyaml
 pandas
 pyfiglet
 Pyarrow
+tmdbv3api
