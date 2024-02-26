@@ -2,4 +2,7 @@ venv/
 *.db
 *.m3u
 *.pkl
-iptv_data
+.ipynb_checkpoints/
+.gitignore
+iptv_data/
+__pycache__/

@@ -174,8 +174,56 @@ def PlaylistToDb(pl_file, db_file, db_table ):
 
 
 def ExportPlaylist(export_file, db_file, db_table, ip):
-    print(f"""  ! Edit table categories & add 1 for keeping""")
     df = pd.read_pickle('df_playlist.pkl')
+
+    # Cleaning unwanted categories     
+    print ('  > Cleaning unwanted categories...')
+    
+    SQL = f"""WITH M AS (
+    SELECT group_title, count, to_keep_ind
+    FROM categories
+    WHERE group_title LIKE 'ENGLISH%' OR 
+          group_title LIKE 'FRANCE%' OR 
+          group_title LIKE 'NETFLIX%SERIES%' OR 
+          group_title LIKE 'QUEBEC%' OR 
+          group_title LIKE 'EN -%' OR 
+          group_title LIKE 'APPLE+%' OR 
+          group_title LIKE 'FR -%' OR 
+          group_title LIKE 'AMAZON%' OR 
+          group_title LIKE 'QUÉBEC%' OR 
+          group_title LIKE 'CA|%' OR 
+          group_title LIKE 'QC %' OR 
+          group_title LIKE '%QMJHL%'
+),
+Filtered AS (
+    SELECT *
+    FROM M
+    WHERE group_title NOT LIKE '%KIDS%' AND
+          group_title NOT LIKE '%ENFANTS%' AND
+          group_title NOT LIKE '%ANIMATION%' AND
+          group_title NOT LIKE '%FOX%' AND
+          group_title NOT LIKE '%WWE%' AND
+          group_title NOT LIKE '%ANIME%' AND
+          group_title NOT LIKE '%Biblical%' AND
+          group_title NOT LIKE '%MUSIC%' AND
+          group_title NOT LIKE '%MUSIQUE%' AND
+          group_title NOT LIKE '%BOXING%' AND
+          group_title NOT LIKE '%CFL%'
+)
+UPDATE categories
+SET to_keep_ind = 1
+WHERE group_title IN (SELECT group_title FROM Filtered);"""
+
+    conn = sqlite3.connect(db_file)  # Replace 'your_database.db' with your database file
+    cursor = conn.cursor()
+    cursor.execute(SQL)
+
+    # Commit the changes
+    conn.commit()
+
+    # Close the connection
+    conn.close()
+
 
     # Connect to the SQLite database
     conn = sqlite3.connect(db_file)  # Replace 'your_database.db' with your database file
@@ -185,7 +233,8 @@ def ExportPlaylist(export_file, db_file, db_table, ip):
                     count,
                     to_keep_ind
               FROM {db_table}
-              WHERE to_keep_ind = 1"""  
+              WHERE to_keep_ind = 1""" 
+         
 
     # Read data from SQLite into a DataFrame
     df_group = pd.read_sql(SQL, conn)

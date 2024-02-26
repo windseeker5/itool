@@ -7,3 +7,6 @@ db_file: smartersiptv.db
 restreams:
   - name: sport
     ffmpeg: ffmpeg -i http://slip50863.cdngold.me:80/c8bb0d2998/297afed6ea/412907 -c copy -f flv rtmp://127.0.0.1/live/sport
+  - name: door
+    ffmpeg: ffmpeg -i rtsp://admin:'mFrance&2012phileli'@192.168.1.174:554 -c copy -f flv rtmp://127.0.0.1/live/door
+
