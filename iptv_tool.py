@@ -10,11 +10,9 @@ from util import DowloadPlaylist
 from util import ExportPlaylist
 from util import Header
 from util import LoadConfig
-from util import StartWeb
-from util import Restreaming
 from util import RandomStream
 from util import BatchDownload
-
+from util import BuidlRunDocker
 
 
 # Next improvements :
@@ -30,19 +28,19 @@ if __name__ == '__main__':
     streams = '-'
     rst_info = '-'
     choice = ""
-
     folder = "iptv_data"  # Data Folder 
 
     if not os.path.exists(folder): 
         os.makedirs(folder) 
 
+
+
     while True:
         Header(streams, rst_info)
-        print("  [1] Install Docker & Nginx-rmtp")
+        print("  [1] Build docker image & run it ")
         print("  [2] Download m3u file from service provider(SP)")
         print("  [3] Convert m3u file to Sqlite db")
         print("  [4] Export your filtered \ smaller m3u file")
-        print("  [5] Start local web service for your m3u files")
         print("  [6] re/streaming IPTV")
         print("  [7] Download VOD flaged 1 in DB")
         print("  [q] Exit ")
@@ -53,7 +51,10 @@ if __name__ == '__main__':
 
         # MENU OPTION 1
         if (choice == "1"):
-            print('runing function 1')
+            ip = Header(streams, rst_info)
+            DocPath = r"""/home/kdresdell/Documents/DEV/itool/DockerFiles/"""
+            docid = BuidlRunDocker( DocPath )
+
 
         # MENU OPTION 2
         elif (choice == "2"):

@@ -1,84 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movies Table</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+{% extends 'base.html' %}
 
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
+{% block title %}KDC Broadcasting{% endblock %}
 
-        th {
-            background-color: #f2f2f2;
+{% block content %}
+    <!-- Flashy title -->
+    <h1>Personal Broadcasting Solution</h1>
+
+    <!-- Video container with rounded corners -->
+    <div id="video-container">
+        <!-- Video element to play the HLS stream -->
+        <video id="video" controls autoplay></video>
+    </div>
+
+    <!-- Include HLS.js from a CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        // Check if HLS.js is supported in the browser
+        if (Hls.isSupported()) {
+            var video = document.getElementById('video');
+            var hls = new Hls();
+
+            // Load and attach the HLS stream to the video element
+            hls.loadSource('http://tv.dresdell.com:8080/hls/sport.m3u8');
+            hls.attachMedia(video);
+
+            // Play the video once the manifest is parsed
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
         }
-    </style>
-</head>
-<body>
-    <h1>Movies Table</h1>
-    
-    <form method="GET" action="{{ url_for('index') }}">
-        <label for="title_filter">Filter by Title:</label>
-        <input type="text" id="title_filter" name="title_filter">
-        
-        <label>Filter by Genre:</label><br>
-        <input type="checkbox" id="genre_action" name="genre_action" value="Action" checked>
-        <label for="genre_action">Action</label><br>
-        
-        <input type="checkbox" id="genre_adventure" name="genre_adventure" value="Adventure" checked>
-        <label for="genre_adventure">Adventure</label><br>
-        
-        <input type="checkbox" id="genre_animation" name="genre_animation" value="Animation" checked>
-        <label for="genre_animation">Animation</label><br>
-        
-        <!-- Add more genre checkboxes as needed -->
-        
-        <button type="submit">Filter</button>
-    </form>
-    
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Poster</th>
-                <th>Title</th>
-                <th>Overview</th>
-                <th>Language</th>
-                <th>Popularity</th>
-                <th>Release Date</th>
-                <th>Vote Average</th>
-                <th>Vote Count</th>
-                <th>Runtime</th>
-                <th>Tagline</th>
-                <th>Genres</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for movie in movies %}
-            <tr>
-                <td>{{ movie['id'] }}</td>
-                <td><img src="{{ movie['poster_img'] }}" alt="{{ movie['original_title'] }}" style="max-width: 100px;"></td>
-                <td>{{ movie['original_title'] }}</td>
-                <td>{{ movie['overview'] }}</td>
-                <td>{{ movie['original_language'] }}</td>
-                <td>{{ movie['popularity'] }}</td>
-                <td>{{ movie['release_date'] }}</td>
-                <td>{{ movie['vote_average'] }}</td>
-                <td>{{ movie['vote_count'] }}</td>
-                <td>{{ movie['runtime'] }}</td>
-                <td>{{ movie['tagline'] }}</td>
-                <td>{{ movie['genres'] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+    </script>
+{% endblock %}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQLite Search</title>
+    <style>
+        .logo img {
+            max-width: 175px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+
+
+        <h1>Job Queue Information</h1>
+
+        <table>
+            <tr>
+                <th>Job ID</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            {% for job in jobs %}
+            <tr>
+                <td> {{ job.id }} </td>
+                <td> {{ job.get_status() }} </td>
+                <td><a href="{{ url_for('delete', id=job.id) }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    
+
+
+
+
+
+
+
+    <h1>TV Hack Tool</h1>
+
+    <form action="/search" method="post">
+        <input type="text" name="search_query" placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
+
+    <br>
+
+    <table border="1">
+        <tr>
+            <th>Asset ID</th>
+            <th>Video Description</th>
+            <th>Logo</th>
+            <th>Category</th>
+            <th>video_url</th>
+            <th>Stream type</th>
+            <th>Actions</th> <!-- New column for actions -->
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item[0] }}</td>
+            <td>{{ item[2] }}</td>
+            <td class="logo"><img src="{{ item[3] }}" alt="Logo"></td>
+            <td>{{ item[4] }}</td>
+            <td>{{ item[7] }}</td>
+            <td>{{ item[8] }}</td>
+                
+            <td>{% if item[8] == 'LIV' %}<a href="{{url_for('qjob', long_url=item[7]) }}">ReStream</a>{% endif %}</td> 
+        </tr>
+        {% endfor %}
+
+    </table>
+</body>
+</html>

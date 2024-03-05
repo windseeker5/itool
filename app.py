@@ -1,86 +1,108 @@
-from flask import Flask, render_template, request
+from flask import ( Flask, render_template, session, redirect, request,
+                    url_for, flash, abort, logging, jsonify )
+
 import sqlite3
 
+
 app = Flask(__name__)
-
-# Function to connect to the SQLite database
-def get_db_connection():
-    conn = sqlite3.connect('TheMovieDB.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+app.secret_key = 'your_secret_key_here'
 
 
+from rq import Queue
+from redis import Redis
+import subprocess
+from util import ReStream
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    conn = get_db_connection()
-    cursor = conn.cursor()
+# Connect to the Redis server
+redis_conn = Redis(host='localhost', port=6379)
 
-    if request.method == 'POST':
-        title_filter = request.form.get('title_filter', '')
-        genres = [request.form.get('genre_action', '1'),
-                  request.form.get('genre_adventure', '1'),
-                  request.form.get('genre_animation', '1')]
-        # Add more genres as needed
+# Create a queue named 'ffmpeg_jobs'
+q = Queue(connection=redis_conn)
+
+
+
+
+
+
+@app.route('/delete/<id>')
+def delete(id):
+
+    # Fetch the job by its ID
+    job = q.fetch_job(id)
+
+    # Check if the job exists and is queued
+    if job is not None and job.get_status() == 'queued':
+        # Cancel the job
+        job.cancel()
+        print(f"Job {id} has been cancelled.")
     else:
-        title_filter = request.args.get('title_filter', '')
-        genres = [request.args.get('genre_action', '1'),
-                  request.args.get('genre_adventure', '1'),
-                  request.args.get('genre_animation', '1')]
-        # Add more genres as needed
+        print(f"Job {id} not found or already running.")
 
-    # Define your query
-    query = """
-    SELECT id,
-        poster_img,
-        original_language,
-        original_title,
-        overview,
-        popularity,
-        release_date,
-        vote_average,
-        vote_count,
-        budget,
-        production_companies,
-        revenue,
-        runtime,
-        tagline,
-        genres
-    FROM movies
-    WHERE original_language IN ('en', 'fr')
-    AND genres NOT LIKE '%Music%'
-    AND genres NOT LIKE '%Documentary%'
-    AND genres NOT LIKE '%Animation%'
-    """
+    flash("Bot was deleted")
 
-    if title_filter:
-        query += f"AND original_title LIKE '%{title_filter}%' "
+    # Get all jobs in the queue
+    jobs = q.jobs
+
+    #return render_template('index2.html', jobs=jobs)
+    return redirect(url_for('index'))
 
 
-    # Build genre filter
-    genre_conditions = []
-    if '1' in genres:
-        genre_conditions.append("genres LIKE '%Action%'")
-    if '2' in genres:
-        genre_conditions.append("genres LIKE '%Adventure%'")
-    if '3' in genres:
-        genre_conditions.append("genres LIKE '%Animation%'")
-    # Add more genres as needed
 
-    if genre_conditions:
-        query += "AND (" + " OR ".join(genre_conditions) + ") "
 
-    query += "ORDER BY vote_average DESC, release_date DESC;"
 
-    cursor.execute(query)
-    movies = cursor.fetchall()
 
+@app.route('/')
+def index():
+
+    q = Queue(connection=redis_conn)
+    # Get all jobs in the queue
+    jobs = q.jobs
+    print(jobs)
+    print(type(jobs))
+
+    return render_template('index2.html', jobs=jobs)
+
+
+
+
+
+@app.route('/qjob/<path:long_url>')
+def qjob(long_url):
+
+    job = q.enqueue( ReStream, 
+                     args=(long_url,),
+                     job_timeout=3600,
+                     # result_ttl=20 
+                    )
+
+    flash(f"Bot creation was successfull! your ID is {job.get_id()}")
+    
+  # Get all jobs in the queue
+    jobs = q.jobs
+    print(jobs)
+    print(type(jobs))
+
+    #return render_template('index2.html', jobs=jobs)
+    return redirect(url_for('index'))
+
+
+
+
+@app.route('/search', methods=['POST'])
+def search():
+    search_query = request.form.get('search_query')
+    conn = sqlite3.connect('data.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM smartersiptv WHERE tvg_name LIKE ?", ('%' + search_query + '%',))
+    items = cursor.fetchall()
     conn.close()
 
-    return render_template('index.html', movies=movies)
+  # Get all jobs in the queue
+    jobs = q.jobs
+    print(jobs)
+    print(type(jobs))
 
-
-
+    return render_template('index2.html', items=items, jobs=jobs)
 
 
 
@@ -89,3 +111,4 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
+

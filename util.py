@@ -13,7 +13,8 @@ import yaml
 import time
 import shlex
 import random
-
+import subprocess
+import psutil
 
 
 def Header(video_cnt, rst_info):
@@ -48,6 +49,46 @@ def LoadConfig():
         sys.exit()
 
     return(config)
+
+
+def BuidlRunDocker(DockerfilePath):
+    # Change the working directory to a different folder
+    print(f"  > Changing to path {DockerfilePath}")
+    os.chdir(DockerfilePath)
+
+    print("  > Building the Docker image...take few minutes...")
+    # docker build -t kdc-nginx-rtmp .
+    command = ["docker", "build", "-t", "kdc-nginx-rtmp", "."]
+
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, check=True)
+    except subprocess.CalledProcessError as e:
+        # Handle errors, if any
+        print(f"Error: {e}")
+
+
+    print("  > run -d -p 1935:1935 -p 8080:8080 --name kdc-nginx-rtmp  ..take few minutes...")
+    # docker run -d -p 1935:1935 -p 8080:8080 --name kdc-nginx-rtmp my-nginx-rtmp
+    command = ["docker", "run", "-d", "-p", "1935:1935", "-p", "8080:8080", "--name", "kdc-nginx-rtmp", "kdc-nginx-rtmp"]
+
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, check=True)
+    except subprocess.CalledProcessError as e:
+        # Handle errors, if any
+        print(f"Error: {e}")
+
+
+    print("  > Run docker Redis server localy...")
+    # docker run --name my-redis -p 6379:6379 -d redis
+    command = ["docker", "run", "--name", "my-redis", "-p", "6379:6379", "-d", "redis"]
+
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, check=True)
+    except subprocess.CalledProcessError as e:
+        # Handle errors, if any
+        print(f"Error: {e}")
+
+    return()
 
 
 
@@ -293,47 +334,31 @@ WHERE group_title IN (SELECT group_title FROM Filtered);"""
 
 
 
-def StartWeb(folder):
 
-    os.chdir(folder)
-    print(f'  * Serving /{folder}/', flush=True)
 
-    from http.server import HTTPServer, SimpleHTTPRequestHandler
 
-    server_address = ('', 8000)
-    httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
 
-    print('  * Listening at http://127.0.0.1:8000/     > ctrl+c to quit <', flush=True)
-    print(" ")
+def ReStream(url):
+    print(f"""  > Restreaming {url} to local server...""")
     
-    httpd.serve_forever()
-
-
-
-def Restreaming(streams) :
-
-    lpid = []
-
-    for stream in streams:
-        ffmpeg_command = stream['ffmpeg']
-        #process = subprocess.Popen(ffmpeg_command, shell=True, 
-        #                                           stdout=subprocess.PIPE, 
-        #                                           stderr=subprocess.PIPE, 
-        #                                           preexec_fn=os.setsid)
-
-        # Run the command with preexec_fn=os.setpgrp for Unix-like systems
-        process = subprocess.Popen(ffmpeg_command, shell=True, 
-                                                stdout=subprocess.PIPE, 
-                                                stderr=subprocess.PIPE, 
-                                                preexec_fn=os.setpgrp)
-
+    command = ["ffmpeg", "-i", url, "-c", "copy", "-f", "flv", "rtmp://127.0.0.1/live/sport"]
+ 
+    try:
+        # Start the ffmpeg process
+        process = subprocess.Popen(command)
+        # Retrieve the PID of the ffmpeg process
         pid = process.pid
-        print(f"  > Restreaming {stream['name']} with PID: {pid}")
-        lpid.append(pid)
+        print(f"  > ffmpeg PID: {pid}")
 
-        time.sleep(5)
-        
-    return(lpid)
+        # Wait for the process to finish
+        process.wait()
+    except subprocess.CalledProcessError as e:
+        # Handle errors, if any
+        print(f"Error: {e}")
+
+    return(pid)
+
+
 
 
 
@@ -461,8 +486,6 @@ def BatchDownload(db_file, db_table, folder):
         # Use subprocess to run the mpv command
         subprocess.run(linux_command)
         
-    
-    
     return(df_down)
 
 
