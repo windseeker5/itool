@@ -1,18 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQLite Search</title>
     <style>
+        /* Video container centered and 60% of page width */
+        #video-container {
+            border-radius: 10px;
+            overflow: hidden;
+            width: 50%;
+        }
+        #video {
+            border-radius: 15px;
+            width: 100%;
+        }
         .logo img {
-            max-width: 175px;
+            max-width: 160px;
             height: auto;
         }
     </style>
+    <!-- Include HLS.js from a CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
+
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -25,25 +35,134 @@
     {% endwith %}
 
 
+    <ul>
+        <li><a href="{{ url_for('index') }}">Home</a>
+        <li><a href="#">Explore</a></li>
+        <li><a href="#">Login</a></li>
+
+
+
+        {% if fpids is not none %}
 
         <h1>Job Queue Information</h1>
 
         <table>
             <tr>
-                <th>Job ID</th>
-                <th>Status</th>
+                <th>ffmpeg ID</th>
                 <th>Action</th>
             </tr>
-            {% for job in jobs %}
+            {% for fid in fpids %}
             <tr>
-                <td> {{ job.id }} </td>
-                <td> {{ job.get_status() }} </td>
-                <td><a href="{{ url_for('delete', id=job.id) }}">Delete</a></td>
+                <td> {{ fid }} </td>
+                <td><a href="{{ url_for('delete', id=fid) }}">Delete</a></td>
             </tr>
             {% endfor %}
         </table>
 
+        {% endif %}
+
+
+
+
+
+
+        {% if kpi.asset is not none %}
+
+        <h1>Media KPI</h1>
+
+        <table>
+            <tr>
+                <th>ASSET</th>
+                <th>CATEGORIES</th>
+                <th>LIVE STREAM</th>
+                <th>VOD</th>
+            </tr>
+            <tr>
+                <td> {{ kpi.asset }} </td>
+                <td> {{ kpi.categories }} </td>
+                <td> {{ kpi.liv }}  </td>
+                <td> {{ kpi.vod }} </td>
+            </tr>
+        </table>
+
+        {{ kpi.dbname }} ({{ kpi.cr_tm }}) 
+
+        {% endif %}
+
+
+
+
+
+
+
+        <h1>TV Hack Tool</h1>
+
+        <form action="/search" method="post">
+            <input type="text" name="search_query" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+        
+        <br>
+        
+        {% if items %}
+        <table border="1">
+            <tr>
+                <th>Asset ID</th>
+                <th>Video Description</th>
+                <th>Logo</th>
+                <th>Category</th>
+                <th>video_url</th>
+                <th>Stream type</th>
+                <th>Actions</th> <!-- New column for actions -->
+            </tr>
+            {% for item in items %}
+            <tr>
+                <td>{{ item[0] }}</td>
+                <td>{{ item[2] }}</td>
+                <td class="logo"><img src="{{ item[3] }}" alt="Logo"></td>
+                <td>{{ item[4] }}</td>
+                <td>{{ item[7] }}</td>
+                <td>{{ item[8] }}</td>
+                    
+                <td>{% if item[8] == 'LIV' %}<a href="{{url_for('qjob', long_url=item[7]) }}">ReStream</a>{% endif %}</td> 
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+        
+
+
+
+        {% if fpids is not none %}
+
+
+        <h1>Personal Broadcasting Solution</h1>
+
+        <!-- Video container with rounded corners -->
+        <div id="video-container">
+            <!-- Video element to play the HLS stream -->
+            <video id="video" controls autoplay></video>
+        </div>
     
+        <script>
+            // Check if HLS.js is supported in the browser
+            if (Hls.isSupported()) {
+                var video = document.getElementById('video');
+                var hls = new Hls();
+    
+                // Load and attach the HLS stream to the video element
+                hls.loadSource('http://192.168.1.95:8080/hls/sport.m3u8');
+                hls.attachMedia(video);
+    
+                // Play the video once the manifest is parsed
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play();
+                });
+            }
+        </script>
+        
+
+        {% endif %}
 
 
 
@@ -51,38 +170,11 @@
 
 
 
-    <h1>TV Hack Tool</h1>
 
-    <form action="/search" method="post">
-        <input type="text" name="search_query" placeholder="Search...">
-        <button type="submit">Search</button>
-    </form>
 
-    <br>
 
-    <table border="1">
-        <tr>
-            <th>Asset ID</th>
-            <th>Video Description</th>
-            <th>Logo</th>
-            <th>Category</th>
-            <th>video_url</th>
-            <th>Stream type</th>
-            <th>Actions</th> <!-- New column for actions -->
-        </tr>
-        {% for item in items %}
-        <tr>
-            <td>{{ item[0] }}</td>
-            <td>{{ item[2] }}</td>
-            <td class="logo"><img src="{{ item[3] }}" alt="Logo"></td>
-            <td>{{ item[4] }}</td>
-            <td>{{ item[7] }}</td>
-            <td>{{ item[8] }}</td>
-                
-            <td>{% if item[8] == 'LIV' %}<a href="{{url_for('qjob', long_url=item[7]) }}">ReStream</a>{% endif %}</td> 
-        </tr>
-        {% endfor %}
 
-    </table>
+
+
 </body>
 </html>

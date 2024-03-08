@@ -1,8 +1,47 @@
-{% extends 'base.html' %}
-
-{% block title %}KDC Broadcasting{% endblock %}
-
-{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KDC Broadcasting</title>
+    <style>
+        /* Dark mode background */
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Pacifico', cursive;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            text-align: center;
+        }
+        /* Flashy title with gradient color */
+        h1 {
+            font-size: 3em;
+            background: linear-gradient(45deg, #ff1493, #87ceeb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        /* Video container centered and 60% of page width */
+        #video-container {
+            border-radius: 15px;
+            overflow: hidden;
+            width: 60%;
+        }
+        #video {
+            border-radius: 15px;
+            width: 100%;
+        }
+    </style>
+    <!-- Include Google Fonts for the Pacifico font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico&display=swap">
+    <!-- Include HLS.js from a CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
     <!-- Flashy title -->
     <h1>Personal Broadcasting Solution</h1>
 
@@ -12,8 +51,6 @@
         <video id="video" controls autoplay></video>
     </div>
 
-    <!-- Include HLS.js from a CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
         // Check if HLS.js is supported in the browser
         if (Hls.isSupported()) {
@@ -30,4 +67,5 @@
             });
         }
     </script>
-{% endblock %}
+</body>
+</html>

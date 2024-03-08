@@ -6,16 +6,23 @@ redis_conn = Redis()
 q = Queue(connection=redis_conn)
 
 
+from MyLib import ReStream
+from MyLib import KillProc
+from MyLib import GetRQJob
+from MyLib import GetFfmpegPid
+
+
+rqid = GetRQJob()
+
+print(f'RQ JOB: {rqid}')
+print(type(rqid))
+
+
+ffid = GetFfmpegPid()
+
+print(f'ffmpeg pids: {ffid}')
+print(type(ffid))
 
 
 
 
-# Wait for a short while to ensure the job is processing
-time.sleep(1)
-
-# Get all active job IDs
-active_job_ids = [job.id for job in q.jobs if job.get_status() == "queued" or job.get_status() == "started"]
-
-print("Active job IDs:")
-for job_id in active_job_ids:
-    print(job_id)

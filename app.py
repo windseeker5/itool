@@ -2,46 +2,61 @@ from flask import ( Flask, render_template, session, redirect, request,
                     url_for, flash, abort, logging, jsonify )
 
 import sqlite3
+from rq import Queue
+from redis import Redis
+import subprocess
+
+from MyLib import ReStream
+from MyLib import KillProc
+from MyLib import GetRQJob
+from MyLib import GetFfmpegPid
+from MyLib import GetKpi
+
 
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
 
+db = """iptv_data/smartersiptv.db"""
 
-from rq import Queue
-from redis import Redis
-import subprocess
-from util import ReStream
 
-# Connect to the Redis server
-redis_conn = Redis(host='localhost', port=6379)
 
-# Create a queue named 'ffmpeg_jobs'
+# RQ & redis setup - need redis server as docker 
+redis_conn = Redis()
 q = Queue(connection=redis_conn)
 
+# GetKpi from db
+kpi = GetKpi(db)
 
 
 
 
 
+
+##
+## ROUTES AND PAGES
+##
+
+
+# home page
+@app.route('/')
+def index():
+    # List RQ Job and FFmpeg id
+    fpids = GetFfmpegPid()
+    print(fpids)
+    return render_template('index2.html', fpids=fpids, kpi=kpi)
+
+
+
+
+# Cancel ffmpeg job
 @app.route('/delete/<id>')
 def delete(id):
 
-    # Fetch the job by its ID
-    job = q.fetch_job(id)
+    # Killing ffmpeg job
+    k = KillProc(id)
 
-    # Check if the job exists and is queued
-    if job is not None and job.get_status() == 'queued':
-        # Cancel the job
-        job.cancel()
-        print(f"Job {id} has been cancelled.")
-    else:
-        print(f"Job {id} not found or already running.")
-
-    flash("Bot was deleted")
-
-    # Get all jobs in the queue
-    jobs = q.jobs
+    flash(f"ffmpeg restream process #{k} was killed...")
 
     #return render_template('index2.html', jobs=jobs)
     return redirect(url_for('index'))
@@ -49,23 +64,7 @@ def delete(id):
 
 
 
-
-
-@app.route('/')
-def index():
-
-    q = Queue(connection=redis_conn)
-    # Get all jobs in the queue
-    jobs = q.jobs
-    print(jobs)
-    print(type(jobs))
-
-    return render_template('index2.html', jobs=jobs)
-
-
-
-
-
+# Add ffmpeg job
 @app.route('/qjob/<path:long_url>')
 def qjob(long_url):
 
@@ -75,34 +74,28 @@ def qjob(long_url):
                      # result_ttl=20 
                     )
 
-    flash(f"Bot creation was successfull! your ID is {job.get_id()}")
-    
-  # Get all jobs in the queue
-    jobs = q.jobs
-    print(jobs)
-    print(type(jobs))
-
-    #return render_template('index2.html', jobs=jobs)
     return redirect(url_for('index'))
 
 
 
 
+
+
+# Search for Liv or vod
 @app.route('/search', methods=['POST'])
 def search():
     search_query = request.form.get('search_query')
-    conn = sqlite3.connect('data.db')
+    conn = sqlite3.connect(db)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM smartersiptv WHERE tvg_name LIKE ?", ('%' + search_query + '%',))
     items = cursor.fetchall()
     conn.close()
 
-  # Get all jobs in the queue
-    jobs = q.jobs
-    print(jobs)
-    print(type(jobs))
+    fpids = GetFfmpegPid()
 
-    return render_template('index2.html', items=items, jobs=jobs)
+    return render_template('index2.html', items=items, fpids=fpids, kpi=kpi )
+
+
 
 
 

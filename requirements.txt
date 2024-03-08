@@ -6,3 +6,4 @@ tmdbv3api
 redis
 rq
 ffmpeg-python
+psutil

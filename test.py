@@ -1,14 +1,18 @@
+import subprocess
+import time
+import ffmpeg
+import sqlite3
+
 from rq import Queue
 from redis import Redis
-import time 
-
-from MyLib import ReStream
-from MyLib import KillProc
 
 from MyLib import ReStream
 from MyLib import KillProc
 from MyLib import GetRQJob
 from MyLib import GetFfmpegPid
+from MyLib import GetKpi
+
+
 
 
 
@@ -16,17 +20,13 @@ redis_conn = Redis()
 q = Queue(connection=redis_conn)
 
 
-
-print("> Starting a ReStream process with RQ Redis...")
+db = """/home/kdresdell/Documents/DEV/itool/iptv_data/smartersiptv.db"""
 
 url = """http://slip50863.cdngold.me:80/c8bb0d2998/297afed6ea/412907"""
 
+import os
 
-job = q.enqueue( ReStream, 
-                     args=(url,),
-                     job_timeout=None,
-                    )
-
-print(f"Enqueued job with ID: {job.id}")
-
+db = """/home/kdresdell/Documents/DEV/itool/iptv_data/smartersiptv.db"""
+filename = os.path.basename(db)
+print(filename)
 
