@@ -1,0 +1,11 @@
+pyyaml
+pandas
+pyfiglet
+Pyarrow
+tmdbv3api
+redis
+rq
+ffmpeg-python
+psutil
+gunicorn
+Flask

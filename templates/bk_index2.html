@@ -2,11 +2,9 @@
 <html>
 <head>
     <title>HaKTv</title>
+    <link href="https://vjs.zencdn.net/7.16.0/video-js.css" rel="stylesheet">
+ 
 
-    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
-    <script defer src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
-    
-    
     <style>
         .logo img {
             max-width: 160px;
@@ -72,10 +70,6 @@
 
         <h1>Media KPI</h1>
 
-        http://tv.dresdell.com:8080/hls/sport.m3u8
-
-        <br>  <br>
-
         <table>
             <tr>
                 <th>ASSET</th>
@@ -93,10 +87,7 @@
 
         {{ kpi.dbname }} ({{ kpi.cr_tm }}) 
 
-      
-        
-    
-         {% endif %}
+        {% endif %}
 
 
 
@@ -136,7 +127,7 @@
                 <td>{{ item[7] }}</td>
                 <td>{{ item[8] }}</td>
                     
-                <td><a href="{{url_for('qjob', long_url=item[7]) }}">ReStream</a> </td> 
+                <td>{% if item[8] == 'LIV' %}<a href="{{url_for('qjob', long_url=item[7]) }}">ReStream</a>{% endif %}</td> 
             </tr>
             {% endfor %}
         </table>
@@ -158,25 +149,41 @@
 
         <h1>Personal Broadcasting Solution</h1>
 
-        <video 
-           id="my-video" 
-           class="video-js" 
-           controls 
-           autoplay 
-           preload="auto" 
-           width="640" 
-           height="360"
-           muted
-           data-setup="{}"           
-        
-        >
-
-            <source src="http://tv.dresdell.com:8080/hls/sport.m3u8" 
-                    type="application/x-mpegURL">
-
-
+   
+        <video id="my-video" class="video-js" controls autoplay preload="auto" width="640" height="264">
+            <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4">
+            Your browser does not support the video tag.
         </video>
-  
+    
+        <script src="https://vjs.zencdn.net/7.16.0/video.min.js"></script>
+        <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+        <script>
+            var player = videojs('my-video');
+            player.ready(function() {
+                // Initialize Google Cast with your application ID
+                cast.framework.CastContext.getInstance().setOptions({
+                    receiverApplicationId: 'FB778770',
+                    autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+                });
+    
+                var castButton = document.createElement('button');
+                castButton.className = 'vjs-button vjs-control vjs-cast-button';
+                castButton.innerHTML = '<span class="vjs-icon-placeholder"></span><span class="vjs-control-text">Cast</span>';
+                castButton.addEventListener('click', function() {
+                    var castSession = cast.framework.CastContext.getInstance().getCurrentSession();
+                    if (castSession) {
+                        var mediaInfo = new chrome.cast.media.MediaInfo('http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4', 'video/mp4');
+                        var request = new chrome.cast.media.LoadRequest(mediaInfo);
+                        castSession.loadMedia(request);
+                    }
+                });
+    
+                // Insert the cast button before the fullscreen button
+                var fullscreenButton = player.controlBar.getChild('FullscreenToggle');
+                player.controlBar.el().insertBefore(castButton, fullscreenButton.el());
+            });
+        </script>
+
 
 
         {% endif %}
