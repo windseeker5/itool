@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Player</title>
+    <link href="https://vjs.zencdn.net/7.16.0/video-js.css" rel="stylesheet">
+    <style>
+        /* Style for the cast button */
+        .vjs-cast-button {
+            background-color: transparent;
+            border: none;
+            color: #000000; /* Set text color to white */
+        }
+        .vjs-cast-button:hover {
+            color: #ff2701; /* Change text color on hover */
+        }
+    </style>
+</head>
+<body>
+    <video id="my-video" class="video-js" controls autoplay preload="auto" width="640" height="264">
+        <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <script src="https://vjs.zencdn.net/7.16.0/video.min.js"></script>
+    <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+    <script>
+        var player = videojs('my-video');
+        player.ready(function() {
+            // Initialize Google Cast with your application ID
+            cast.framework.CastContext.getInstance().setOptions({
+                receiverApplicationId: 'FB778770',
+                autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+            });
+
+            var castButton = document.createElement('button');
+            castButton.className = 'vjs-button vjs-control vjs-cast-button';
+            castButton.innerHTML = '<span class="vjs-icon-placeholder"></span><span class="vjs-control-text">Cast</span>';
+            castButton.addEventListener('click', function() {
+                var castSession = cast.framework.CastContext.getInstance().getCurrentSession();
+                if (castSession) {
+                    var mediaInfo = new chrome.cast.media.MediaInfo('http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4', 'video/mp4');
+                    var request = new chrome.cast.media.LoadRequest(mediaInfo);
+                    castSession.loadMedia(request);
+                }
+            });
+
+            // Insert the cast button before the fullscreen button
+            var fullscreenButton = player.controlBar.getChild('FullscreenToggle');
+            player.controlBar.el().insertBefore(castButton, fullscreenButton.el());
+        });
+    </script>
+</body>
+</html>

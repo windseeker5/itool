@@ -2,17 +2,12 @@
 <html>
 <head>
     <title>SQLite Search</title>
+
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <script defer src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+
+
     <style>
-        /* Video container centered and 60% of page width */
-        #video-container {
-            border-radius: 10px;
-            overflow: hidden;
-            width: 50%;
-        }
-        #video {
-            border-radius: 15px;
-            width: 100%;
-        }
         .logo img {
             max-width: 160px;
             height: auto;
@@ -20,6 +15,10 @@
     </style>
     <!-- Include HLS.js from a CDN -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+
+
+
 </head>
 <body>
 
@@ -138,29 +137,26 @@
 
         <h1>Personal Broadcasting Solution</h1>
 
-        <!-- Video container with rounded corners -->
-        <div id="video-container">
-            <!-- Video element to play the HLS stream -->
-            <video id="video" controls autoplay></video>
-        </div>
-    
-        <script>
-            // Check if HLS.js is supported in the browser
-            if (Hls.isSupported()) {
-                var video = document.getElementById('video');
-                var hls = new Hls();
-    
-                // Load and attach the HLS stream to the video element
-                hls.loadSource('http://192.168.1.95:8080/hls/sport.m3u8');
-                hls.attachMedia(video);
-    
-                // Play the video once the manifest is parsed
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play();
-                });
-            }
-        </script>
-        
+   
+        <video 
+            id="my-video"
+            class="video-js"
+            controls
+            preload="auto"
+            width="640"
+            height="264"
+            data-setup="{}"
+        >
+          <source 
+            src="https://uni10rtmp.tulix.tv/iipctv/iipctv.smil/chunklist_w1550531622_b864000.m3u8" 
+            type="application/x-mpegURL"
+          >
+     
+  
+        </video>
+  
+
+
 
         {% endif %}
 

@@ -8,6 +8,11 @@ from datetime import datetime
 from rq import Queue
 from redis import Redis
 
+
+import psutil
+
+
+
 redis_conn = Redis()
 q = Queue(connection=redis_conn)
 
@@ -75,37 +80,14 @@ def GetKpi(db):
 
 
 
-def GetRQJob():
-
-    # Get all active job IDs
-    active_job_ids = [job.id for job in q.jobs if job.get_status() == "queued" or job.get_status() == "started"]
-    print(active_job_ids)
-    #print("Active job IDs:")
-    #for job_id in active_job_ids:
-    #    print(job_id)
-    
-    #return(job_id)
-
-
-
 def GetFfmpegPid():
+    # List to store process IDs
+    pid_list = []
 
-    try:
-        # Define the command to run
-        command = 'pgrep -f "ffmpeg -i http://"'
-
-        # Run the command and capture the output
-        output = subprocess.check_output(command, shell=True)
-
-        # Decode the output and get the PID
-        pid = output.decode().strip()
-
-        pid_list = [pid]
-        print(f"PID:{pid_list}")
-
-    except subprocess.CalledProcessError as e:
-        print(f"Error running command: {e}")
-        pid_list = None
+    # Find all running processes that contain 'ffmpeg' in their name
+    for process in psutil.process_iter(['pid', 'name', 'cmdline']):
+        if 'ffmpeg' in process.info['name'] or any('ffmpeg' in arg for arg in process.info['cmdline']):
+            pid_list.append(process.pid)
 
     return(pid_list)
 
@@ -125,12 +107,13 @@ def ReStream(url):
 
 
 
-def KillProc(pid):
-    # Kill the ffmpeg process
-    p = subprocess.Popen(['kill', '-kill', pid])
-    pid = str(p.pid)
-    print(f'Killing is {pid}')
+def KillProc(pid_str):
+    # Send SIGTERM signal to the process
+    # Replace 'pid_str' with the actual process ID string you want to kill
 
-    return(pid)
+    # Convert the PID string to an integer
+    pid = int(pid_str)
+    p = os.kill(pid, 15)
+    return(p)
 
 
