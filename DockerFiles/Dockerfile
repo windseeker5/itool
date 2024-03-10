@@ -25,9 +25,12 @@ COPY . .
 
 # Update the package index
 RUN apt-get update
+RUN apt-get upgrade -y
 
 # Install ffmpeg
 RUN apt-get install -y ffmpeg
+RUN apt-get install -y nano
+
 
 # Install python3-pip
 RUN apt-get install -y python3-pip
@@ -48,5 +51,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Expose the RTMP and HTTP ports
 EXPOSE 1935
 EXPOSE 8080
-EXPOSE 5000
+# EXPOSE 5000
 

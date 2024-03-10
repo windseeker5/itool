@@ -1,7 +1,6 @@
 from flask import ( Flask, render_template, session, redirect, request,
                     url_for, flash, abort, logging, jsonify )
 
-
 import sqlite3
 from rq import Queue
 from redis import Redis
@@ -14,7 +13,6 @@ from MyLib import GetFfmpegPid
 from MyLib import GetKpi
 
 
-
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
 
@@ -23,20 +21,12 @@ db = """iptv_data/smartersiptv.db"""
 
 
 # RQ & redis setup - need redis server as docker 
-# redis_conn = Redis()
 redis_conn = Redis(host='tv.dresdell.com', port=6379)
 q = Queue(connection=redis_conn)
 
 
-
-
-
-
-
 # GetKpi from db
 kpi = GetKpi(db)
-
-
 
 
 
@@ -55,7 +45,20 @@ def index():
     if len(fpids) == 0 :
         fpids = None
 
-    return render_template('index2.html', fpids=fpids, kpi=kpi)
+    return render_template('index.html', fpids=fpids, kpi=kpi)
+
+
+
+
+# home page
+@app.route('/test')
+def test():
+    # List RQ Job and FFmpeg id
+    fpids = GetFfmpegPid()
+    if len(fpids) == 0 :
+        fpids = None
+
+    return render_template('test.html', fpids=fpids, kpi=kpi)
 
 
 
@@ -64,13 +67,12 @@ def index():
 # Cancel ffmpeg job
 @app.route('/delete/<id>')
 def delete(id):
-
     # Killing ffmpeg job
     k = KillProc(id)
 
     flash(f"ffmpeg restream process #{k} was killed...")
 
-    time.sleep(2)  # Sleep for 2 seconds
+    time.sleep(1)  # Sleep for 2 seconds
     #return render_template('index2.html', jobs=jobs)
     return redirect(url_for('index'))
 
@@ -88,7 +90,7 @@ def qjob(long_url):
                      # result_ttl=20 
                     )
     
-    time.sleep(2)  # Sleep for 2 seconds
+    time.sleep(1)  # Sleep for 2 seconds
     return redirect(url_for('index'))
 
 
@@ -110,7 +112,7 @@ def search():
     if len(fpids) == 0 :
         fpids = None
 
-    return render_template('index2.html', items=items, fpids=fpids, kpi=kpi )
+    return render_template('index.html', items=items, fpids=fpids, kpi=kpi )
 
 
 
@@ -119,7 +121,7 @@ def search():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
 
 
