@@ -20,8 +20,9 @@ app.secret_key = 'your_secret_key_here'
 db = """iptv_data/smartersiptv.db"""
 
 
-# RQ & redis setup - need redis server as docker 
-redis_conn = Redis(host='tv.dresdell.com', port=6379)
+#redis_conn = Redis(host='tv.dresdell.com', port=6379)
+#redis_conn = Redis()
+redis_conn = Redis(host='127.0.0.1', port=6379)
 q = Queue(connection=redis_conn)
 
 
@@ -72,7 +73,7 @@ def delete(id):
 
     flash(f"ffmpeg restream process #{k} was killed...")
 
-    time.sleep(1)  # Sleep for 2 seconds
+    time.sleep(2)  # Sleep for 2 seconds
     #return render_template('index2.html', jobs=jobs)
     return redirect(url_for('index'))
 
@@ -117,11 +118,12 @@ def search():
 
 
 
-
-
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True)
+
+
+#if __name__ == '__main__':
+#    app.run(host='0.0.0.0', port=5000, debug=True)
 
 
 

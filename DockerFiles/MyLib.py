@@ -14,9 +14,10 @@ import psutil
 
 
 # RQ & redis setup - need redis server as docker 
-# redis_conn = Redis()
-redis_conn = Redis(host='tv.dresdell.com', port=6379)
-q = Queue(connection=redis_conn)
+#redis_conn = Redis()
+#redis_conn = Redis(host='tv.dresdell.com', port=6379)
+#redis_conn = Redis(host='127.0.0.1', port=6379)
+#q = Queue(connection=redis_conn)
 
 
 

@@ -164,9 +164,6 @@ def PlaylistToDb(pl_file, db_file, db_table ):
         # Create a DataFrame from the list of dictionaries
         df = pd.DataFrame(data)
        
-        # Remove newline characters from the 'st_uri
-        #df['st_uri'] = df['st_uri'].str.replace('\n', '')
-
         # Define the file extensions
         file_extensions = ['.mp4', '.mov', '.avi', '.m4v', '.mkv', '.mp3' ]
         df['st_type'] = np.where(df['row2'].str.contains('|'.join(file_extensions)), 'VOD', 'LIV')
