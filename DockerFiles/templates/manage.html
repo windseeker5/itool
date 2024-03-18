@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HaKTv</title>
+
+
+    <style>
+        .logo img {
+            max-width: 90px;
+            border-radius: 9px;
+            height: auto;
+        }
+    </style>
+
+</head>
+<body>
+
+
+
+    <ul>
+        <li><a href="{{ url_for('index') }}">Home</a>
+        <li><a href="#">Explore</a></li>
+
+        {% if 'username' in session %}
+        <li><a href="#">Manage</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+
+        {% else %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        {% endif %}
+
+
+
+
+        {% if 'username' in session %}
+        <p>Hello, {{ session['username'] }}!</p>
+        {% endif %}
+
+
+
+
+        {% if fpids is not none %}
+
+        <h1>Queue Information</h1>
+
+        <table>
+            <tr>
+                <th>ffmpeg ID</th>
+                <th>Action</th>
+            </tr>
+            {% for fid in fpids %}
+            <tr>
+                <td> {{ fid }} </td>
+                <td><a href="{{ url_for('delete', id=fid) }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% endif %}
+
+
+
+
+
+
+
+        {% if kpi.asset is not none %}
+
+        <h1>Media KPI</h1>
+
+        <table>
+            <tr>
+                <th>ASSET</th>
+                <th>CATEGORIES</th>
+                <th>LIVE STREAM</th>
+                <th>VOD</th>
+            </tr>
+            <tr>
+                <td> {{ kpi.asset }} </td>
+                <td> {{ kpi.categories }} </td>
+                <td> {{ kpi.liv }}  </td>
+                <td> {{ kpi.vod }} </td>
+            </tr>
+        </table>
+
+        {{ kpi.dbname }} ({{ kpi.cr_tm }}) 
+  
+         {% endif %}
+
+
+
+
+
+        <h1>Search Assets</h1>
+
+        <form action="/search" method="post">
+            <input type="text" name="search_query" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+        
+        <br>
+        
+        {% if items %}
+
+        <table border="1">
+            <tr>
+                <th>Asset ID</th>
+                <th>Logo</th>
+                <th>Category</th>
+                <th>Video Description</th>
+
+                <th>Stream type</th>
+                <th>Actions</th> <!-- New column for actions -->
+            </tr>
+            {% for item in items %}
+            <tr>
+                <td>{{ item[0] }}</td>
+                <td class="logo"><img src="{{ item[3] }}" alt="NaN"></td>
+                <td>{{ item[4] }}</td>
+                <td>{{ item[2] }}</td>
+                <td>{{ item[8] }}</td>
+                    
+                <td><a href="{{url_for('qjob', long_url=item[7]) }}">ReStream</a> </td> 
+            </tr>
+            {% endfor %}
+        </table>
+        
+        {% endif %}
+        
+
+
+
+</body>
+</html>

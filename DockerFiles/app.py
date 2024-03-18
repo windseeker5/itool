@@ -1,6 +1,5 @@
 from flask import ( Flask, render_template, session, redirect, request,
                     url_for, flash, abort, logging, jsonify )
-
 import sqlite3
 from rq import Queue
 from redis import Redis
@@ -16,14 +15,16 @@ from MyLib import GetKpi
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
 
-
 db = """iptv_data/smartersiptv.db"""
-
 
 #redis_conn = Redis(host='tv.dresdell.com', port=6379)
 #redis_conn = Redis()
 redis_conn = Redis(host='127.0.0.1', port=6379)
 q = Queue(connection=redis_conn)
+
+
+# Mock user database (replace this with a real user database)
+users = {'admin': 'password'}
 
 
 # GetKpi from db
@@ -38,7 +39,6 @@ kpi = GetKpi(db)
 ##
 
 
-# home page
 @app.route('/')
 def index():
     # List RQ Job and FFmpeg id
@@ -46,20 +46,76 @@ def index():
     if len(fpids) == 0 :
         fpids = None
 
-    return render_template('index.html', fpids=fpids, kpi=kpi)
+    if session:
+        print(session)
+  
+    return render_template('index.html', fpids=fpids, kpi=kpi, session=session)
 
 
 
 
-# home page
-@app.route('/test')
-def test():
+@app.route('/manage')
+def manage():
     # List RQ Job and FFmpeg id
     fpids = GetFfmpegPid()
     if len(fpids) == 0 :
         fpids = None
 
-    return render_template('test.html', fpids=fpids, kpi=kpi)
+    if session:
+        print(session)
+        print(session['username'])
+        print(type(session['username']))
+  
+    return render_template('manage.html', fpids=fpids, kpi=kpi, session=session)
+
+
+
+
+
+
+
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # Perform the actual login check here (this is a basic example)
+        if username == 'admin' and password == 'password':
+            print("Saving user in session....")
+            session['username'] = username  
+            return redirect(url_for('index'))
+        else:
+            return render_template('login.html', message='Invalid credentials')
+    else:
+        return render_template('login.html')
+
+
+
+@app.route('/logout')
+def logout():
+    print(f'sesion : {session}')
+    session.pop('username', None)
+    return redirect(url_for('index'))
+
+
+
+
+# Add ffmpeg job
+@app.route('/qjob/<path:long_url>')
+def qjob(long_url):
+
+    job = q.enqueue( ReStream, 
+                     args=(long_url,),
+                     job_timeout=3600,
+                     # result_ttl=20 
+                    )
+    
+    time.sleep(2)  # Sleep for 2 seconds
+    return redirect(url_for('manage'))
+
 
 
 
@@ -75,26 +131,7 @@ def delete(id):
 
     time.sleep(2)  # Sleep for 2 seconds
     #return render_template('index2.html', jobs=jobs)
-    return redirect(url_for('index'))
-
-
-
-
-
-# Add ffmpeg job
-@app.route('/qjob/<path:long_url>')
-def qjob(long_url):
-
-    job = q.enqueue( ReStream, 
-                     args=(long_url,),
-                     job_timeout=3600,
-                     # result_ttl=20 
-                    )
-    
-    time.sleep(1)  # Sleep for 2 seconds
-    return redirect(url_for('index'))
-
-
+    return redirect(url_for('manage'))
 
 
 
@@ -113,7 +150,8 @@ def search():
     if len(fpids) == 0 :
         fpids = None
 
-    return render_template('index.html', items=items, fpids=fpids, kpi=kpi )
+    return render_template('manage.html', items=items, fpids=fpids, kpi=kpi )
+
 
 
 

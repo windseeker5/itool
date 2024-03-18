@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyHack#Tool</title>
+    <link rel="stylesheet" href="static/css/style2.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Workbench&display=swap" rel="stylesheet">
+   
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <script defer src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+    rel="stylesheet"
+    />
+
+
+</head>
+
+
+
+<body>
+
+    <header>
+        <nav>
+            <img src="static/img/logo5.png" class="logo">
+            <ul class="nav_links">
+                <li class="link">Home</li>
+                <li class="link">Explore</li>
+                <li class="link">Login</li>
+            </ul>
+            <div class="toggle_btn">
+                <i class="ri-menu-line"></i>
+            </div>
+        </nav>
+
+
+    </header>
+
+
+ 
+
+<!-- Section live streaming video if restream active-->
+
+    <section>
+
+    
+
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Section  footer-->
+
+    <section>
+        <div class="custom-shape-divider-top-1710690546">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M892.25 114.72L0 0 0 120 1200 120 1200 0 892.25 114.72z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </section>
+
+
+    <section class="footer">
+
+        <h2>Disclaimer:</h2>
+
+        <p> This is a personal project created only for the purpose of 
+            learning IP TV, FFmpeg, Flask, HTML, CSS & docker.</p>
+
+
+        <a href="https://discord.com/channels/808085186767355924/808085187275653121" target="_blank">
+            <i class="ri-discord-fill"></i>
+        </a>
+            
+        <a href="https://github.com/windseeker5/itool" target="_blank">
+            <i class="ri-github-fill"></i>
+        </a>
+
+    
+
+    </section>
+
+
+
+
+<script>
+    const toggleBtn = document.querySelector(".toggle_btn")
+    const toggleBtnIcon = document.querySelector(".toggle_btn i")
+    const menu = document.querySelector(".nav_links")
+
+    toggleBtn.onclick = function () {
+        menu.classList.toggle("open")
+        const isOpen = menu.classList.contains("open")
+
+        toggleBtnIcon.classList = isOpen ? "ri-close-line" : "ri-menu-line";
+
+    }
+</script>
+
+
+</body>
+
+</html>
