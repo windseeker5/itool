@@ -17,9 +17,7 @@ app.secret_key = 'your_secret_key_here'
 
 db = """iptv_data/smartersiptv.db"""
 
-#redis_conn = Redis(host='tv.dresdell.com', port=6379)
-#redis_conn = Redis()
-redis_conn = Redis(host='127.0.0.1', port=6379)
+redis_conn = Redis(host='tv.dresdell.com', port=6379)
 q = Queue(connection=redis_conn)
 
 
@@ -155,13 +153,8 @@ def search():
 
 
 
-
 if __name__ == '__main__':
-    app.run(debug=True)
-
-
-#if __name__ == '__main__':
-#    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
 
 
