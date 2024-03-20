@@ -13,7 +13,8 @@ RUN chmod 777 /nginx/hls /nginx/html /nginx/log
 
 # Copy your nginx.conf file to the container
 COPY nginx.conf /etc/nginx/nginx.conf
-#COPY index.html /nginx/html/index.html
+COPY index.html /nginx/html/index.html
+COPY ken.txt /nginx/html/ken.txt
 
 
 # Set the working directory in the container
@@ -40,11 +41,17 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-# Run the Flask app with gunicorn when the container starts
-CMD ["gunicorn", "-w", "2","--bind", "0.0.0.0:5000", "app:app"]
 
 # Start the RQ worker
-CMD ["rq", "worker", "--url", "redis://.dresdell.com:6379"]
+# rq worker --url redis://tv.dresdell.com:6379
+CMD ["rq", "worker", "--url", "redis://tv.dresdell.com:6379"]
+
+
+
+# Run the Flask app with gunicorn when the container starts
+# gunicorn -w 4 --bind unix:/nginx/app/app.sock app:app
+CMD ["gunicorn", "-w", "4", "--bind", "unix:/nginx/app/app.sock", "app:app"]
+
 
 
 # Expose the RTMP and HTTP ports
