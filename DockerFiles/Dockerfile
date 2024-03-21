@@ -7,14 +7,16 @@ LABEL maintainer="Ken Dresdell <kdresdell@gmail.com>"
 RUN mkdir -p /nginx
 RUN mkdir -p /nginx/hls /nginx/html /nginx/log
 
-# Set permissions
-RUN chmod 777 /nginx/hls /nginx/html /nginx/log
-
 
 # Copy your nginx.conf file to the container
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY index.html /nginx/html/index.html
 COPY ken.txt /nginx/html/ken.txt
+
+
+# Set permissions
+RUN chmod 777 /nginx/hls /nginx/html /nginx/log
+
 
 
 # Set the working directory in the container
@@ -41,21 +43,18 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-
 # Start the RQ worker
 # rq worker --url redis://tv.dresdell.com:6379
-CMD ["rq", "worker", "--url", "redis://tv.dresdell.com:6379"]
-
-
 
 # Run the Flask app with gunicorn when the container starts
 # gunicorn -w 4 --bind unix:/nginx/app/app.sock app:app
-CMD ["gunicorn", "-w", "4", "--bind", "unix:/nginx/app/app.sock", "app:app"]
 
+RUN chmod +x start.sh
+# CMD ["bash", "start.sh"]
 
 
 # Expose the RTMP and HTTP ports
 EXPOSE 1935
 EXPOSE 8080
-EXPOSE 5000
+# EXPOSE 5000
 
