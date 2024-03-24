@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap');
+
+
+@import url('https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400;700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400;700&family=Updock&display=swap');
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: linear-gradient(to top, rgba(42, 41, 53, 0.15),rgba(0, 0, 0, 0.9999)), url(../img/bg5.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: rgb(14, 2, 10);
+
+
+
+
+}
+
+.container{
+    position: relative;
+    width: 500px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container i{
+    position: absolute;
+    inset: 0;
+    border: 2px solid #fff;
+    transition: 0.5s;
+}
+
+
+.container i:nth-child(1){
+    border-radius: 43% 57% 74% 26% / 44% 30% 70% 56% ;
+    animation: animate 6s linear infinite;
+}
+
+
+.container i:nth-child(2) {
+    border-radius: 62% 38% 42% 58% / 52% 38% 62% 48%;
+    animation: animate 4s linear infinite;
+}
+
+
+.container i:nth-child(3) {
+    border-radius: 44% 56% 42% 58% / 37% 65% 35% 63%;
+    animation: animate 5s linear infinite;
+}
+
+
+@keyframes animate
+{
+    0%
+    {
+        transform: rotate(0deg);
+    }
+    100%
+    {
+        transform: rotate(360deg);
+    }
+}
+
+
+.container:hover i{
+    border: 6px solid var(--clr);
+    filter: drop-shadow(0 0 20px var(--clr));
+}
+
+.container .login{
+    position: absolute;
+    width: 300px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.container .login h2{
+    font-size: 2.4em;
+    color: rgb(255, 107, 243);
+    font-family: "Miriam Libre", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+
+}
+
+
+.container .login .inputBx {
+    position: relative;
+    width: 100%;
+    margin: 15px 0;
+
+} 
+
+.container .login .inputBx input{
+    position: relative;
+    width: 100%;
+    padding: 12px 20px;
+    background: transparent;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    font-size: 1em;
+    color: white;
+    box-shadow: none;
+    outline: none;
+}
+
+
+.container .login .inputBx input::placeholder{
+    color: rgba(255, 255, 255, 0.5);
+}
+
+
+
+.container .login .inputBx input[type='submit']{
+    background: linear-gradient(45deg, #cc2ba4, #19c9ff);
+    border: none;
+    cursor: pointer;
+}
+
+.container .login .links{
+    position: relative;
+    width: 100% ;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+}
+
+.container .login .links a{
+    color: #f00bf0;
+    font-size: 0.9em;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+}
