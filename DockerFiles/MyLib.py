@@ -97,14 +97,26 @@ def GetFfmpegPid():
 
 
 
-def ReStream(url):
-    # Start the ffmpeg process
-    ffmpeg_process = subprocess.Popen(['ffmpeg', '-i', url, 
-    '-c', 'copy', '-f', 'flv', 'rtmp://127.0.0.1/live/sport'])
+def ReStream(type, url):
 
-    # Get the process ID (PID) of the ffmpeg process
-    pid = str(ffmpeg_process.pid)
-    print(f'ffmpeg PID is {pid}')
+    if type =="LIV":
+        # Start the ffmpeg process
+        ffmpeg_process = subprocess.Popen(['ffmpeg', '-i', url, 
+        '-c', 'copy', '-f', 'flv', 'rtmp://127.0.0.1/live/live'])
+
+        # Get the process ID (PID) of the ffmpeg process
+        pid = str(ffmpeg_process.pid)
+        print(f'ffmpeg PID is {pid}')
+
+    if type =='VOD':
+        # Start the ffmpeg process
+
+        ffmpeg_process = subprocess.Popen(['ffmpeg', '-re', '-i', url, 
+        '-c:v', 'copy', '-c:a', 'aac', '-f', 'flv', 'rtmp://127.0.0.1/live/live'])
+
+        # Get the process ID (PID) of the ffmpeg process
+        pid = str(ffmpeg_process.pid)
+        print(f'ffmpeg PID is {pid}')
 
     return(pid)
 

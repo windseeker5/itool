@@ -119,11 +119,11 @@ def logout():
 
 
 # Add ffmpeg job
-@app.route('/qjob/<path:long_url>')
-def qjob(long_url):
+@app.route('/qjob/<path:type>/<path:long_url>')
+def qjob(type, long_url):
 
     job = q.enqueue( ReStream, 
-                     args=(long_url,),
+                     args=(type, long_url,),
                      job_timeout=3600,
                      # result_ttl=20 
                     )

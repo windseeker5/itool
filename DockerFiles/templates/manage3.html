@@ -169,8 +169,22 @@
                     <td>{{ item[4] }}</td>
                     <td>{{ item[2] }}</td>
                     <td>{{ item[8] }}</td>
-                        
-                    <td><a href="{{url_for('qjob', long_url=item[7]) }}"><i class="ri-tv-fill"></i></i></a> </td> 
+
+                    {% if item[8] == "LIV" %}
+                        <td><a href="{{url_for('qjob', type='LIV', long_url=item[7]) }}"> 
+                                 <i class="ri-git-branch-fill"></i> 
+                            </a> 
+                        </td>
+                    {% endif %}
+
+                    {% if item[8] == "VOD" %}
+                        <td><a href="{{url_for('qjob', type='VOD',long_url=item[7]) }}"> 
+                            <i class="ri-youtube-fill"></i>
+                            </a> 
+                        </td>
+                    {% endif %}
+
+                
                 </tr>
                 {% endfor %}
             </table>
