@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HaKTv</title>
+
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <script defer src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    
+    
+    <style>
+        .logo img {
+            max-width: 160px;
+            height: auto;
+        }
+    </style>
+
+
+</head>
+<body>
+
+
+
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+
+
+
+
+
+    <ul>
+        <li><a href="{{ url_for('index') }}">Home</a>
+        <li><a href="#">Explore</a></li>
+
+        {% if 'username' in session %}
+        <li><a href="{{ url_for('manage') }}">Manage</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+
+        {% else %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        {% endif %}
+
+
+
+
+        
+
+        {% if 'username' in session %}
+        <p>Hello, {{ session['username'] }}!</p>
+        {% endif %}
+
+
+
+
+        {% if fpids is not none %}
+
+
+        <h1>Personal Broadcasting Solution</h1>
+
+        <video 
+           id="my-video" 
+           class="video-js" 
+           controls 
+           autoplay 
+           preload="auto" 
+           width="640" 
+           height="360"
+           muted
+           data-setup="{}"           
+        
+        >
+
+            <source src="http://tv.dresdell.com:8080/hls/sport.m3u8" 
+                    type="application/x-mpegURL">
+
+
+        </video>
+  
+
+
+        {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

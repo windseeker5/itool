@@ -11,11 +11,6 @@ from MyLib import KillProc
 from MyLib import GetFfmpegPid
 from MyLib import GetKpi
 
-from util import PlaylistToDb
-from util import DowloadPlaylist
-from util import LoadConfig
-
-
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
@@ -34,23 +29,12 @@ users = {'admin': 'password'}
 kpi = GetKpi(db)
 
 
-conf = LoadConfig()
-folder = "iptv_data"  # Data Folder 
-
-
-
-#pl = DowloadPlaylist( conf['m3u_service'] , folder+"/"+ conf['m3u_file_fullsize'] )
-
-#stat = PlaylistToDb( folder+"/"+conf['m3u_file_fullsize'], 
-#                     folder+"/"+conf['db_file'], 
-#                     conf['db_schema'])
 
 
 
 ##
 ## ROUTES AND PAGES
 ##
-
 
 
 @app.route('/')
@@ -63,7 +47,7 @@ def index():
     if session:
         print(session)
   
-    return render_template('index3.html', fpids=fpids, kpi=kpi, session=session)
+    return render_template('index.html', fpids=fpids, kpi=kpi, session=session)
 
 
 
@@ -80,7 +64,10 @@ def manage():
         print(session['username'])
         print(type(session['username']))
   
-    return render_template('manage3.html', fpids=fpids, kpi=kpi, session=session)
+    return render_template('manage.html', fpids=fpids, kpi=kpi, session=session)
+
+
+
 
 
 
@@ -99,11 +86,9 @@ def login():
             session['username'] = username  
             return redirect(url_for('index'))
         else:
-            return render_template('login3.html', message='Invalid credentials')
+            return render_template('login.html', message='Invalid credentials')
     else:
-        return render_template('login3.html')
-
-
+        return render_template('login.html')
 
 
 
@@ -116,14 +101,12 @@ def logout():
 
 
 
-
-
 # Add ffmpeg job
-@app.route('/qjob/<path:type>/<path:long_url>')
-def qjob(type, long_url):
+@app.route('/qjob/<path:long_url>')
+def qjob(long_url):
 
     job = q.enqueue( ReStream, 
-                     args=(type, long_url,),
+                     args=(long_url,),
                      job_timeout=3600,
                      # result_ttl=20 
                     )
@@ -151,7 +134,6 @@ def delete(id):
 
 
 
-
 # Search for Liv or vod
 @app.route('/search', methods=['POST'])
 def search():
@@ -166,13 +148,15 @@ def search():
     if len(fpids) == 0 :
         fpids = None
 
-    return render_template('manage3.html', items=items, fpids=fpids, kpi=kpi )
-
-
+    return render_template('manage.html', items=items, fpids=fpids, kpi=kpi )
 
 
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+
+
+
 
