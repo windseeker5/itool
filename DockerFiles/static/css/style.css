@@ -16,28 +16,33 @@ a{
 
 body{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    height: 110vh;
+    height: 100vh;
     background-image: linear-gradient(to top, rgba(42, 41, 53, 0.15),rgba(0, 0, 0, 0.9)), url(../img/bg1.jpg);
     background-position: center;
     background-size: cover;
+    background-repeat: no-repeat;
     background-color: rgb(14, 2, 10);
 }
 
 header{
     position: relative;
     padding: 0 2rem;
+    background-color: #1d1f1d;
+    height: 90px;
 }
 
+  
 .logo{
-    width: 90px;
+    width: 100px;
     cursor: pointer;
     filter: drop-shadow(0 0 3px #f701ff); 
 }
 
+
 nav{
-    height: 80px;
+    height: 90px;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1000px;
     margin: auto;
     display: flex;
     align-items: center;
@@ -61,9 +66,6 @@ nav{
     background-color: rgba(255, 31, 244, 0.1);   
 }
 
-.open{
-    display: flex;
-}
 
 .nav_links .link{
     font-size: 1rem;
@@ -101,33 +103,99 @@ nav{
 }
 
 
+/*    -------------------ken --*/
 
-.toggle_btn{
-    display: block;
-    color: #fff;
-    font-size: 2rem;
+
+
+#hamburger-icon {
+    position: relative;
+    top: 35px;
+    margin: auto 0;
+    display: none;
+    cursor: pointer;
+  }
+  
+  #hamburger-icon div {
+    width: 35px;
+    height: 3px;
+    background-color: white;
+    margin: 6px 0;
+    transition: 0.4s;
+  }
+  
+  .open .bar1 {
+    -webkit-transform: rotate(-45deg) translate(-6px, 6px);
+    transform: rotate(-45deg) translate(-6px, 6px);
+  }
+  
+  .open .bar2 {
+    opacity: 0;
+  }
+  
+  .open .bar3 {
+    -webkit-transform: rotate(45deg) translate(-6px, -8px);
+    transform: rotate(45deg) translate(-6px, -8px);
+  }
+  
+  .open .mobile-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  .mobile-menu {
+    display: none;
+    background-color: #ffffff;
+    list-style: none;
+
+  }
+  
+  .mobile-menu a {
+    color: #8f2323;
+    text-align: left;
+    font-size: larger;
+    padding: 10px 10px;
+ 
+  }
+
+  .mobile-menu li {
+ 
+  }
+  
+
+
+
+/*    -------------------ken --*/
+
+
+.hero-wrapper{
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    
 }
 
 
 .hero{
-    max-width: 1200px;
-    width: 100%;
-    margin: auto;
-    position: relative;
+    padding: 5%;
     display: flex;
-    align-items: center;
-    justify-content: top;
-    color: var(--extra-light);
+    flex-direction: column;
+    align-items: flex-start;
+
 }
 
 
-.hero-left{
-    margin-top: 5%;
-    max-width: 450px; 
-}
 
-
-.hero-left h1{
+.hero h1{
     font-family: "Workbench", sans-serif;
     font-optical-sizing: auto;
     color: rgb(94, 236, 51);
@@ -140,17 +208,24 @@ nav{
       margin-bottom: 3px;
 }
 
-.hero-left h3{
+.hero h3{
     font-size: 30px;
     font-family: "Roboto Slab", serif;
     font-weight: 200;
-    line-height: 20px;
-    margin-bottom: 10px;
     color: #ffffff;
 }
 
 
-.hero-left span{
+.hero h4{
+    font-size: 16px;
+    font-family: "Roboto Slab", serif;
+    font-weight: 200;
+    color: #ffffff;
+}
+
+
+
+.hero span{
     font-size: 25px ;
     font-family: "Roboto Slab", serif;
     font-weight: 400;
@@ -160,7 +235,7 @@ nav{
 }
 
 
-.hero-left p{
+.hero p{
     font-family: "Roboto Slab", serif;
     font-optical-sizing: auto;
     font-weight: 300;
@@ -171,43 +246,12 @@ nav{
 }
 
 
-.hero-right{
-    align-self: flex-end;
-    margin-left: 25px;
-    margin-bottom: 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-}
-
-
-.hero-right h3{
-    font-size: 30px;
-    font-family: "Roboto Slab", serif;
-    font-weight: 200;
-    color: #ce2f8c;
-}
-
-.hero-right i {
-    font-size: 20px;
-    color: #1cff2f;
-}
-
-
-
-.hero-right p{
-    font-family: "Roboto Slab", serif;
-    font-optical-sizing: auto;
-    font-weight: 200;
-    font-style: normal;
-    font-size: 18px;
-    color: #ffffff;
-}
-
 .icon-app img{
-    width: 70px;
+    position: relative;
+    top: -35px;
+    right: -375px;
+    width: 50px;
     height: auto;
-    padding: 10px 10px;
 }
 
 
@@ -216,12 +260,22 @@ nav{
 }
 
 
-.stream-url{
+
+.streamn-url-wrapper{
     width: 100%;
-    font-size: 18px;
-    margin-top: 20px;
+    margin-top: 2%;
     display: flex;
+    flex-direction: column;
     align-items: center;
+    align-content: center;
+
+}
+
+.stream-url{
+    font-size: 18px;
+    text-align: center;
+    width: 640px;
+    margin-top: 20px;
     background: #ffffff;
     border-radius: 5px;
     padding: 5px;
@@ -243,13 +297,7 @@ nav{
     align-content: center;
 }
 
-.stream-section h3{
-    font-size: 20px ;
-    font-family: "Roboto Slab", serif;
-    font-weight: 400;
-    margin-bottom: 20px;
-    color: #f0e228;
-}
+
 
 
 
@@ -306,20 +354,28 @@ nav{
 
 
 /*                                    */
-/*     SECTION POUR SWICTH RESPONSIVE */
+/*  SECTION POUR SWICTH RESPONSIVE    */
 /*                                    */
 
-@media screen and (min-width: 640px) {
-    .nav_links{
-        width: 250px;
-    }
 
-    .hero{
-        align-items: flex-start;
+@media screen and (max-width: 899px) {
+    header nav {
+        display: none;
+    }
+    
+    #hamburger-icon {
+        display: block;
+    }
+    
+    /* Exclude the logo from being hidden */
+    .logo {
+        display: block;
     }
 }
 
-@media screen and (min-width:1024px) {
+
+
+@media screen and (min-width:900px) {
     .nav_links{
         position: unset;
         width: unset;
@@ -328,15 +384,8 @@ nav{
         display: flex !important;
         background: transparent;
     }
-    .toggle_btn{
-        display: none;
-    }
-    .hero h3{
-        font-size: 2rem;
-    }
-    .hero h1{
-        font-size: 6rem;
-    }
+    
+
 
 }
 
@@ -364,9 +413,6 @@ nav{
 .custom-shape-divider-top-1710690546 .shape-fill {
     fill: rgba(0, 0, 0, 0.2); /* transparent black */
 }
-
-
-
 
 
 
@@ -431,7 +477,6 @@ nav{
     margin-left: 20px;
     margin-bottom: 20px;
 }
-
 
 
 .footer i{
@@ -595,8 +640,6 @@ nav{
     font-size: 0.9rem;
     margin-bottom: 100px;
     box-shadow: 0 0 15px rgb(146, 255, 5);
-
-
 }
 
 
@@ -610,7 +653,6 @@ nav{
     color: #5944d4;
     transition: 0.3s ease-out;
 }
-
 
 
 .show-result tr{
@@ -630,17 +672,13 @@ nav{
 
 
 
-
 .stream-logo img {
     width: 120px;
     height: auto;
     border-radius: 15px;
     padding: 10px 10px;
     filter: drop-shadow(0 0 3px #f701ff); 
-
 }
-
-
 
 
 .btn{
@@ -654,5 +692,4 @@ nav{
     color: #fff;
     font-weight: 500;
     cursor: pointer;
-
 }

@@ -63,7 +63,7 @@ def index():
     if session:
         print(session)
   
-    return render_template('index.html', fpids=fpids, kpi=kpi, session=session)
+    return render_template('index2.html', fpids=fpids, kpi=kpi, session=session)
 
 
 
