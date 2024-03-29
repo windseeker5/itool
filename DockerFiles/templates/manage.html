@@ -1,194 +1,57 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyHack#Tool</title>
-    <link rel="stylesheet" href="static/css/style.css">
+{% extends 'base.html' %}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+{% block title %}Home{% endblock %}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Workbench&display=swap" rel="stylesheet">
+{% block content %}
+
+
+
    
-    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
-    <script defer src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
-    
-    <link
-    href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
-    rel="stylesheet"
-    />
-
-
-</head>
-
-
-
-<body>
-
-    <header>
-        <nav>
-            <img src="static/img/logo5.png" class="logo">
-
-            <div class="user">
-                <!--               -->
-                <!--  ffmpeg proc  -->
-                <!--               -->
-                {% if 'username' in session %}
-                <p> >_ Hello, {{ session['username'] }}  
-                                 
-                        {% if fpids is not none %}
-
-                            {% for fid in fpids %}
-                               { <i class="ri-live-fill"></i>  {{ fid }}  <a href="{{ url_for('delete', id=fid) }}">
-                                                  <i class="ri-delete-bin-fill"></i></a>
-                               } 
-                            {% endfor %}
-
-                        {% endif %}  </p>
-                {% endif %}
-            </div>
-
-
-            <ul class="nav_links">
-
-                <li class="link"><a href="{{ url_for('index') }}">Home</a>
-                <li class="link"><a href="https://www.themoviedb.org" target="_blank">Explore</a></li>
-                
-                {% if 'username' in session %}
-                <li class="link"><a href="{{ url_for('manage') }}">Manage</a></li>
-                <li class="link"><a href="{{ url_for('logout') }}">Logout</a></li>
-                
-                {% else %}
-                <li class="link"><a href="{{ url_for('login') }}">Login</a></li>
-                {% endif %}
-
-
-            </ul>
-            <div class="toggle_btn">
-                <i class="ri-menu-line"></i>
-            </div>
-        </nav>
-
-
-    </header>
-
-
-    <div class="manage--wrapper">
-
-
-        <div class="manage-kpi-db--wrapper">
-
-
-            <!--               -->
-            <!--  kpi only     -->
-            <!--               -->
-
-            {% if kpi.asset is not none %}
-
-            <div class="kpi-only">
-
-                <table>
-                    <tr>
-                        <th>ASSETS</th>
-                        <th>CATEGORIES</th>
-                        <th>LIVE</th>
-                        <th>VOD</th>
-                    </tr>
-                    <tr>
-                        <td> {{ kpi.asset }} </td>
-                        <td> {{ kpi.categories }} </td>
-                        <td> {{ kpi.liv }}  </td>
-                        <td> {{ kpi.vod }} </td>
-                    </tr>
-                </table>
-
-        
-            </div>
-            {% endif %}
-
-
-            {% if kpi.asset is not none %}
-            <div class="db-only">
-
-                <i class="ri-database-2-fill"></i>
-
-                {{ kpi.dbname }} ({{ kpi.cr_tm }})  
-                
-                <a href="#"><i class="ri-download-cloud-fill"></i></a>
-
-
-            </div>
-            {% endif %}
-
-
-
-        </div>
-
-           
-
-
-
-        <!--                 -->
-        <!-- Search an Asset -->
-        <!--                 -->
-
-
-        <div class="search">
-
-            <form action="/search" method="post">
-                <input type="text" name="search_query" placeholder="Search an asset...">
-
-                    <button type="submit" class="btn">
-                        <i class="ri-search-line"></i>
-                    </button>
-
-            </form>
-            
-        </div>
 
     
-
-            
-        <!--                 -->
-        <!-- Results table   -->
-        <!--                 -->
+<div class="manage--wrapper">
 
 
+    <div class="manage-kpi-db--wrapper">
 
-        {% if items %}
-        <div class="show-result">
 
-            <table border="0">
-                {% for item in items %}
+        <!--               -->
+        <!--  kpi only     -->
+        <!--               -->
 
+        {% if kpi.asset is not none %}
+
+        <div class="kpi-only">
+
+            <table>
                 <tr>
-                    <td class="stream-logo"><img src="{{ item[3] }}" alt="NaN"></td>
-                    <td>{{ item[4] }}</td>
-                    <td>{{ item[2] }}</td>
-                    <td>{{ item[8] }}</td>
-
-                    {% if item[8] == "LIV" %}
-                        <td><a href="{{url_for('qjob', type='LIV', long_url=item[7]) }}"> 
-                                 <i class="ri-git-branch-fill"></i> 
-                            </a> 
-                        </td>
-                    {% endif %}
-
-                    {% if item[8] == "VOD" %}
-                        <td><a href="{{url_for('qjob', type='VOD',long_url=item[7]) }}"> 
-                            <i class="ri-youtube-fill"></i>
-                            </a> 
-                        </td>
-                    {% endif %}
-
-                
+                    <th>ASSETS</th>
+                    <th>CATEGORIES</th>
+                    <th>LIVE</th>
+                    <th>VOD</th>
                 </tr>
-                {% endfor %}
+                <tr>
+                    <td> {{ kpi.asset }} </td>
+                    <td> {{ kpi.categories }} </td>
+                    <td> {{ kpi.liv }}  </td>
+                    <td> {{ kpi.vod }} </td>
+                </tr>
             </table>
-                        
+
+    
+        </div>
+        {% endif %}
+
+
+        {% if kpi.asset is not none %}
+        <div class="db-only">
+
+            <i class="ri-database-2-fill"></i>
+
+            {{ kpi.dbname }} ({{ kpi.cr_tm }})  
+            
+            <a href="#"><i class="ri-download-cloud-fill"></i></a>
+
 
         </div>
         {% endif %}
@@ -197,68 +60,86 @@
 
     </div>
 
+       
 
 
 
+    <!--                 -->
+    <!-- Search an Asset -->
+    <!--                 -->
+
+
+    <div class="search">
+
+        <form action="/search" method="post">
+            <input type="text" name="search_query" placeholder="Search an asset...">
+
+                <button type="submit" class="btn">
+                    <i class="ri-search-line"></i>
+                </button>
+
+        </form>
+        
+    </div>
 
 
 
-    <!--                -->
-    <!-- Section  footer-->
-    <!--                -->
+        
+    <!--                 -->
+    <!-- Results table   -->
+    <!--                 -->
 
-    
-    <section class="footer">
 
-        <div class="footer-message">
 
-            <div class="footer-message-item">
+    {% if items %}
+    <div class="show-result">
 
-                <h2>Disclaimer:</h2>
+        <table border="0">
+            {% for item in items %}
 
-                <p> This is a personal project created only for the purpose of 
-                    learning IP TV, FFmpeg, Flask, HTML, CSS & docker.</p>
+            <tr>
+                <td class="stream-logo"><img src="{{ item[3] }}" alt="NaN"></td>
+                <td class="stream-category">{{ item[4] }}</td>
+                <td>{{ item[2] }}</td>
+                <td>{{ item[8] }}</td>
 
-            </div>
+                {% if item[8] == "LIV" %}
+                    <td><a href="{{url_for('qjob', type='LIV', long_url=item[7]) }}"> 
+                             <i class="ri-git-branch-fill"></i> 
+                        </a> 
+                    </td>
+                {% endif %}
 
-            <div class="footer-message-social">
+                {% if item[8] == "VOD" %}
+                    <td><a href="{{url_for('qjob', type='VOD',long_url=item[7]) }}"> 
+                        <i class="ri-youtube-fill"></i>
+                        </a> 
+                    </td>
+                {% endif %}
+
+            
+            </tr>
+            {% endfor %}
+        </table>
                     
-                <a href="https://github.com/windseeker5/itool" target="_blank">
-                    <i class="ri-github-fill"></i>
-                </a>
 
-                <a href="https://discord.com/channels/808085186767355924/808085187275653121" target="_blank">
-                    <i class="ri-discord-fill"></i>
-                </a>
+    </div>
+    {% endif %}
 
-            </div>
 
-        </div>        
 
-        <div class="footer-copyright">    
-            <p>© KDC 2024. All rights reserved</p>
-        </div>
+</div>
 
-    </section>
+
+
+ 
+ 
 
 
 
 
-<script>
-    const toggleBtn = document.querySelector(".toggle_btn")
-    const toggleBtnIcon = document.querySelector(".toggle_btn i")
-    const menu = document.querySelector(".nav_links")
-
-    toggleBtn.onclick = function () {
-        menu.classList.toggle("open")
-        const isOpen = menu.classList.contains("open")
-
-        toggleBtnIcon.classList = isOpen ? "ri-close-line" : "ri-menu-line";
-
-    }
-</script>
 
 
-</body>
 
-</html>
+
+{% endblock %}

@@ -17,76 +17,73 @@ a{
 body{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     height: 100vh;
-    background-image: linear-gradient(to top, rgba(42, 41, 53, 0.15),rgba(0, 0, 0, 0.9)), url(../img/bg1.jpg);
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.99)), url(../img/bg1.jpg);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     background-color: rgb(14, 2, 10);
 }
 
-header{
-    position: relative;
-    padding: 0 2rem;
-    background-color: #1d1f1d;
-    height: 90px;
+
+.logo{
+    width: 80px;
+    cursor: pointer;
+    filter: drop-shadow(0 0 2px #f701ff); 
 }
 
-  
-.logo{
-    width: 100px;
-    cursor: pointer;
-    filter: drop-shadow(0 0 3px #f701ff); 
-}
 
 
 nav{
-    height: 90px;
-    width: 100%;
-    max-width: 1000px;
-    margin: auto;
+    padding: 0px 30px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: relative;
+    height: 90px;
+    z-index: 99999;
 }
 
 
 
-.nav_links {
-    position: absolute;
-    right: 0;
-    top: 80px;
-    width: 100%;
-    list-style: none;
-    display: none;
-    flex-direction: column;
-    gap: .5rem;
-    padding: .5rem;
-    border-radius: 1rem;
-    background-color: rgba(255, 31, 244, 0.1);   
+nav ul{
+    display: flex;
+    gap: 20px;
+    align-items: center;
 }
 
+nav ul li{
+    list-style-type: none;
+}
 
-.nav_links .link{
-    font-size: 1rem;
-    color: rgb(255, 253, 230);
-    text-align: center;
-    width: 100%;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+nav ul li a{
+    text-decoration: none;
+    color: #9e40a1; 
     cursor: pointer;
+    border-radius: 5px;
     transition: 0.3s;
- 
+
 }
 
-.nav_links .link a{
-    color: #853f88; 
-}
-
-
-.nav_links .link:hover{
+nav ul li a:hover{
     background-color: rgba(226, 55, 226, 0.2);
+    filter: drop-shadow(0 0 10px #f701ff); 
 }
+
+
+
+.menu-icon{
+    display: none;
+}
+
+.menu-icon i{
+    color: #fff;
+    font-size: 30px;
+}
+
+
+
+
+
 
 .user p{
     color: #5bff5b;
@@ -103,74 +100,6 @@ nav{
 }
 
 
-/*    -------------------ken --*/
-
-
-
-#hamburger-icon {
-    position: relative;
-    top: 35px;
-    margin: auto 0;
-    display: none;
-    cursor: pointer;
-  }
-  
-  #hamburger-icon div {
-    width: 35px;
-    height: 3px;
-    background-color: white;
-    margin: 6px 0;
-    transition: 0.4s;
-  }
-  
-  .open .bar1 {
-    -webkit-transform: rotate(-45deg) translate(-6px, 6px);
-    transform: rotate(-45deg) translate(-6px, 6px);
-  }
-  
-  .open .bar2 {
-    opacity: 0;
-  }
-  
-  .open .bar3 {
-    -webkit-transform: rotate(45deg) translate(-6px, -8px);
-    transform: rotate(45deg) translate(-6px, -8px);
-  }
-  
-  .open .mobile-menu {
-    position: absolute;
-    top: 0;
-    right: 0;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-  }
-  
-  .mobile-menu {
-    display: none;
-    background-color: #ffffff;
-    list-style: none;
-
-  }
-  
-  .mobile-menu a {
-    color: #8f2323;
-    text-align: left;
-    font-size: larger;
-    padding: 10px 10px;
- 
-  }
-
-  .mobile-menu li {
- 
-  }
-  
-
-
-
-/*    -------------------ken --*/
 
 
 .hero-wrapper{
@@ -358,36 +287,42 @@ nav{
 /*                                    */
 
 
-@media screen and (max-width: 899px) {
-    header nav {
-        display: none;
+@media (max-width: 600px) {
+    nav ul {
+        position: absolute;
+        top: 90px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        text-align: center;
+        background: #181318;
+        gap: 0;
+        overflow: hidden;
     }
-    
-    #hamburger-icon {
-        display: block;
-    }
-    
-    /* Exclude the logo from being hidden */
+
     .logo {
+        display: none; 
+    }
+
+    .stream-category{
+        display: none; 
+    }
+
+
+    nav ul li {
+        padding: 20px;
+        padding-top: 10px;
+    }
+
+    .menu-icon {
         display: block;
     }
-}
 
-
-
-@media screen and (min-width:900px) {
-    .nav_links{
-        position: unset;
-        width: unset;
-        flex-direction: row;
-        gap: .5rem;
-        display: flex !important;
-        background: transparent;
+    #menuList {
+        transition: all 0.5s;
     }
-    
-
-
 }
+
 
 
 
@@ -523,11 +458,11 @@ nav{
     background-color: rgba(255, 255, 255, 0.1); /* Transparent white */
     backdrop-filter: blur(10px); /* Apply a blur effect */
     box-shadow: 0 0 10px rgb(146, 255, 5);
-    min-width: 660px;
-    max-width: 800px;
+    min-width: 600px;
+    max-width: 600px;
     border-radius: 10px;
     margin-top: 25px;
-    padding: 30px 30px;
+    padding: 20px 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -565,7 +500,7 @@ nav{
     font-size: 40px;
     font-family: "Roboto Slab", serif;
     font-weight: 500;
-    padding: 0px 20px;
+    padding: 0px 15px;
 }
 
 
@@ -580,7 +515,7 @@ nav{
 
 
 .search form{
-    min-width: 660px;
+    min-width: 600px;
     max-width: 800px;
     display: flex;
     align-items: center;
@@ -627,6 +562,10 @@ nav{
     color: #108b00;
     font-size: 2rem;
 }
+
+
+
+
 
 
 .show-result{

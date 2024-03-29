@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP#TV>_</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Workbench&display=swap" rel="stylesheet">
+   
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <script defer src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+    rel="stylesheet"
+    />
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            <a href="#"><img src="static/img/logo5.png" class="logo"></a>
+        </div>
+
+        <div class="user">
+            <!--               -->
+            <!--  ffmpeg proc  -->
+            <!--               -->
+            {% if 'username' in session %}
+            <p> $>_   
+                                
+                    {% if fpids is not none %}
+
+                        {% for fid in fpids %}
+                            { <i class="ri-live-fill"></i>  {{ fid }}  <a href="{{ url_for('delete', id=fid) }}">
+                                                <i class="ri-delete-bin-fill"></i></a>
+                            } 
+                        {% endfor %}
+
+                    {% endif %}  </p>
+            {% endif %}
+        </div>
+
+        <ul id="menuList">
+
+            <li><a href="{{ url_for('index') }}">Home</a>
+            <li><a href="https://www.themoviedb.org" target="_blank">Explore</a></li>
+        
+            {% if 'username' in session %}
+            <li><a href="{{ url_for('manage') }}">Manage</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        
+            {% else %}
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+            {% endif %}
+            
+        </ul>
+
+        <div class="menu-icon">
+            <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+        </div>
+
+    </nav>
+   
+  
+
+
+    <!--                -->
+    <!--  MAIN SECTION  -->
+    <!--                -->
+
+ 
+    <main>
+        <!-- This is where the content from other 
+            templates will be inserted -->
+        {% block content %}{% endblock %}
+
+    </main>
+
+
+
+
+
+
+
+
+    <!--                -->
+    <!-- Section  footer-->
+    <!--                -->
+
+    <section>
+        <div class="custom-shape-divider-top-1710690546">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M892.25 114.72L0 0 0 120 1200 120 1200 0 892.25 114.72z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </section>
+
+
+    <section class="footer">
+
+        <div class="footer-message">
+
+            <div class="footer-message-item">
+
+                <h2>Disclaimer:</h2>
+
+                <p> This is a personal project created only for the purpose of 
+                    learning IP TV, FFmpeg, Flask, HTML, CSS & docker.</p>
+
+            </div>
+
+            <div class="footer-message-social">
+                    
+                <a href="https://github.com/windseeker5/itool" target="_blank">
+                    <i class="ri-github-fill"></i>
+                </a>
+
+                <a href="https://discord.com/channels/808085186767355924/808085187275653121" target="_blank">
+                    <i class="ri-discord-fill"></i>
+                </a>
+
+            </div>
+
+        </div>        
+
+        <div class="footer-copyright">    
+            <p>© KDC 2024. All rights reserved</p>
+        </div>
+
+    </section>
+
+
+
+
+<script>
+    function toggleMobileMenu(menu) {
+        menu.classList.toggle('open');
+    }
+</script>
+
+
+
+<script>
+    let menuList = document.getElementById("menuList")
+    menuList.style.maxHeight = "0px";
+
+    function toggleMenu(){
+        if(menuList.style.maxHeight == "0px")
+        {
+            menuList.style.maxHeight = "300px";
+        }
+        else{
+            menuList.style.maxHeight = "0px";
+        }
+    }
+    
+</script>
+<script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script>
+
+
+
+
+</body>
+
+</html>
