@@ -159,8 +159,6 @@ def search():
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
 
-
-
     cursor.execute("""SELECT 
                             s.tvg_id,
                             s.tvg_name,
@@ -190,15 +188,71 @@ def search():
     if len(fpids) == 0 :
         fpids = None
 
-    print(items)
-    print(type(items))
-    print(len(items))
-    print("---------debug------")
-    print(items[1])
-
-
-
     return render_template('manage.html', items=items, fpids=fpids, kpi=kpi )
+
+
+
+#@app.route('/explore', methods=['GET', 'POST'])
+#def explore():
+#    if request.method == 'POST':
+#        # Your existing POST method logic
+#        pass
+#    else:
+#        # Your GET method logic
+#        pass
+
+
+
+# Explore best hot
+@app.route('/explore', methods=['GET', 'POST'])
+def explore():
+    search_query = request.form.get('search_query')
+    conn = sqlite3.connect(db)
+    cursor = conn.cursor()
+
+
+    cursor.execute("""SELECT 
+        s.tvg_id,
+        s.tvg_name,
+        s.vod_name,
+        s.tvg_logo,
+        s.group_title,
+        s.st_uri,
+        s.st_type,
+        m.genres,
+        m.vote_average,
+        m.popularity,
+        m.original_language,
+        CASE
+            WHEN m.original_language IN ('fr', 'en') AND m.vote_average >= 7.6 THEN 1
+            ELSE 0
+        END AS hot
+    FROM
+        smartersiptv AS s
+            LEFT OUTER JOIN
+        movies AS m ON s.vod_name = m.original_title
+    WHERE
+        s.group_title IN ('QUÉBEC SERIES','EN - NEW RELEASE')
+        AND hot = 1
+    ORDER BY
+        m.vote_average DESC""")
+
+
+  
+    items = cursor.fetchall()
+    conn.close()
+
+    fpids = GetFfmpegPid()
+    if len(fpids) == 0 :
+        fpids = None
+
+    return render_template('explore.html', items=items, fpids=fpids, kpi=kpi )
+
+
+
+
+
+
 
 
 
