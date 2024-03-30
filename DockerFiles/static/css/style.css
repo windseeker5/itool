@@ -16,11 +16,11 @@ a{
 
 body{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    height: 100vh;
+    height: 100%;
     background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.99)), url(../img/bg1.jpg);
     background-position: center;
     background-size: cover;
-    background-repeat: no-repeat;
+    background-repeat: repeat-y;
     background-color: rgb(14, 2, 10);
 }
 
@@ -192,7 +192,6 @@ nav ul li a:hover{
 
 .streamn-url-wrapper{
     width: 100%;
-    margin-top: 2%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -204,7 +203,6 @@ nav ul li a:hover{
     font-size: 18px;
     text-align: center;
     width: 640px;
-    margin-top: 20px;
     background: #ffffff;
     border-radius: 5px;
     padding: 5px;
@@ -219,7 +217,6 @@ nav ul li a:hover{
 .stream-section{
     width: 100%;
     height: 450px;
-    margin-top: 2%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -507,8 +504,8 @@ nav ul li a:hover{
 
 .db-only{
     color: #ffffff;
-    font-size: 18px;
-    margin-top: 10px;
+    font-size: 14px;
+    margin-top: 7px;
 }
 
 
@@ -582,6 +579,11 @@ nav ul li a:hover{
 }
 
 
+.show-result .ri-heart-3-fill{
+    color: red;
+}
+
+
 .show-result i {
     color: #450c66;
     padding: 10px 10px;
@@ -612,10 +614,10 @@ nav ul li a:hover{
 
 
 .stream-logo img {
-    width: 120px;
+    width: 100px;
     height: auto;
-    border-radius: 15px;
-    padding: 10px 10px;
+    border-radius: 13px;
+    padding: 8px 8px;
     filter: drop-shadow(0 0 3px #f701ff); 
 }
 

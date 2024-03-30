@@ -148,10 +148,20 @@ def PlaylistToDb(pl_file, db_file, db_table ):
                 st_uri = row2
                 row2 = '\n' + row2
 
+
+                match = re.search(r'(?<=- ).*?(?=\()', tvg_name)
+                if match:
+                    vod_name = match.group(0).rstrip()
+
+                else:
+                    vod_name = None
+
+
                 row_data = {
                     'tvg_id': tvg_id, 
                     'tvg_name': tvg_name,
                     'tvg_logo': tvg_logo,
+                    'vod_name': vod_name,
                     'group_title': group_title,
                     'row1': row1,
                     'row2': row2,
@@ -168,7 +178,6 @@ def PlaylistToDb(pl_file, db_file, db_table ):
         file_extensions = ['.mp4', '.mov', '.avi', '.m4v', '.mkv', '.mp3' ]
         df['st_type'] = np.where(df['row2'].str.contains('|'.join(file_extensions)), 'VOD', 'LIV')
         
-        df['to_restream_ind'] = 0 
         df['to_download_ind'] = 0 
 
         # Create a schema group_name

@@ -46,8 +46,6 @@
         {% if kpi.asset is not none %}
         <div class="db-only">
 
-            <i class="ri-database-2-fill"></i>
-
             {{ kpi.dbname }} ({{ kpi.cr_tm }})  
             
             <a href="#"><i class="ri-download-cloud-fill"></i></a>
@@ -90,7 +88,6 @@
     <!--                 -->
 
 
-
     {% if items %}
     <div class="show-result">
 
@@ -100,24 +97,38 @@
             <tr>
                 <td class="stream-logo"><img src="{{ item[3] }}" alt="NaN"></td>
                 <td class="stream-category">{{ item[4] }}</td>
-                <td>{{ item[2] }}</td>
-                <td>{{ item[8] }}</td>
+                <td>{{ item[1] }}</td>
 
-                {% if item[8] == "LIV" %}
-                    <td><a href="{{url_for('qjob', type='LIV', long_url=item[7]) }}"> 
-                             <i class="ri-git-branch-fill"></i> 
-                        </a> 
+
+                {% if item[11] == 1 %}
+                    <td> 
+                       <a href="https://www.themoviedb.org/search/movie?query={{ item[2] }}" target="_blank">
+                         <i class="ri-heart-3-fill"></i>
+                       </a> 
+                    </td>
+                {% else %}
+                    <td> 
+                        &nbsp;
                     </td>
                 {% endif %}
 
-                {% if item[8] == "VOD" %}
-                    <td><a href="{{url_for('qjob', type='VOD',long_url=item[7]) }}"> 
-                        <i class="ri-youtube-fill"></i>
-                        </a> 
-                    </td>
+
+                {% if item[6] == "LIV" and fpids is none %}
+                  <td><a href="{{url_for('qjob', type='LIV', long_url=item[5]) }}"> 
+                      <i class="ri-git-branch-fill"></i> 
+                      </a> 
+                  </td> 
                 {% endif %}
 
-            
+
+
+                {% if item[6] == "VOD" and fpids is none %}
+                  <td><a href="{{url_for('qjob', type='VOD',long_url=item[5]) }}"> 
+                      <i class="ri-youtube-fill"></i>
+                      </a> 
+                  </td>   
+                {% endif %}
+
             </tr>
             {% endfor %}
         </table>

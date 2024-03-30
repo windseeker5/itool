@@ -27,7 +27,7 @@
     <nav>
 
         <div class="logo">
-            <a href="#"><img src="static/img/logo5.png" class="logo"></a>
+            <a href="{{ url_for('index') }}"><img src="static/img/logo5.png" class="logo"></a>
         </div>
 
         <div class="user">
@@ -35,7 +35,7 @@
             <!--  ffmpeg proc  -->
             <!--               -->
             {% if 'username' in session %}
-            <p> $>_   
+            <p>{{ session['username'] }} $>_   
                                 
                     {% if fpids is not none %}
 
@@ -52,7 +52,6 @@
         <ul id="menuList">
 
             <li><a href="{{ url_for('index') }}">Home</a>
-            <li><a href="https://www.themoviedb.org" target="_blank">Explore</a></li>
         
             {% if 'username' in session %}
             <li><a href="{{ url_for('manage') }}">Manage</a></li>

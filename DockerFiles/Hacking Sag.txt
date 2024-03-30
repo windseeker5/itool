@@ -1,1 +1,3 @@
-ffmpeg -thread_queue_size 4096 -i https://15053.live.streamtheworld.com/QC_EVENTAAC_SC -thread_queue_size 4096 -i http://slip50863.cdngold.me:80/c8bb0d2998/297afed6ea/632737 -map 0:a -map 1:v -c:v copy -af "adelay=52000|52000" -c:a aac -strict experimental -f flv rtmp://127.0.0.1/live/sport
+ffmpeg -thread_queue_size 4096 -i https://15053.live.streamtheworld.com/QC_EVENTAAC_SC -thread_queue_size 4096 -i \
+http://slip50863.cdngold.me:80/c8bb0d2998/297afed6ea/632739 \
+-map 0:a -map 1:v -c:v copy -af "adelay=52000|52000" -c:a aac -strict experimental -f flv rtmp://127.0.0.1/live/sport
