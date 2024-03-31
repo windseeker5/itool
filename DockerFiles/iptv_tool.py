@@ -41,6 +41,7 @@ if __name__ == '__main__':
         print("  [2] Download m3u file from service provider(SP)")
         print("  [3] Convert m3u file to Sqlite db")
         print("  [4] Export your filtered \ smaller m3u file")
+        print("  [5] ")
         print("  [6] Build movies DB for reco engine")
         print("  [7] Download VOD flaged 1 in DB")
         print("  [q] Exit ")
@@ -54,7 +55,7 @@ if __name__ == '__main__':
             ip = Header(streams, rst_info)
             DocPath = r"""/home/kdresdell/Documents/DEV/itool/DockerFiles/"""
             docid = BuidlRunDocker( DocPath )
-
+            time.sleep(20)  
 
         # MENU OPTION 2
         elif (choice == "2"):
@@ -90,6 +91,7 @@ if __name__ == '__main__':
         elif (choice == "6"):
             ip = Header(streams, rst_info)
             BuildMovieDB()
+            time.sleep(10) 
 
 
         # MENU OPTION 7
