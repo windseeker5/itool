@@ -99,7 +99,7 @@ def login():
             session['username'] = username  
             return redirect(url_for('index'))
         else:
-            return render_template('login3.html', message='Invalid credentials')
+            return render_template('login.html', message='Invalid credentials')
     else:
         return render_template('login.html')
 
