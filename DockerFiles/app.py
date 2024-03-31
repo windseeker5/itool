@@ -204,39 +204,41 @@ def search():
 
 
 # Explore best hot
-@app.route('/explore', methods=['GET', 'POST'])
-def explore():
+@app.route('/exploremov', methods=['GET', 'POST'])
+def exploremov():
     search_query = request.form.get('search_query')
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
 
 
     cursor.execute("""SELECT 
-        s.tvg_id,
-        s.tvg_name,
-        s.vod_name,
-        s.tvg_logo,
-        s.group_title,
-        s.st_uri,
-        s.st_type,
-        m.genres,
-        m.vote_average,
-        m.popularity,
-        m.original_language,
-        CASE
-            WHEN m.original_language IN ('fr', 'en') AND m.vote_average >= 7.6 THEN 1
-            ELSE 0
-        END AS hot
-    FROM
-        smartersiptv AS s
-            LEFT OUTER JOIN
-        movies AS m ON s.vod_name = m.original_title
-    WHERE
-        s.group_title IN ('QUÉBEC SERIES','EN - NEW RELEASE')
-        AND hot = 1
-    ORDER BY
-        m.vote_average DESC""")
-
+    s.tvg_id,
+    s.tvg_name,
+    s.vod_name,
+    s.tvg_logo,
+    s.group_title,
+    s.st_uri,
+    s.st_type,
+    m.genres,
+    ROUND(m.vote_average, 1),
+    m.tagline,
+    m.popularity,
+    m.original_language,
+    CASE
+        WHEN m.original_language IN ('fr', 'en') AND m.vote_average >= 7.5 THEN 1
+        ELSE 0
+    END AS hot
+FROM
+    smartersiptv AS s
+        LEFT OUTER JOIN
+    movies AS m ON s.vod_name = m.original_title
+WHERE
+    s.group_title IN ('EN - NEW RELEASE')
+    -- s.group_title IN ('ENGLISH SERIES','FRANCE SÉRIES','NETFLIX  SERIES','APPLE+ SERIES','NORDIC SERIES', 'QUÉBEC SERIES')
+    
+    AND hot = 1
+ORDER BY
+    m.vote_average DESC;""")
 
   
     items = cursor.fetchall()
@@ -246,9 +248,64 @@ def explore():
     if len(fpids) == 0 :
         fpids = None
 
-    return render_template('explore.html', items=items, fpids=fpids, kpi=kpi )
+    exp_type = "movies"
+
+    return render_template('explore.html',items=items,fpids=fpids,kpi=kpi,exp_type=exp_type )
 
 
+
+
+
+
+
+# Explore best hot
+@app.route('/exploretv', methods=['GET', 'POST'])
+def exploretv():
+    search_query = request.form.get('search_query')
+    conn = sqlite3.connect(db)
+    cursor = conn.cursor()
+
+
+    cursor.execute("""SELECT 
+    s.tvg_id,
+    s.tvg_name,
+    s.vod_name,
+    s.tvg_logo,
+    s.group_title,
+    s.st_uri,
+    s.st_type,
+    m.genres,
+    ROUND(m.vote_average, 1),
+    m.tagline,
+    m.popularity,
+    m.original_language,
+    CASE
+        WHEN m.original_language IN ('fr', 'en') AND m.vote_average >= 7.5 THEN 1
+        ELSE 0
+    END AS hot
+FROM
+    smartersiptv AS s
+        LEFT OUTER JOIN
+    movies AS m ON s.vod_name = m.original_title
+WHERE
+    -- s.group_title IN ('EN - NEW RELEASE')
+    s.group_title IN ('ENGLISH SERIES','FRANCE SÉRIES','NETFLIX  SERIES','APPLE+ SERIES','NORDIC SERIES', 'QUÉBEC SERIES')
+    
+    AND hot = 1
+ORDER BY
+    m.vote_average DESC;""")
+
+  
+    items = cursor.fetchall()
+    conn.close()
+
+    fpids = GetFfmpegPid()
+    if len(fpids) == 0 :
+        fpids = None
+
+    exp_type = "tv shows"
+
+    return render_template('explore.html',items=items,fpids=fpids,kpi=kpi,exp_type=exp_type )
 
 
 

@@ -13,7 +13,7 @@ from util import LoadConfig
 from util import RandomStream
 from util import BatchDownload
 from util import BuidlRunDocker
-
+from util import BuildMovieDB
 
 # Next improvements :
 #
@@ -41,7 +41,7 @@ if __name__ == '__main__':
         print("  [2] Download m3u file from service provider(SP)")
         print("  [3] Convert m3u file to Sqlite db")
         print("  [4] Export your filtered \ smaller m3u file")
-        print("  [6] re/streaming IPTV")
+        print("  [6] Build movies DB for reco engine")
         print("  [7] Download VOD flaged 1 in DB")
         print("  [q] Exit ")
         print("")
@@ -85,10 +85,12 @@ if __name__ == '__main__':
             ip = Header(streams, rst_info)
             StartWeb(folder)
 
+        
         # MENU OPTION 6
         elif (choice == "6"):
             ip = Header(streams, rst_info)
-            rst_info = Restreaming(conf['restreams'])
+            BuildMovieDB()
+
 
         # MENU OPTION 7
         elif (choice == "7"):

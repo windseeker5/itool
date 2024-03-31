@@ -22,22 +22,35 @@
                 Recommanded  <i class="ri-android-fill"></i> and <i class="ri-apple-fill"></i> mobile App for your tv : <div class="icon-app">
                     <a href="https://play.google.com/store/search?q=vlc&c=apps&hl=en_CA&gl=US" target="_blank"> <img src="static/img/vlc.png" alt="vlc"> </a>
                 </div>
-                Now, setup your TV or Mobile App to this URL link <i class="ri-link-m"></i>:
-            
             </h4>
+
+            {% if fpids is none %}
+
+            <div class="main-page-no-streaming">
+                <!-- Include the template here -->
+                {% include 'base-kpi.html' %}
+            </div>
+
+
+            {% endif %}
+
 
         </div>
 
     </div>
 
 
-    
+
+    {% if fpids is not none %}
+
     <!--                           -->
     <!-- Display publish url       -->
     <!--                           -->
 
     <section>
         <div class="streamn-url-wrapper">
+
+            <h4>Now, setup your TV or Mobile App to this URL link :</h4>
 
             <div class="stream-url">
                 <i class="ri-earth-fill"></i>&nbsp;http://tv.dresdell.com:8080/hls/live.m3u8 
@@ -82,7 +95,7 @@
 
     </section>
 
-
+    {% endif %}
 
 
 

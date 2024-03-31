@@ -68,7 +68,6 @@ for i in tqdm(range(1, qt_movie )):
 ## Downloading additional info fro each df movie in database
 ##
 
-
 # Creating an empty database with required columns
 details_df = pd.DataFrame(columns=['id','budget','production_companies','revenue','runtime','tagline'])
 
@@ -127,7 +126,6 @@ df['genres'] = df['genres'].apply(json.dumps)
 
 
 df['release_date'] = pd.to_datetime(df['release_date'], format='%Y-%m-%d')
-
 
 
 print("> Saving to as Sqlite database")

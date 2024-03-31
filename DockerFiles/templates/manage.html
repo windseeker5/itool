@@ -12,54 +12,9 @@
 <div class="manage--wrapper">
 
 
-    <div class="manage-kpi-db--wrapper">
-
-
-        <!--               -->
-        <!--  kpi only     -->
-        <!--               -->
-
-        {% if kpi.asset is not none %}
-
-        <div class="kpi-only">
-
-            <table>
-                <tr>
-                    <th>ASSETS</th>
-                    <th>CATEGORIES</th>
-                    <th>LIVE</th>
-                    <th>VOD</th>
-                </tr>
-                <tr>
-                    <td> {{ kpi.asset }} </td>
-                    <td> {{ kpi.categories }} </td>
-                    <td> {{ kpi.liv }}  </td>
-                    <td> {{ kpi.vod }} </td>
-                </tr>
-            </table>
-
-    
-        </div>
-        {% endif %}
-
-
-        {% if kpi.asset is not none %}
-        <div class="db-only">
-
-            {{ kpi.dbname }} ({{ kpi.cr_tm }})  
-            
-            <a href="#"><i class="ri-download-cloud-fill"></i></a>
-
-
-        </div>
-        {% endif %}
-
-
-
-    </div>
-
+    <!-- Include the template here -->
+    {% include 'base-kpi.html' %}
        
-
 
 
     <!--                 -->

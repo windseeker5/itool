@@ -9,3 +9,4 @@ ffmpeg-python
 psutil
 gunicorn
 Flask
+tqdm

@@ -189,6 +189,15 @@ nav ul li a:hover{
 }
 
 
+.hero-wrapper .main-page-no-streaming{
+    margin-bottom: 100px;
+}
+
+
+
+
+
+
 
 .streamn-url-wrapper{
     width: 100%;
@@ -198,6 +207,15 @@ nav ul li a:hover{
     align-content: center;
 
 }
+
+.streamn-url-wrapper h4{
+    color: rgb(94, 236, 51);
+    font-size: 18px;
+    font-family: "Roboto Slab", serif;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
 
 .stream-url{
     font-size: 18px;
@@ -633,4 +651,23 @@ nav ul li a:hover{
     color: #fff;
     font-weight: 500;
     cursor: pointer;
+}
+
+
+.explore-category h1{
+    font-family: "Sacramento", cursive;
+    font-weight: 500;
+    font-style: normal;
+    color: #ffffff;
+    font-size: 50px;
+    text-align: left;
+    margin-top: 25px;
+    margin-left: -300px;
+
+}
+
+
+.mov-cat{
+    font-size: 0.6rem;
+    color: #181318;
 }
