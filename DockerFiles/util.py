@@ -26,7 +26,7 @@ def BuildMovieDB():
 
     d = '2010-01-01'
     number = 6  # Minimum movie score
-    qt_movie = 1000  # This mean 10 page of 20 movies 
+    qt_movie = 500  # This mean 10 page of 20 movies 
 
     # Function to map a list of genre IDs to genre names
     def map_ids_to_genres(genre_ids):
