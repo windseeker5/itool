@@ -192,6 +192,17 @@ def BuidlRunDocker(DockerfilePath):
     print(f"  > Changing to path {DockerfilePath}")
     os.chdir(DockerfilePath)
 
+    print("  > Run docker Redis server localy...")
+    # docker run --name my-redis -p 6379:6379 -d redis
+    command = ["docker", "run", "--name", "my-redis", "-p", "6379:6379", "-d", "redis"]
+
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, check=True)
+    except subprocess.CalledProcessError as e:
+        # Handle errors, if any
+        print(f"Error: {e}")
+
+
     print("  > Building the Docker image...take few minutes...")
     # docker build -t kdc-nginx-rtmp .
     command = ["docker", "build", "-t", "kdc-nginx-rtmp", "."]
@@ -213,16 +224,6 @@ def BuidlRunDocker(DockerfilePath):
         # Handle errors, if any
         print(f"Error: {e}")
 
-
-    print("  > Run docker Redis server localy...")
-    # docker run --name my-redis -p 6379:6379 -d redis
-    command = ["docker", "run", "--name", "my-redis", "-p", "6379:6379", "-d", "redis"]
-
-    try:
-        result = subprocess.run(command, capture_output=True, text=True, check=True)
-    except subprocess.CalledProcessError as e:
-        # Handle errors, if any
-        print(f"Error: {e}")
 
     return()
 

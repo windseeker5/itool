@@ -11,33 +11,50 @@
 
     <div class="hero-wrapper">
 
-        <div class="hero">
+        <div class="hero-wrapper-row">
 
-            <h3>Streaming <span>{for}</span></h3> 
-            <h1>hackers_</h1> 
-            <p>Stream your content to any platforms With Open-source 
-                technology and Docker.</p>
- 
-            <h4>
-                Recommanded  <i class="ri-android-fill"></i> and <i class="ri-apple-fill"></i> mobile App for your tv : <div class="icon-app">
-                    <a href="https://play.google.com/store/search?q=vlc&c=apps&hl=en_CA&gl=US" target="_blank"> <img src="static/img/vlc.png" alt="vlc"> </a>
+            <div class="hero-wrapper-column">
+
+                <div class="hero">
+
+                    <h3>Streaming <span>{for}</span></h3> 
+                    <h1>hackers_</h1> 
+
+                    <p>
+                        Stream any content with Open-source technology and Docker.
+                        Recommended <i class="ri-android-fill"></i> and 
+                        <i class="ri-apple-fill"></i> mobile App for your TV:
+                        <span class="icon-app">
+                            <a href="https://play.google.com/store/search?q=vlc&c=apps&hl=en_CA&gl=US" target="_blank"> 
+                                <img src="static/img/vlc.png" alt="vlc">
+                            </a>
+                        </span> 
+                    </p>
+
+
+                    {% if fpids is none %}
+                        <div class="hero-no-streaming">
+
+                            <!-- Include the template here -->
+                            {% include 'base-kpi.html' %}
+            
+                        </div>
+                    {% endif %}
+
+
                 </div>
-            </h4>
 
-            {% if fpids is none %}
-
-            <div class="main-page-no-streaming">
-                <!-- Include the template here -->
-                {% include 'base-kpi.html' %}
             </div>
-
-
-            {% endif %}
-
 
         </div>
 
     </div>
+
+
+
+
+
+
 
 
 
@@ -49,16 +66,27 @@
 
     <section>
         <div class="streamn-url-wrapper">
+            
+            <div class="streamn-url-row">
 
-            <h4>Now, setup your TV or Mobile App to this URL link :</h4>
+                <div class="streamn-url-column">
 
-            <div class="stream-url">
-                <i class="ri-earth-fill"></i>&nbsp;http://tv.dresdell.com:8080/hls/live.m3u8 
+                    <h4>Setup your TV or Mobile App to this URL link :</h4>
+
+                    <div class="stream-url">
+                        <i class="ri-earth-fill"></i>&nbsp;
         
+                            <a href="vlc://http://tv.dresdell.com:8080/hls/live.m3u8">
+                                http://tv.dresdell.com:8080/hls/live.m3u8 
+                            </a>                              
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
-        
+
     </section>
 
         

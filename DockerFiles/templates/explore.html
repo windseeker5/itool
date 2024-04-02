@@ -40,31 +40,39 @@
                 {% if item[2] is not none %}
                     <td>
                         <a href="https://www.themoviedb.org/search?query={{ item[2] }}" target="_blank">
-                            {{ item[1] }}  <div class="mov-cat"> {{ item[7] }} </div>  
+                            {{ item[1] | replace('EN - ', '') | replace('FR - ', '') }}
+
+                            <div class="mov-cat">   
+                                {% set genres_list = item[7][1:-1].split(', ') %}
+                                {{ genres_list | join(', ') | replace('"', '') }}
+                            </div>  
                         </a>  
                     </td>
                 {% else %}
-                    <td>{{ item[1] }}  <div class="mov-cat"> {{ item[7] }} </div>   </td>
+                    <td>
+                        {{ item[1] | replace('EN - ', '') | replace('FR - ', '') }}
+                        <div class="mov-cat">  &nbsp; </div>   
+                    </td>
                 {% endif %}
 
 
-                <td>
+                <td class="stream-tag">
                     {{ item[9] }}
                 </td>
 
-                <td>
+                <td class="stream-score">
                     {{ item[8] }}
                 </td>
 
 
                 {% if item[12] == 1 %}
-                    <td> 
+                    <td class="stream-love"> 
                        <a href="https://www.themoviedb.org/search?query={{ item[2] }}" target="_blank">
                          <i class="ri-heart-3-fill"></i>
                        </a> 
                     </td>
                 {% else %}
-                    <td> 
+                    <td class="stream-love"> 
                         &nbsp;
                     </td>
                 {% endif %}

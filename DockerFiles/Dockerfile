@@ -45,15 +45,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Start the RQ worker
 # rq worker --url redis://tv.dresdell.com:6379
 
-# Run the Flask app with gunicorn when the container starts
-# gunicorn -w 4 --bind unix:/nginx/app/app.sock app:app
+# CMD ["python3", "myworker.py"]
 
 RUN chmod +x start.sh
-# CMD ["bash", "start.sh"]
+#CMD ["bash", "start.sh"]
 
 
 # Expose the RTMP and HTTP ports
 EXPOSE 1935
 EXPOSE 8080
 # EXPOSE 5000
-

@@ -25,12 +25,12 @@ body{
 }
 
 
+
 .logo{
     width: 80px;
     cursor: pointer;
     filter: drop-shadow(0 0 2px #f701ff); 
 }
-
 
 
 nav{
@@ -44,7 +44,6 @@ nav{
 }
 
 
-
 nav ul{
     display: flex;
     gap: 20px;
@@ -55,21 +54,20 @@ nav ul li{
     list-style-type: none;
 }
 
+
 nav ul li a{
     text-decoration: none;
     color: #9e40a1; 
     cursor: pointer;
     border-radius: 5px;
     transition: 0.3s;
-
 }
+
 
 nav ul li a:hover{
     background-color: rgba(226, 55, 226, 0.2);
     filter: drop-shadow(0 0 10px #f701ff); 
 }
-
-
 
 .menu-icon{
     display: none;
@@ -79,10 +77,6 @@ nav ul li a:hover{
     color: #fff;
     font-size: 30px;
 }
-
-
-
-
 
 
 .user p{
@@ -102,26 +96,37 @@ nav ul li a:hover{
 
 
 
+
+
+
 .hero-wrapper{
-    width: 100%;
-    max-width: 1000px;
-    margin: auto;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    justify-content: space-between;
-    position: relative;
-    
+}
+
+            
+.hero-wrapper-row{
+    display: flex;
+    justify-content: center;
 }
 
 
 .hero{
-    padding: 5%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-
+    justify-content: center;
+    align-items: left;
+    min-width: 800px;
+    max-width: 800px;
+    padding: 30px 30px;
 }
 
+.hero-no-streaming{
+    margin-top: 0px;
+    margin-bottom: 20%;
+}
 
 
 .hero h1{
@@ -144,14 +149,12 @@ nav ul li a:hover{
     color: #ffffff;
 }
 
-
 .hero h4{
     font-size: 16px;
     font-family: "Roboto Slab", serif;
     font-weight: 200;
     color: #ffffff;
 }
-
 
 
 .hero span{
@@ -163,22 +166,19 @@ nav ul li a:hover{
     color: #ce2f8c;
 }
 
-
 .hero p{
     font-family: "Roboto Slab", serif;
     font-optical-sizing: auto;
     font-weight: 300;
     font-style: normal;
     font-size: 24px;
-    margin-bottom: 25px; 
+    padding: 030px 0px;
     color: #fff;
 }
 
-
 .icon-app img{
     position: relative;
-    top: -35px;
-    right: -375px;
+    bottom: -15px;
     width: 50px;
     height: auto;
 }
@@ -189,24 +189,33 @@ nav ul li a:hover{
 }
 
 
-.hero-wrapper .main-page-no-streaming{
-    margin-bottom: 100px;
-}
-
-
-
-
 
 
 
 .streamn-url-wrapper{
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+            
+.streamn-url-row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.streamn-url-column{
     display: flex;
     flex-direction: column;
     align-items: center;
-    align-content: center;
 
 }
+
+
 
 .streamn-url-wrapper h4{
     color: rgb(94, 236, 51);
@@ -294,54 +303,6 @@ nav ul li a:hover{
 
 
 
-
-
-
-/*                                    */
-/*  SECTION POUR SWICTH RESPONSIVE    */
-/*                                    */
-
-
-@media (max-width: 600px) {
-    nav ul {
-        position: absolute;
-        top: 90px;
-        left: 0;
-        right: 0;
-        flex-direction: column;
-        text-align: center;
-        background: #181318;
-        gap: 0;
-        overflow: hidden;
-    }
-
-    .logo {
-        display: none; 
-    }
-
-    .stream-category{
-        display: none; 
-    }
-
-
-    nav ul li {
-        padding: 20px;
-        padding-top: 10px;
-    }
-
-    .menu-icon {
-        display: block;
-    }
-
-    #menuList {
-        transition: all 0.5s;
-    }
-}
-
-
-
-
-
 .custom-shape-divider-top-1710690546 {
     position: relative;
     top: 0;
@@ -412,7 +373,6 @@ nav ul li a:hover{
     color: #ffffff;
     font-size: 40px;
     text-align: left;
-
 }
       
 
@@ -469,12 +429,26 @@ nav ul li a:hover{
 
 }
 
+
+.explore-category h1{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-family: "Sacramento", cursive;
+    font-weight: 500;
+    font-style: normal;
+    color: #ffffff;
+    font-size: 50px;
+    text-align: left;
+}
+
+
 .manage-kpi-db--wrapper{
     background-color: rgba(255, 255, 255, 0.1); /* Transparent white */
     backdrop-filter: blur(10px); /* Apply a blur effect */
     box-shadow: 0 0 10px rgb(146, 255, 5);
-    min-width: 600px;
-    max-width: 600px;
+    min-width: 700px;
+    max-width: 700px;
     border-radius: 10px;
     margin-top: 25px;
     padding: 20px 20px;
@@ -515,10 +489,17 @@ nav ul li a:hover{
     font-size: 40px;
     font-family: "Roboto Slab", serif;
     font-weight: 500;
-    padding: 0px 15px;
+    padding: 0px 25px;
 }
 
 
+.kpi-only span{
+    color: #69ff24;
+    font-size: 30px;
+    font-family: "Roboto Slab", serif;
+    font-weight: 500;
+    padding: 0px 0px;
+}
 
 .db-only{
     color: #ffffff;
@@ -529,9 +510,10 @@ nav ul li a:hover{
 
 
 
+
 .search form{
-    min-width: 600px;
-    max-width: 800px;
+    min-width: 700px;
+    max-width: 700px;
     display: flex;
     align-items: center;
     background: #fff;
@@ -562,7 +544,6 @@ nav ul li a:hover{
 }
 
 
-
 .search form .btn{
     font-size: 2rem;
     background: transparent;
@@ -585,8 +566,8 @@ nav ul li a:hover{
 
 .show-result{
     display: flex;
-    min-width: 660px;
-    max-width: 800px;
+    min-width: 700px;
+    max-width: 700px;
     border-radius: 15px;
     align-items: center;
     background: #fff;
@@ -639,6 +620,10 @@ nav ul li a:hover{
     filter: drop-shadow(0 0 3px #f701ff); 
 }
 
+.stream-tag{
+    font-size: 0.8rem;
+}
+
 
 .btn{
     display: flex;
@@ -654,20 +639,347 @@ nav ul li a:hover{
 }
 
 
-.explore-category h1{
-    font-family: "Sacramento", cursive;
-    font-weight: 500;
-    font-style: normal;
-    color: #ffffff;
-    font-size: 50px;
-    text-align: left;
-    margin-top: 25px;
-    margin-left: -300px;
-
-}
-
-
 .mov-cat{
     font-size: 0.6rem;
     color: #181318;
 }
+
+
+
+
+
+
+
+
+/*                                    */
+/*                                    */
+/*  SECTION POUR SWICTH RESPONSIVE    */
+/*                                    */
+/*   640 px                           */
+/*                                    */
+
+@media (max-width: 750px) {
+    nav ul {
+        position: absolute;
+        top: 90px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        text-align: center;
+        background: #181318;
+        gap: 0;
+        overflow: hidden;
+    }
+
+    nav ul li {
+        padding: 20px;
+        padding-top: 10px;
+    }
+
+    .logo {
+        display: none ;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+
+    #menuList {
+        transition: all 0.5s;
+    }
+
+
+    .manage-kpi-db--wrapper{
+        background-color: rgba(255, 255, 255, 0.1) ;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 5px rgb(146, 255, 5) ;
+        min-width: 650px ;
+        max-width: 650px ;
+        border-radius: 12px ;
+        margin-top: 25px ;
+        padding: 10px 10px;
+    }
+    
+    .manage-kpi-db--wrapper i {
+        font-size: 1.5rem;    
+    }
+    
+    .kpi-only th{
+        font-size: 0.8rem;
+    }
+    
+    .kpi-only td{
+        font-size: 3rem;
+        padding: 0px 25px;
+    }
+    
+    .kpi-only span{
+        font-size: 1.5rem;
+        padding: 0px 0px;
+    }
+    
+    .db-only{
+        font-size: 1.2rem;
+        margin-top: 7px;
+    }
+    
+
+    .search form{
+        min-width: 650px;
+        max-width: 650px;
+    }
+    
+    .search form:active{
+        box-shadow: 0 0 10px rgb(255, 84, 232), 0 0 10px rgb(151, 38, 167) inset;
+    }
+    
+
+    .show-result{
+        min-width: 650px;
+        max-width: 650px;
+        border-radius: 8px;
+        padding: 20px 20px;
+        font-size: 1rem;
+        margin-bottom: 100px;
+        box-shadow: 0 0 15px rgb(146, 255, 5);
+    }
+    
+    .stream-category{
+        display: none; 
+    }
+ 
+
+    .stream-love{
+        display: none;
+    }
+    
+    .stream-logo img {
+        width: 80px;
+        height: auto;
+        border-radius: 8px;
+        padding: 5px 5px;
+    }
+
+
+    .hero{
+        min-width: 650px;
+        max-width: 650px;
+        padding: 5px 5px;
+    }
+    
+    .hero-no-streaming{
+        margin-top: 0px;
+    }
+    
+    
+    .hero h1{
+        font-size: 4rem;
+    }
+    
+    .hero h3{
+        font-size: 2rem;
+    }
+    
+    
+    .hero span{
+        font-size: 2rem;
+    }
+    
+    .hero p{
+        font-size: 1.2rem;
+    }
+    
+    .icon-app img{
+        position: relative;
+        bottom: -15px;
+        width: 40px;
+        height: auto;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*                                    */
+/*                                    */
+/*  SECTION POUR SWICTH RESPONSIVE    */
+/*                                    */
+/*   430 px                           */
+/*                                    */
+
+@media (max-width: 430px) {
+    nav ul {
+        position: absolute;
+        top: 90px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        text-align: center;
+        background: #181318;
+        gap: 0;
+        overflow: hidden;
+    }
+
+    nav ul li {
+        padding: 20px;
+        padding-top: 10px;
+    }
+
+    .logo {
+        display: none; 
+    }
+
+    .menu-icon {
+        display: block;
+    }
+
+    #menuList {
+        transition: all 0.5s;
+    }
+
+    .manage-kpi-db--wrapper{
+        background-color: rgba(255, 255, 255, 0.1) ;
+        backdrop-filter: blur(10px) ;
+        box-shadow: 0 0 5px rgb(146, 255, 5);
+        min-width: 350px ;
+        max-width: 350px ;
+        border-radius: 7px ;
+        margin-top: 25px ;
+        padding: 5px 5px ;
+    }
+    
+    .manage-kpi-db--wrapper i {
+        font-size: 1rem ;    
+    }
+    
+    .kpi-only th{
+        font-size: 0.8rem ;
+    }
+    
+    .kpi-only td{
+        font-size: 1.7rem ;
+        padding: 0px 15px ;
+    }
+    
+    .kpi-only span{
+        font-size: 1.2rem ;
+        padding: 0px 0px ;
+    }
+    
+    .db-only{
+        font-size: 0.9rem ;
+        margin-top: 7px ;
+    }
+    
+
+    .search form{
+        min-width: 350px;
+        max-width: 350px;
+    }
+    
+    .search form:active{
+        box-shadow: 0 0 10px rgb(255, 84, 232), 0 0 10px rgb(151, 38, 167) inset;
+    }
+    
+
+    .show-result{
+        min-width: 350px;
+        max-width: 350px;
+        border-radius: 8px;
+        padding: 20px 20px;
+        font-size: 0.8rem;
+        margin-bottom: 100px;
+        box-shadow: 0 0 15px rgb(146, 255, 5);
+    }
+    
+    .stream-category{
+        display: none; 
+    }
+    
+    .stream-score{
+        display: none; 
+    }
+
+    .stream-tag{
+        display: none;
+    }
+
+    .stream-love{
+        display: none;
+    }
+    
+    .stream-logo img {
+        width: 80px;
+        height: auto;
+        border-radius: 8px;
+        padding: 5px 5px;
+    }
+
+
+    .hero{
+        min-width: 355px;
+        max-width: 355px;
+        padding: 5px 5px;
+    }
+    
+    .hero-no-streaming{
+        margin-top: 0px;
+    }
+    
+    
+    .hero h1{
+        font-size: 4rem;
+    }
+    
+    .hero h3{
+        font-size: 2rem;
+    }
+    
+    
+    .hero span{
+        font-size: 2rem;
+    }
+    
+    .hero p{
+        font-size: 1.2rem;
+    }
+    
+    .icon-app img{
+        position: relative;
+        bottom: -15px;
+        width: 40px;
+        height: auto;
+    }
+    
+
+    .stream-url{
+        min-width: 355px;
+        max-width: 355px;
+        padding: 5px 5px;
+        font-size: 0.9rem;
+    }
+
+    .streamn-url-column h4{
+        font-size: 0.9rem;
+
+    }
+
+
+
+
+}
+
+
+

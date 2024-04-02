@@ -1,8 +1,6 @@
 <!-- base-kpi template.html -->
 
-
 <div class="manage-kpi-db--wrapper">
-
 
     <!--               -->
     <!--  kpi only     -->
@@ -24,13 +22,27 @@
                 </th>
             </tr>
             <tr>
-                <td> {{ kpi.asset }} </td>
-                <td> {{ kpi.categories }} </td>
-                <td> {{ kpi.liv }}  </td>
-                <td> {{ kpi.vod }} </td>
+                <td> 
+                    {% if kpi.asset > 1000 %}{{ ( kpi.asset / 1000) | round | int }}<span>k</span>
+                    {% else %}{{ kpi.asset }}{% endif %}
+                </td>
+
+                <td>
+                    {% if kpi.categories > 1000 %}{{ ( kpi.categories / 1000) | round | int }}<span>k</span>
+                    {% else %}{{ kpi.categories }}{% endif %}
+                </td>
+
+                <td>  
+                    {% if  kpi.liv > 1000 %}{{ (  kpi.liv / 1000) | round | int }}<span>k</span>
+                    {% else %}{{  kpi.liv }}{% endif %}
+                </td>
+                
+                <td>
+                    {% if  kpi.vod > 1000 %}{{ (  kpi.vod / 1000) | round | int }}<span>k</span>
+                    {% else %}{{ kpi.vod }}{% endif %}
+                </td>
             </tr>
         </table>
-
 
     </div>
     {% endif %}
@@ -39,13 +51,11 @@
     {% if kpi.asset is not none %}
     <div class="db-only">
 
-        {{ kpi.dbname }} ({{ kpi.cr_tm }})  
+        <a href="https://smartersiptv.ca/" target="_blank">{{ kpi.dbname }}</a> ({{ kpi.cr_tm }})  
         
         <a href="#"><i class="ri-download-cloud-fill"></i></a>
 
-
     </div>
     {% endif %}
-
 
 </div>

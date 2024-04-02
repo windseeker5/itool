@@ -124,8 +124,8 @@ def qjob(type, long_url):
 
     job = q.enqueue( ReStream, 
                      args=(type, long_url,),
-                     job_timeout=3600,
-                     # result_ttl=20 
+                     job_timeout=43200,
+                     result_ttl=43200 
                     )
     
     time.sleep(2)  # Sleep for 2 seconds
