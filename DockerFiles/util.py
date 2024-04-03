@@ -215,7 +215,7 @@ def BuidlRunDocker(DockerfilePath):
 
 
     print("  > run -d -p 1935:1935 -p 8080:8080 --name kdc-nginx-rtmp  ..take few minutes...")
-    # docker run -d -p 1935:1935 -p 8080:8080 --name kdc-nginx-rtmp my-nginx-rtmp
+    # docker run -d -p 1935:1935 -p 8080:8080 --name kdc-nginx-rtmp kdc-nginx-rtmp
     command = ["docker", "run", "-d", "-p", "1935:1935", "-p", "8080:8080", "--name", "kdc-nginx-rtmp", "kdc-nginx-rtmp"]
 
     try:

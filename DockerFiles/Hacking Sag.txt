@@ -1,3 +1,13 @@
-ffmpeg -thread_queue_size 4096 -i https://15053.live.streamtheworld.com/QC_EVENTAAC_SC -thread_queue_size 4096 -i \
-http://slip50863.cdngold.me:80/c8bb0d2998/297afed6ea/632739 \
--map 0:a -map 1:v -c:v copy -af "adelay=52000|52000" -c:a aac -strict experimental -f flv rtmp://127.0.0.1/live/sport
+ffmpeg -thread_queue_size 4096 \
+-i https://15053.live.streamtheworld.com/QC_EVENTAAC_SC -thread_queue_size 4096 \
+-i http://slip50863.cdngold.me:80/c8bb0d2998/297afed6ea/632739 \
+-map 0:a -map 1:v -c:v copy -af "adelay=52000|52000" -c:a aac -strict experimental -f flv rtmp://127.0.0.1/live/live
+
+
+ffmpeg -loglevel error -i input.mp4 -c:v copy -c:a copy -f flv rtmp://server/live/stream 2> ffmpeg.log
+
+ffmpeg -i rtmp://iptv_provider_url/stream_key -c:v libx264 -preset veryfast -tune zerolatency -s 1280x720 -b:v 3M -c:a aac -b:a 128k -f hls -hls_time 4 -hls_list_size 6 -hls_flags delete_segments -hls_allow_cache 0 http://your_nginx_server_ip/hls/stream.m3u8
+
+ffmpeg -v verbose -thread_queue_size 4096 -i http://slip50863.cdngold.me:80/c8bb0d2998/297afed6ea/498806 \
+-c copy -f flv rtmp://127.0.0.1/live/live 
+
