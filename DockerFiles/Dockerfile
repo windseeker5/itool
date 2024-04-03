@@ -47,12 +47,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # CMD ["python3", "myworker.py"]
 
+# Make sure start.sh is executable
 RUN chmod +x start.sh
-
-# Start the script when the container starts
-ENTRYPOINT ["/nginx/app/start.sh"]
-
-
+#CMD ["./start.sh"]
 
 # Expose the RTMP and HTTP ports
 EXPOSE 1935
