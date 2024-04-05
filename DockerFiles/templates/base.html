@@ -33,21 +33,24 @@
         </div>
 
         <div class="user">
-            <!--               -->
-            <!--  ffmpeg proc  -->
-            <!--               -->
             {% if 'username' in session %}
-            <p>{{ session['username'] }} $>_   
-                                
+
+                <p>$>  
+
                     {% if fpids is not none %}
 
                         {% for fid in fpids %}
-                            { <i class="ri-live-fill"></i>  {{ fid }}  <a href="{{ url_for('delete', id=fid) }}">
-                                                <i class="ri-delete-bin-fill"></i></a>
-                            } 
-                        {% endfor %}
 
-                    {% endif %}  </p>
+                                            
+                                {% if fname is not none %}
+                                    {{ fname }} <a href="{{ url_for('delete', id=fid) }}"> <i class="ri-delete-bin-fill"></i></a> 
+                                {% endif %}  
+
+                        {% endfor %}
+                
+                    {% endif %} 
+                </p>
+
             {% endif %}
         </div>
 

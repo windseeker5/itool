@@ -3,13 +3,14 @@ from flask import ( Flask, render_template, session, redirect, request,
 import sqlite3
 from rq import Queue
 from redis import Redis
-import subprocess
+import subprocess, os
 import time
 
 from MyLib import ReStream
 from MyLib import KillProc
 from MyLib import GetFfmpegPid
 from MyLib import GetKpi
+from MyLib import GetStreamName
 
 from util import PlaylistToDb
 from util import DowloadPlaylist
@@ -25,17 +26,15 @@ db = """iptv_data/smartersiptv.db"""
 redis_conn = Redis(host='tv.dresdell.com', port=6379)
 q = Queue(connection=redis_conn)
 
-
 # Mock user database (replace this with a real user database)
 users = {'admin': 'password'}
 
-
 # GetKpi from db
 kpi = GetKpi(db)
-
-
 conf = LoadConfig()
+
 folder = "iptv_data"  # Data Folder 
+flag_file = "ffmpeg_proc.pid"
 
 
 
@@ -47,41 +46,51 @@ folder = "iptv_data"  # Data Folder
 
 
 
+##################################################################################
 ##
 ## ROUTES AND PAGES
 ##
-
+##################################################################################
 
 
 @app.route('/')
 def index():
-    # List RQ Job and FFmpeg id
     fpids = GetFfmpegPid()
+    fname = GetStreamName()
+
     if len(fpids) == 0 :
         fpids = None
+        fname = None
+        if os.path.exists(flag_file):
+            os.remove(flag_file)
 
-    if session:
-        print(session)
-  
-    return render_template('index.html', fpids=fpids, kpi=kpi, session=session)
+    print("- - - - - - - - - - - - - - - - - - - - - - - - - - - ")
+    print(f"fpids {fpids}")
+    print(f"fname {fname}")
+
+    return render_template('index.html', fpids=fpids, kpi=kpi, 
+                                         session=session, fname=fname )
 
 
 
 
 @app.route('/manage')
 def manage():
-    # List RQ Job and FFmpeg id
     fpids = GetFfmpegPid()
+    fname = GetStreamName()
+
     if len(fpids) == 0 :
         fpids = None
+        fname = None
+        if os.path.exists(flag_file):
+            os.remove(flag_file)
 
-    if session:
-        print(session)
-        print(session['username'])
-        print(type(session['username']))
+    print("- - - - - - - - - - - - - - - - - - - - - - - - - - - ")
+    print(f"fpids {fpids}")
+    print(f"fname {fname}")
   
-    return render_template('manage.html', fpids=fpids, kpi=kpi, session=session)
-
+    return render_template('manage.html', fpids=fpids, kpi=kpi, 
+                                          session=session, fname=fname )
 
 
 
@@ -106,7 +115,6 @@ def login():
 
 
 
-
 @app.route('/logout')
 def logout():
     print(f'sesion : {session}')
@@ -116,12 +124,22 @@ def logout():
 
 
 
-
-
 # Add ffmpeg job
 @app.route('/qjob/<path:type>/<path:long_url>')
 def qjob(type, long_url):
 
+    # Based on long_url, find stream name 
+    conn = sqlite3.connect(db)
+    cursor = conn.cursor()
+    cursor.execute("SELECT tvg_name FROM smartersiptv WHERE st_uri = ?", (long_url,))    
+    st_name = cursor.fetchall()
+    st_nm = st_name[0][0]
+
+    # Write the variable to the file
+    with open(flag_file, "w") as file:
+        file.write(st_nm)
+
+    # send the job to redis
     job = q.enqueue( ReStream, 
                      args=(type, long_url,),
                      job_timeout=43200,
@@ -129,8 +147,7 @@ def qjob(type, long_url):
                     )
     
     time.sleep(2)  # Sleep for 2 seconds
-    return redirect(url_for('manage'))
-
+    return redirect(url_for('index'))
 
 
 
@@ -139,16 +156,13 @@ def qjob(type, long_url):
 # Cancel ffmpeg job
 @app.route('/delete/<id>')
 def delete(id):
-    # Killing ffmpeg job
     k = KillProc(id)
 
-    flash(f"ffmpeg restream process #{k} was killed...")
+    if os.path.exists(flag_file):
+        os.remove(flag_file)
 
     time.sleep(2)  # Sleep for 2 seconds
-    #return render_template('index2.html', jobs=jobs)
     return redirect(url_for('manage'))
-
-
 
 
 
@@ -185,31 +199,35 @@ def search():
     conn.close()
 
     fpids = GetFfmpegPid()
+    fname = GetStreamName()
+
     if len(fpids) == 0 :
         fpids = None
+        fname = None
 
-    return render_template('manage.html', items=items, fpids=fpids, kpi=kpi )
+        if os.path.exists(flag_file):
+            os.remove(flag_file)
+
+    print("- - - - - - - - - - - - - - - - - - - - - - - - - - - ")
+    print(f"fpids {fpids}")
+    print(f"fname {fname}")
+  
+    return render_template('manage.html', items=items, fpids=fpids, kpi=kpi,
+                                          session=session, fname=fname )
 
 
-
-#@app.route('/explore', methods=['GET', 'POST'])
-#def explore():
-#    if request.method == 'POST':
-#        # Your existing POST method logic
-#        pass
-#    else:
-#        # Your GET method logic
-#        pass
 
 
 
 # Explore best hot
 @app.route('/exploremov', methods=['GET', 'POST'])
 def exploremov():
+    fpids = GetFfmpegPid()
+    fname = GetStreamName()    
+
     search_query = request.form.get('search_query')
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
-
 
     cursor.execute("""SELECT 
     s.tvg_id,
@@ -240,17 +258,24 @@ WHERE
 ORDER BY
     m.vote_average DESC;""")
 
-  
     items = cursor.fetchall()
     conn.close()
 
-    fpids = GetFfmpegPid()
+    exp_type = "movies"
+ 
     if len(fpids) == 0 :
         fpids = None
+        fname = None
 
-    exp_type = "movies"
+        if os.path.exists(flag_file):
+            os.remove(flag_file)
 
-    return render_template('explore.html',items=items,fpids=fpids,kpi=kpi,exp_type=exp_type )
+    print("- - - - - - - - - - - - - - - - - - - - - - - - - - - ")
+    print(f"fpids {fpids}")
+    print(f"fname {fname}")
+
+    return render_template('explore.html',items=items,fpids=fpids,
+                                          kpi=kpi,exp_type=exp_type,fname=fname )
 
 
 
@@ -261,10 +286,12 @@ ORDER BY
 # Explore best hot
 @app.route('/exploretv', methods=['GET', 'POST'])
 def exploretv():
+    fpids = GetFfmpegPid()
+    fname = GetStreamName()
+
     search_query = request.form.get('search_query')
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
-
 
     cursor.execute("""SELECT 
     s.tvg_id,
@@ -295,20 +322,28 @@ WHERE
 ORDER BY
     m.vote_average DESC;""")
 
-  
     items = cursor.fetchall()
     conn.close()
 
-    fpids = GetFfmpegPid()
-    if len(fpids) == 0 :
-        fpids = None
-
     exp_type = "tv shows"
 
-    return render_template('explore.html',items=items,fpids=fpids,kpi=kpi,exp_type=exp_type )
+    if len(fpids) == 0 :
+        fpids = None
+        fname = None
+
+        if os.path.exists(flag_file):
+            os.remove(flag_file)
+
+    print("- - - - - - - - - - - - - - - - - - - - - - - - - - - ")
+    print(f"fpids {fpids}")
+    print(f"fname {fname}")
+
+    return render_template('explore.html',items=items,fpids=fpids,
+                                          kpi=kpi,exp_type=exp_type,fname=fname )
 
 
 
+ 
 
 
 

@@ -4,21 +4,9 @@ import ffmpeg
 import sqlite3
 import os 
 from datetime import datetime
-
 from rq import Queue
 from redis import Redis
-
-
 import psutil
-
-
-
-# RQ & redis setup - need redis server as docker 
-#redis_conn = Redis()
-#redis_conn = Redis(host='tv.dresdell.com', port=6379)
-#redis_conn = Redis(host='127.0.0.1', port=6379)
-#q = Queue(connection=redis_conn)
-
 
 
 
@@ -81,47 +69,85 @@ def GetKpi(db):
 
 
 
+def GetStreamName():
+    
+    flag_file = "ffmpeg_proc.pid"
+    if os.path.exists(flag_file):
+        with open(flag_file, "r") as file:
+            st_nm = file.readline()
+    else:
+        st_nm = None
+    return(st_nm)
+
+
 
 
 def GetFfmpegPid():
-    # List to store process IDs
     pid_list = []
 
     # Find all running processes that contain 'ffmpeg' in their name
     for process in psutil.process_iter(['pid', 'name', 'cmdline']):
         if 'ffmpeg' in process.info['name'] or any('ffmpeg' in arg for arg in process.info['cmdline']):
             pid_list.append(process.pid)
-
     return(pid_list)
+
+
+
+
+def start_ffmpeg_liv(url):
+    return subprocess.Popen(['ffmpeg', '-v', 'verbose', 
+            '-thread_queue_size', '4096', '-i', url,
+            '-c', 'copy', '-f', 'flv', 'rtmp://127.0.0.1/live/live'])
+
+
+
+def start_ffmpeg_vod(url):
+    return subprocess.Popen(['ffmpeg', '-re', '-i', url, 
+            '-c:v', 'copy', '-c:a', 'aac', '-f', 'flv', 'rtmp://127.0.0.1/live/live'])   
+
+
+
+
+def ffmpeg_should_continue():
+    flag_file = "ffmpeg_proc.pid"
+    return os.path.exists(flag_file)
 
 
 
 
 def ReStream(type, url):
 
-    if type =="LIV":
-        # Start the ffmpeg process
+    max_retries = 5
+    retry_count = 0
 
-        #ffmpeg_process = subprocess.Popen(['ffmpeg', '-i', url, 
-        #'-c', 'copy', '-f', 'flv', 'rtmp://127.0.0.1/live/live'])
+    while retry_count < max_retries:
 
-        ffmpeg_process = subprocess.Popen(['ffmpeg', '-v', 'verbose', 
-        '-thread_queue_size', '4096', '-i', url,
-        '-c', 'copy', '-f', 'flv', 'rtmp://127.0.0.1/live/live'])
+        if type =="LIV":
+            ffmpeg_process = start_ffmpeg_liv(url)
 
-        # Get the process ID (PID) of the ffmpeg process
-        pid = str(ffmpeg_process.pid)
-        print(f'ffmpeg PID is {pid}')
+            # Get the process ID (PID) of the ffmpeg process
+            pid = str(ffmpeg_process.pid)
+            print(f'ffmpeg PID is {pid}')
 
-    if type =='VOD':
-        # Start the ffmpeg process
 
-        ffmpeg_process = subprocess.Popen(['ffmpeg', '-re', '-i', url, 
-        '-c:v', 'copy', '-c:a', 'aac', '-f', 'flv', 'rtmp://127.0.0.1/live/live'])
+        if type =='VOD':
+            # Start the ffmpeg process
+            ffmpeg_process = start_ffmpeg_vod(url)
 
-        # Get the process ID (PID) of the ffmpeg process
-        pid = str(ffmpeg_process.pid)
-        print(f'ffmpeg PID is {pid}')
+            # Get the process ID (PID) of the ffmpeg process
+            pid = str(ffmpeg_process.pid)
+            print(f'ffmpeg PID is {pid}')
+
+
+        while True:
+            if ffmpeg_process.poll() is not None or not ffmpeg_should_continue():
+                retry_count += 1
+                break
+            time.sleep(5)  
+
+        if retry_count >= max_retries:
+            break
+
 
     return(pid)
 
@@ -129,12 +155,22 @@ def ReStream(type, url):
 
 
 def KillProc(pid_str):
+
+    flag_file = "ffmpeg_proc.pid"
+
+    # Check if the file exists before trying to delete it
+    if os.path.exists(flag_file):
+        os.remove(flag_file)
+        print(f"File '{flag_file}' has been deleted.")
+    else:
+        print(f"File '{flag_file}' does not exist.")
+
     # Send SIGTERM signal to the process
     # Replace 'pid_str' with the actual process ID string you want to kill
 
     # Convert the PID string to an integer
-    pid = int(pid_str)
-    p = os.kill(pid, 15)
-    return(p)
-
+    #pid = int(pid_str)
+    #p = os.kill(pid, 15)
+    #return(p)
+    return
 
