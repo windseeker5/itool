@@ -33,25 +33,30 @@
         </div>
 
         <div class="user">
-            {% if 'username' in session %}
+            
 
-                <p>$>  
+            {% if fpids is not none %}
 
-                    {% if fpids is not none %}
+                {% for fid in fpids %}
+                                    
+                    <p>$> {{ fname }} 
 
-                        {% for fid in fpids %}
+                        {% if 'username' in session %}
+                            
+                            <a href="{{ url_for('delete', id=fid) }}"> <i class="ri-delete-bin-fill"></i></a> 
+                        
+                        {% endif %}
 
-                                            
-                                {% if fname is not none %}
-                                    {{ fname }} <a href="{{ url_for('delete', id=fid) }}"> <i class="ri-delete-bin-fill"></i></a> 
-                                {% endif %}  
+                    </p>
 
-                        {% endfor %}
-                
-                    {% endif %} 
-                </p>
+                {% endfor %}
+        
+            {% endif %} 
+         
 
-            {% endif %}
+
+
+        
         </div>
 
         <ul id="menuList">
