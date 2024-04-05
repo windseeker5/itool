@@ -2,6 +2,7 @@ venv/
 *.db
 *.m3u
 *.pkl
+*.pid
 .ipynb_checkpoints/
 .gitignore
 iptv_data/
