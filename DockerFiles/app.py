@@ -11,6 +11,7 @@ from MyLib import KillProc
 from MyLib import GetFfmpegPid
 from MyLib import GetKpi
 from MyLib import GetStreamName
+from MyLib import GetUserSession
 
 from util import PlaylistToDb
 from util import DowloadPlaylist
@@ -57,19 +58,31 @@ flag_file = "ffmpeg_proc.pid"
 def index():
     fpids = GetFfmpegPid()
     fname = GetStreamName()
+    usess = GetUserSession()
 
+    # Init variable if no streaming
     if len(fpids) == 0 :
         fpids = None
         fname = None
         if os.path.exists(flag_file):
             os.remove(flag_file)
 
+    # Sanity check for gost streaming
+    if fname is None and fpids is not None:
+        for f in fpids:
+            k = KillProc(f)
+            print(f"- Killing gosth ffmpeg {f}")
+            time.sleep(1)  
+            return redirect(url_for('index'))
+
     print("- - - - - - - - - - - - - - - - - - - - - - - - - - - ")
     print(f"fpids {fpids}")
     print(f"fname {fname}")
+    print(f"usess {usess}")
 
     return render_template('index.html', fpids=fpids, kpi=kpi, 
-                                         session=session, fname=fname )
+                                         session=session, fname=fname,
+                                         usess=usess )
 
 
 
@@ -78,19 +91,30 @@ def index():
 def manage():
     fpids = GetFfmpegPid()
     fname = GetStreamName()
+    usess = GetUserSession()
 
+    # Init variable if no streaming
     if len(fpids) == 0 :
         fpids = None
         fname = None
         if os.path.exists(flag_file):
             os.remove(flag_file)
 
+    # Sanity check for gost streaming
+    if fname is None and fpids is not None:
+        for f in fpids:
+            k = KillProc(f)
+            print(f"- Killing gosth ffmpeg {f}")
+            time.sleep(1)  
+            return redirect(url_for('index'))
+
     print("- - - - - - - - - - - - - - - - - - - - - - - - - - - ")
     print(f"fpids {fpids}")
     print(f"fname {fname}")
   
     return render_template('manage.html', fpids=fpids, kpi=kpi, 
-                                          session=session, fname=fname )
+                                          session=session, fname=fname, 
+                                          usess=usess )
 
 
 
@@ -156,13 +180,14 @@ def qjob(type, long_url):
 # Cancel ffmpeg job
 @app.route('/delete/<id>')
 def delete(id):
-    k = KillProc(id)
-
+    
     if os.path.exists(flag_file):
         os.remove(flag_file)
 
-    time.sleep(2)  # Sleep for 2 seconds
-    return redirect(url_for('manage'))
+    k = KillProc(id)
+
+    time.sleep(5)  # Sleep for 3 seconds
+    return redirect(url_for('index'))
 
 
 
@@ -200,6 +225,7 @@ def search():
 
     fpids = GetFfmpegPid()
     fname = GetStreamName()
+    usess = GetUserSession()
 
     if len(fpids) == 0 :
         fpids = None
@@ -213,7 +239,8 @@ def search():
     print(f"fname {fname}")
   
     return render_template('manage.html', items=items, fpids=fpids, kpi=kpi,
-                                          session=session, fname=fname )
+                                          session=session, fname=fname,
+                                          usess=usess ) 
 
 
 
@@ -224,6 +251,7 @@ def search():
 def exploremov():
     fpids = GetFfmpegPid()
     fname = GetStreamName()    
+    usess = GetUserSession()
 
     search_query = request.form.get('search_query')
     conn = sqlite3.connect(db)
@@ -275,7 +303,8 @@ ORDER BY
     print(f"fname {fname}")
 
     return render_template('explore.html',items=items,fpids=fpids,
-                                          kpi=kpi,exp_type=exp_type,fname=fname )
+                                          kpi=kpi,exp_type=exp_type,fname=fname,
+                                          usess=usess  )
 
 
 
@@ -288,6 +317,7 @@ ORDER BY
 def exploretv():
     fpids = GetFfmpegPid()
     fname = GetStreamName()
+    usess = GetUserSession()
 
     search_query = request.form.get('search_query')
     conn = sqlite3.connect(db)
@@ -339,7 +369,8 @@ ORDER BY
     print(f"fname {fname}")
 
     return render_template('explore.html',items=items,fpids=fpids,
-                                          kpi=kpi,exp_type=exp_type,fname=fname )
+                                          kpi=kpi,exp_type=exp_type,fname=fname,
+                                          usess=usess )
 
 
 

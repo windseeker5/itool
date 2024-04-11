@@ -31,6 +31,8 @@ RUN apt-get upgrade -y
 # Install ffmpeg
 RUN apt-get install -y ffmpeg
 RUN apt-get install -y nano
+RUN apt-get install -y iproute2
+
 
 
 # Install python3-pip

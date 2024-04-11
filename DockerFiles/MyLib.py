@@ -82,6 +82,26 @@ def GetStreamName():
 
 
 
+def GetUserSession():
+ 
+    # Command to run
+    command = "ss -Ht sport = :8080 | grep -c 'ESTAB'"
+
+    # Run the command
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+
+    # Check the result
+    if result.returncode == 0:
+        # Convert the output to an integer
+        count = int(result.stdout.strip())
+    else:
+        print("Error message:")
+        count = ''
+        print(result.stderr)
+    return(count)
+
+
+
 def GetFfmpegPid():
     pid_list = []
 
@@ -166,11 +186,10 @@ def KillProc(pid_str):
         print(f"File '{flag_file}' does not exist.")
 
     # Send SIGTERM signal to the process
-    # Replace 'pid_str' with the actual process ID string you want to kill
 
     # Convert the PID string to an integer
-    #pid = int(pid_str)
-    #p = os.kill(pid, 15)
-    #return(p)
-    return
+    pid = int(pid_str)
+    p = os.kill(pid, 15)
+    return(p)
+    #return
 

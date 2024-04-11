@@ -39,11 +39,11 @@
 
                 {% for fid in fpids %}
                                     
-                    <p>$> {{ fname }} 
+                    <p> @ {{ usess }} $> {{ fname }} 
 
                         {% if 'username' in session %}
-                            
-                            <a href="{{ url_for('delete', id=fid) }}"> <i class="ri-delete-bin-fill"></i></a> 
+
+                            <a href="{{ url_for('delete', id=fid) }}"> <i class="ri-delete-bin-fill"></i></a>  
                         
                         {% endif %}
 

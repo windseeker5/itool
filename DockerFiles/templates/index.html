@@ -17,13 +17,12 @@
 
                 <div class="hero">
 
-                    <h3>Streaming <span>{for}</span></h3> 
+                    <h3>streaming <span>{for}</span></h3> 
                     <h1>hackers_</h1> 
 
                     <p>
                         Stream any content with Open-source technology and Docker.
-                        Recommended <i class="ri-android-fill"></i> and 
-                        <i class="ri-apple-fill"></i> mobile App for your TV:
+                        Recommended mobile App for your TV_
                         <span class="icon-app">
                             <a href="https://play.google.com/store/search?q=vlc&c=apps&hl=en_CA&gl=US" target="_blank"> 
                                 <img src="static/img/vlc.png" alt="vlc">
@@ -96,32 +95,17 @@
     <!--                                                -->
 
     <section>
-
         <div class="stream-section">
-
             <div class="box">
-
-                <video 
-                id="my-video" 
-                class="video-js" 
-                controls 
-                autoplay 
-                preload="auto" 
-                width="640" 
-                height="360"
-                muted
-                data-setup="{}"           
-            >
-
-                <source src="http://tv.dresdell.com:8080/hls/live.m3u8" 
-                        type="application/x-mpegURL">        
+                <video id="my-video" class="video-js" controls autoplay preload="auto" muted data-setup="{}">
+                    <source src="http://tv.dresdell.com:8080/hls/live.m3u8" type="application/x-mpegURL">
                 </video>
-        
             </div>
-
         </div>
-
     </section>
+    
+
+
 
     {% endif %}
 

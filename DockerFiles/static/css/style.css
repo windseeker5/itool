@@ -34,7 +34,8 @@ body{
 
 
 nav{
-    padding: 0px 30px;
+    padding: 0px 5%;
+    /* min-width: 700px; */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -92,8 +93,6 @@ nav ul li a:hover{
     color: #f0ff1b;
     transition: 0.3s ease-out;
 }
-
-
 
 
 
@@ -267,6 +266,14 @@ nav ul li a:hover{
     border-radius: 10px; 
 }
 
+.video-js {
+    width: 640px !important;
+    height: 360px !important;
+}
+
+
+
+
 .box::before,
 .box::after {
     content: '';
@@ -298,6 +305,9 @@ nav ul li a:hover{
         background-position: 300%;
     }
 }
+
+
+
 
 
 
@@ -610,6 +620,9 @@ nav ul li a:hover{
     background-color: #f0e3ed; /* Set the color of the line */
 }
 
+.show-result table {
+    width: 100%;
+}
 
 
 .stream-logo img {
@@ -659,6 +672,70 @@ nav ul li a:hover{
 /*                                    */
 
 @media (max-width: 750px) {
+
+    /*                                       */
+    /*     Border Animation RGB effect       */
+    /*                                       */
+
+    .user{
+        font-size: 0.9rem;
+    }
+
+
+
+
+
+    .box {
+        position: relative;
+        width: 640px;
+        height: 360px;
+        background: #151320;
+        border-radius: 10px; 
+    }
+
+
+    .video-js {
+            width: 640px !important;
+            height: 360px !important;
+    }
+    
+
+
+    .box::before,
+    .box::after {
+        content: '';
+        z-index: -1;
+        position: absolute;
+        width: calc(100% + 10px);
+        height: calc(100% + 10px);
+        top: -5px;
+        left: -5px;
+        border-radius: 8px;
+        background: linear-gradient(45deg,
+            #ffff00, #00ff00, #0099ff, #001aff, #a200ff, #ff0055, #ff0000,
+            #ff0055, #ff0000, #ffff00, #00ff00, #0099ff, #001aff, #a200ff
+        );
+        background-size: 300%;
+        animation: border 12s linear infinite;
+    }
+
+    .box::after {
+        filter: blur(25px);
+    }
+
+    @keyframes border {
+        0%, 100% {
+            background-position: 0 0;
+        }
+
+        50% {
+            background-position: 300%;
+        }
+    }
+
+
+
+
     nav ul {
         position: absolute;
         top: 90px;
@@ -737,13 +814,20 @@ nav ul li a:hover{
     .show-result{
         min-width: 650px;
         max-width: 650px;
+        align-items: center;
         border-radius: 8px;
         padding: 20px 20px;
         font-size: 1rem;
         margin-bottom: 100px;
         box-shadow: 0 0 15px rgb(146, 255, 5);
     }
+
+    .show-result table {
+        width: 100%;
+    }
     
+
+  
     .stream-category{
         display: none; 
     }
@@ -773,11 +857,11 @@ nav ul li a:hover{
     
     
     .hero h1{
-        font-size: 4rem;
+        font-size: 5.5rem;
     }
     
     .hero h3{
-        font-size: 2rem;
+        font-size: 2.7rem;
     }
     
     
@@ -786,24 +870,17 @@ nav ul li a:hover{
     }
     
     .hero p{
-        font-size: 1.2rem;
+        font-size: 2rem;
     }
     
     .icon-app img{
         position: relative;
-        bottom: -15px;
-        width: 40px;
+        bottom: -10px;
+        width: 50px;
         height: auto;
     }
 
 }
-
-
-
-
-
-
-
 
 
 
@@ -820,6 +897,65 @@ nav ul li a:hover{
 /*                                    */
 
 @media (max-width: 430px) {
+
+    /*                                       */
+    /*     Border Animation RGB effect       */
+    /*                                       */
+
+    .user{
+        font-size: 0.7rem;
+    }
+
+    .box {
+        position: relative;
+        width: 350px;
+        height: 197px;
+        background: #151320;
+        border-radius: 10px; 
+    }
+
+
+    .video-js {
+            width: 350px !important;
+            height: 197px !important;
+    }
+    
+
+    .box::before,
+    .box::after {
+        content: '';
+        z-index: -1;
+        position: absolute;
+        width: calc(100% + 10px);
+        height: calc(100% + 10px);
+        top: -5px;
+        left: -5px;
+        border-radius: 8px;
+        background: linear-gradient(45deg,
+            #ffff00, #00ff00, #0099ff, #001aff, #a200ff, #ff0055, #ff0000,
+            #ff0055, #ff0000, #ffff00, #00ff00, #0099ff, #001aff, #a200ff
+        );
+        background-size: 300%;
+        animation: border 12s linear infinite;
+    }
+
+    .box::after {
+        filter: blur(25px);
+    }
+
+    @keyframes border {
+        0%, 100% {
+            background-position: 0 0;
+        }
+
+        50% {
+            background-position: 300%;
+        }
+    }
+
+
+
+
     nav ul {
         position: absolute;
         top: 90px;
@@ -874,7 +1010,7 @@ nav ul li a:hover{
     }
     
     .kpi-only span{
-        font-size: 1.2rem ;
+        font-size: 1rem !important;
         padding: 0px 0px ;
     }
     
@@ -902,6 +1038,10 @@ nav ul li a:hover{
         font-size: 0.8rem;
         margin-bottom: 100px;
         box-shadow: 0 0 15px rgb(146, 255, 5);
+    }
+
+    .show-result table {
+        width: 100%;
     }
     
     .stream-category{
@@ -940,25 +1080,25 @@ nav ul li a:hover{
     
     
     .hero h1{
-        font-size: 4rem;
+        font-size: 4.5rem;
     }
     
     .hero h3{
-        font-size: 2rem;
+        font-size: 2.1rem;
     }
     
     
     .hero span{
-        font-size: 2rem;
+        font-size: 1.9rem;
     }
     
     .hero p{
-        font-size: 1.2rem;
+        font-size: 1.5rem;
     }
     
     .icon-app img{
         position: relative;
-        bottom: -15px;
+        bottom: -10px;
         width: 40px;
         height: auto;
     }
@@ -975,8 +1115,6 @@ nav ul li a:hover{
         font-size: 0.9rem;
 
     }
-
-
 
 
 }
