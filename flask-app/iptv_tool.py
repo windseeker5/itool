@@ -40,7 +40,7 @@ if __name__ == '__main__':
         print("  [1] Build docker image & run it ")
         print("  [2] Download m3u file from service provider(SP)")
         print("  [3] Convert m3u file to Sqlite db")
-        print("  [4] Export your filtered \ smaller m3u file")
+        print("  [4] Export your filtered to smaller m3u file")
         print("  [5] ")
         print("  [6] Build movies DB for reco engine")
         print("  [7] Download VOD flaged 1 in DB")

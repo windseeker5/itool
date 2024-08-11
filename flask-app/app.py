@@ -24,7 +24,9 @@ app.secret_key = 'your_secret_key_here'
 
 db = """iptv_data/smartersiptv.db"""
 
-redis_conn = Redis(host='tv.dresdell.com', port=6379)
+redis_conn = Redis(host='redis', port=6379)
+
+
 q = Queue(connection=redis_conn)
 
 # Mock user database (replace this with a real user database)
@@ -36,14 +38,6 @@ conf = LoadConfig()
 
 folder = "iptv_data"  # Data Folder 
 flag_file = "ffmpeg_proc.pid"
-
-
-
-#pl = DowloadPlaylist( conf['m3u_service'] , folder+"/"+ conf['m3u_file_fullsize'] )
-
-#stat = PlaylistToDb( folder+"/"+conf['m3u_file_fullsize'], 
-#                     folder+"/"+conf['db_file'], 
-#                     conf['db_schema'])
 
 
 
@@ -135,6 +129,7 @@ def login():
             return render_template('login.html', message='Invalid credentials')
     else:
         return render_template('login.html')
+
 
 
 
@@ -374,14 +369,8 @@ ORDER BY
 
 
 
- 
-
-
-
-
-
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
 

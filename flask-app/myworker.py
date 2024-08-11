@@ -5,6 +5,8 @@ import os
 import sys
 import time
 
+
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -16,7 +18,7 @@ logger.addHandler(handler)
 
 def run_worker():
     try:
-        redis_conn = Redis(host='tv.dresdell.com', port=6379)
+        redis_conn = Redis(host='redis', port=6379)
         with Connection(redis_conn):
             queue = Queue()
             worker = Worker(queue)

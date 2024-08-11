@@ -34,7 +34,6 @@ RUN apt-get install -y nano
 RUN apt-get install -y iproute2
 
 
-
 # Install python3-pip
 RUN apt-get install -y python3-pip
 
@@ -43,17 +42,18 @@ RUN apt-get install -y python3-pip
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-
-# Start the RQ worker
-# rq worker --url redis://tv.dresdell.com:6379
-
-# CMD ["python3", "myworker.py"]
-
-# Make sure start.sh is executable
-RUN chmod +x start.sh
-#CMD ["./start.sh"]
+# Define environment variable
+ENV FLASK_APP=app.py
 
 # Expose the RTMP and HTTP ports
 EXPOSE 1935
 EXPOSE 8080
-# EXPOSE 5000
+EXPOSE 5000
+
+# Start both Flask and worker process testing env
+CMD ["sh", "-c", "flask run --host=0.0.0.0 --port=5000"]
+
+# CMD ["sh", "-c", "flask run --host=0.0.0.0 --port=8080 & python myworker.py"]
+
+# For production env
+#CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:8080 --log-level debug app:app & python myworker.py"]
