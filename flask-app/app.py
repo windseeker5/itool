@@ -372,7 +372,9 @@ def exploretv():
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
 
-    cursor.execute("""SELECT 
+    cursor.execute("""
+
+SELECT 
     s.tvg_id,
     s.tvg_name,
     s.vod_name,
@@ -386,7 +388,7 @@ def exploretv():
     m.popularity,
     m.original_language,
     CASE
-        WHEN m.original_language IN ('fr', 'en') AND m.vote_average >= 7.5 THEN 1
+        WHEN m.original_language IN ('fr', 'en') AND m.vote_average >= 6 THEN 1
         ELSE 0
     END AS hot
 FROM
@@ -398,6 +400,9 @@ WHERE
     s.group_title IN ('ENGLISH SERIES','FRANCE SÉRIES','NETFLIX  SERIES','APPLE+ SERIES','NORDIC SERIES', 'QUÉBEC SERIES')
     
     AND hot = 1
+    
+GROUP BY vod_name
+
 ORDER BY
     m.vote_average DESC;""")
 
