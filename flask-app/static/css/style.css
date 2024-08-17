@@ -27,10 +27,16 @@ body{
 
 
 .logo{
-    width: 80px;
+    
+    width: 120px;
     cursor: pointer;
-    filter: drop-shadow(0 0 2px #f701ff); 
+    /* Adjust margins */
+    margin-top: 20px; /* Adjust as needed */
+    margin-left: 5%; 
+
 }
+
+
 
 
 nav{

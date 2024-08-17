@@ -221,34 +221,49 @@ def delete(id):
 
 
 
-# Search for Liv or vod
+
+
+
+
 @app.route('/search', methods=['POST'])
 def search():
     search_query = request.form.get('search_query')
+    
+    # Split the search query into individual words
+    search_terms = search_query.split()
+    
+    # Construct the SQL query with placeholders for each search term
+    sql_query = """SELECT 
+                        s.tvg_id,
+                        s.tvg_name,
+                        s.vod_name,
+                        s.tvg_logo,
+                        s.group_title,
+                        s.st_uri,
+                        s.st_type,
+                        m.genres,
+                        m.vote_average,
+                        m.popularity,
+                        m.original_language,
+                        CASE
+                            WHEN m.original_language IN ('fr', 'en') AND m.vote_average >= 7 THEN 1
+                            ELSE 0
+                        END AS hot
+                    FROM
+                        smartersiptv AS s LEFT OUTER JOIN movies AS m ON 
+                            s.vod_name = m.original_title
+                    WHERE """
+    
+    # Add LIKE conditions for each word in the search terms, combined with AND
+    sql_query += " AND ".join(["s.tvg_name LIKE ?"] * len(search_terms))
+    
+    # Prepare the values for the placeholders
+    like_values = ['%' + term + '%' for term in search_terms]
+    
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
 
-    cursor.execute("""SELECT 
-                            s.tvg_id,
-                            s.tvg_name,
-                            s.vod_name,
-                            s.tvg_logo,
-                            s.group_title,
-                            s.st_uri,
-                            s.st_type,
-                            m.genres,
-                            m.vote_average,
-                            m.popularity,
-                            m.original_language,
-                            CASE
-                                WHEN m.original_language IN ('fr', 'en') AND m.vote_average >= 7 THEN 1
-                                ELSE 0
-                            END AS hot
-                        FROM
-                            smartersiptv AS s LEFT OUTER JOIN movies AS m ON 
-                                s.vod_name = m.original_title
-
-                        WHERE s.tvg_name LIKE ?""", ('%' + search_query + '%',))
+    cursor.execute(sql_query, like_values)
     
     items = cursor.fetchall()
     conn.close()
@@ -257,7 +272,7 @@ def search():
     fname = GetStreamName()
     usess = GetUserSession()
 
-    if len(fpids) == 0 :
+    if len(fpids) == 0:
         fpids = None
         fname = None
 
@@ -270,7 +285,11 @@ def search():
   
     return render_template('manage.html', items=items, fpids=fpids, kpi=kpi,
                                           session=session, fname=fname,
-                                          usess=usess ) 
+                                          usess=usess )
+
+
+
+
 
 
 
@@ -407,5 +426,5 @@ ORDER BY
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)
 
