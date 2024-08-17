@@ -21,6 +21,15 @@ from time import sleep
 
 
 
+def download_video(file_url, file_nm):
+    # Define the wget command to download the video
+    linux_command = ['wget', '-O', file_nm, file_url]
+
+    # Use subprocess to run the command
+    subprocess.run(linux_command)
+
+
+
 def BuildMovieDB():
     api_key = 'da835367527db6ee192714cc83849e02'
 

@@ -337,6 +337,9 @@ nav ul li a:hover{
 
 
 
+
+
+
 /*                         */
 /*    Footer Style         */
 /*                         */
@@ -418,6 +421,8 @@ nav ul li a:hover{
     font-size: 0.9rem;
     color: #683865;
 }
+
+
 
 
 
@@ -574,6 +579,8 @@ nav ul li a:hover{
 
 
 
+
+
 .show-result{
     display: flex;
     min-width: 700px;
@@ -600,7 +607,7 @@ nav ul li a:hover{
 }
 
 .show-result i:hover{
-    color: #5944d4;
+    color: #ae1695;
     transition: 0.3s ease-out;
 }
 

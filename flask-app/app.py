@@ -3,20 +3,11 @@ from flask import ( Flask, render_template, session, redirect, request,
 import sqlite3
 from rq import Queue
 from redis import Redis
-import subprocess, os
+import subprocess, os, threading
 import time
 
-from MyLib import ReStream
-from MyLib import KillProc
-from MyLib import GetFfmpegPid
-from MyLib import GetKpi
-from MyLib import GetStreamName
-from MyLib import GetUserSession
-
-from util import PlaylistToDb
-from util import DowloadPlaylist
-from util import LoadConfig
-
+from MyLib import ReStream, KillProc, GetFfmpegPid, GetKpi, GetStreamName, GetUserSession
+from util import PlaylistToDb, DowloadPlaylist, LoadConfig, download_video
 
 
 app = Flask(__name__)
@@ -25,7 +16,6 @@ app.secret_key = 'your_secret_key_here'
 db = """iptv_data/smartersiptv.db"""
 
 redis_conn = Redis(host='redis', port=6379)
-
 
 q = Queue(connection=redis_conn)
 
@@ -36,8 +26,12 @@ users = {'admin': 'password'}
 kpi = GetKpi(db)
 conf = LoadConfig()
 
-folder = "iptv_data"  # Data Folder 
+folder = conf['data_folder'] 
 flag_file = "ffmpeg_proc.pid"
+
+print("- Loading config >")
+print(f" folder - {folder}")
+print(f" flag_file - {flag_file}")
 
 
 
@@ -77,6 +71,47 @@ def index():
     return render_template('index.html', fpids=fpids, kpi=kpi, 
                                          session=session, fname=fname,
                                          usess=usess )
+
+
+
+
+
+# Video Download from app
+@app.route('/download/<path:type>/<path:long_url>')
+def download(type, long_url):
+
+    # Based on long_url, find stream name 
+    conn = sqlite3.connect(db)
+    cursor = conn.cursor()
+    cursor.execute("SELECT tvg_name FROM smartersiptv WHERE st_uri = ?", (long_url,))    
+    st_name = cursor.fetchall()
+    st_nm = st_name[0][0]
+
+    # Extract the file extension from lon_url
+    _, file_extension = os.path.splitext(long_url)
+
+    # Output the file extension
+    print(file_extension)  # Output: .mkv
+
+
+    # Write the variable to the file
+    with open(flag_file, "w") as file:
+        file.write(st_nm)
+
+    # Example video URL and file name
+    file_url = long_url
+    file_nm = folder + "/" + st_nm + file_extension
+
+    print(f"file_nm : {file_nm}")
+
+    # Start the download in a separate thread
+    download_thread = threading.Thread(target=download_video, args=(file_url, file_nm))
+    download_thread.start()
+
+    time.sleep(1)  # Sleep for 2 seconds
+
+    return redirect(url_for('index'))
+
 
 
 

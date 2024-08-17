@@ -89,6 +89,15 @@
                   </td>   
                 {% endif %}
 
+
+                {% if item[6] == "VOD" and fpids is none %}
+                <td><a href="{{url_for('download', type='VOD',long_url=item[5]) }}"> 
+                    <i class="ri-hard-drive-3-fill"></i>
+                    </a> 
+                </td>   
+                {% endif %}
+
+
             </tr>
             {% endfor %}
         </table>
