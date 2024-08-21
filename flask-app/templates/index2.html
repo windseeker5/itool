@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IP#TV>_</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles2.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+</head>
+
+<body>
+
+    <!-- Footer Section -->
+
+    <header class="header">
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo" class="logo">
+        </div>
+        <div class="status-terminal">
+            <div class="terminal" id="terminal">
+                <p>Waiting for status...</p>
+            </div>
+        </div>
+        <nav class="menu">
+            <ul>
+                <li><a href="#item1">Item 1</a></li>
+                <li><a href="#item2">Item 2</a></li>
+                <li><a href="#item3">Item 3</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+
+
+
+
+
+
+
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <p>&copy; 2024 Your Company. All rights reserved.</p>
+        <div class="social-icons">
+            <a href="https://github.com/your-github-repo" target="_blank">
+                <img src="github-icon.png" alt="GitHub">
+            </a>
+            <a href="https://discord.com/invite/your-discord-channel" target="_blank">
+                <img src="discord-icon.png" alt="Discord">
+            </a>
+        </div>
+    </footer>
+
+
+
+    <script>
+        function updateStatus() {
+            fetch('/status')  // Fetch status from the Flask route
+                .then(response => response.json())
+                .then(data => {
+                    const terminal = document.getElementById('terminal');
+                    terminal.innerHTML = '';  // Clear current content
+                    
+                    if (data.running) {  // Only update if running is True
+                        terminal.innerHTML += `<p>${data.task_name || 'N/A'}</p>`;
+                        terminal.innerHTML += `<p>${data.result || 'N/A'}</p>`;
+                    } else {  // When running is False
+                        terminal.innerHTML = '<p>#>_</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching status:', error);
+                    const terminal = document.getElementById('terminal');
+                    terminal.innerHTML = '<p>Error fetching status</p>';
+                });
+        }
+    
+        setInterval(updateStatus, 2000);  // Update status every 2 seconds
+    
+        const hamburger = document.querySelector('.hamburger');
+        const menu = document.querySelector('.menu ul');
+    
+        hamburger.addEventListener('click', () => {
+            menu.classList.toggle('active');
+        });
+    </script>
+    
+
+
+
+
+
+    
+</body>
+
+</html>
