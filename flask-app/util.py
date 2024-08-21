@@ -34,7 +34,7 @@ def BuildMovieDB():
     api_key = 'da835367527db6ee192714cc83849e02'
 
     d = '2010-01-01'
-    number = 6  # Minimum movie score
+    number = 7  # Minimum movie score
     qt_movie = 500  # This mean 10 page of 20 movies 
 
     # Function to map a list of genre IDs to genre names
