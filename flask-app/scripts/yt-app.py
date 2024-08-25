@@ -105,6 +105,6 @@ def api_status():
 
 
 if __name__ == '__main__':
-    os.environ['HTTP_PROXY'] = 'http://webproxystatic-on.tsl.telus.com:8080'
-    os.environ['HTTPS_PROXY'] = 'http://webproxystatic-on.tsl.telus.com:8080'
-    app.run(debug=True)
+   # os.environ['HTTP_PROXY'] = 'http://webproxystatic-on.tsl.telus.com:8080'
+   # os.environ['HTTPS_PROXY'] = 'http://webproxystatic-on.tsl.telus.com:8080'
+    app.run(debug=True, port=8000)

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status</title>
+    <style>
+        body {
+            background-color: white;
+            /* Set background color to white */
+            color: black;
+            /* Default text color to black */
+            font-family: Arial, sans-serif;
+            /* Change the font for the main page */
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .terminal {
+            background-color: black;
+            color: green;
+            font-family: monospace;
+            padding: 10px;
+            margin: 0 auto;
+            max-width: 600px;
+            border: 1px solid green;
+            border-radius: 5px;
+            height: 200px;
+            /* Adjust height as needed */
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .terminal p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Download Status</h1>
+        <div class="terminal" id="terminal">
+            <p>#>_</p>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus() {
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(data => {
+                    const terminal = document.getElementById('terminal');
+                    terminal.innerHTML = '';  // Clear current content
+
+                    terminal.innerHTML += `<p>Status: ${data.status}</p>`;
+                    terminal.innerHTML += `<p>Progress: ${data.progress}</p>`;
+                    if (data.file_path) {
+                        terminal.innerHTML += `<p>File Path: ${data.file_path}</p>`;
+                    }
+                    if (data.error) {
+                        terminal.innerHTML += `<p>Error: ${data.error}</p>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching status:', error);
+                });
+        }
+
+        setInterval(updateStatus, 2000);  // Update status every 2 seconds
+    </script>
+</body>
+
+</html>

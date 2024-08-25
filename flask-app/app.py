@@ -1,37 +1,35 @@
 from flask import ( Flask, render_template, session, redirect, request,
                     url_for, flash, abort, logging, jsonify )
 import sqlite3
-from rq import Queue
+from rq import Worker, Queue, Connection
 from redis import Redis
-import subprocess, os, threading
-import time
-
-from MyLib import ReStream, KillProc, GetFfmpegPid, GetKpi, GetStreamName, GetUserSession
-from util import PlaylistToDb, DowloadPlaylist, LoadConfig, download_video
+import sqlite3, subprocess, os, time
+from threading import Thread
+from tasks import *
 
 
 app = Flask(__name__)
+
 app.secret_key = 'your_secret_key_here'
 
-db = """iptv_data/smartersiptv.db"""
-
 redis_conn = Redis(host='redis', port=6379)
-
 q = Queue(connection=redis_conn)
 
-# Mock user database (replace this with a real user database)
+
+# Mockup user database
 users = {'admin': 'password'}
 
-# GetKpi from db
-kpi = GetKpi(db)
-conf = LoadConfig()
 
+# Load config from yaml
+conf = LoadConfig()
 folder = conf['data_folder'] 
 flag_file = "ffmpeg_proc.pid"
+m3u_url = conf['m3u_service'] 
+pl_name = conf['data_folder'] + "/" + conf['m3u_file_fullsize'] # "iptv_data/Smartersiptv.m3u"
+db_name = conf['data_folder'] + "/" + conf['db_file'] # "iptv_data/smartersiptv.db"
 
-print("- Loading config >")
-print(f" folder - {folder}")
-print(f" flag_file - {flag_file}")
+# GetKpi from db
+kpi = GetKpi(db_name)
 
 
 
@@ -40,6 +38,16 @@ print(f" flag_file - {flag_file}")
 ## ROUTES AND PAGES
 ##
 ##################################################################################
+
+
+
+@app.route('/status', methods=['GET'])
+def get_status():
+    return jsonify(status), 200
+
+
+
+
 
 
 @app.route('/')
@@ -63,14 +71,26 @@ def index():
             time.sleep(1)  
             return redirect(url_for('index'))
 
-    print("- - - - - - - - - - - - - - - - - - - - - - - - - - - ")
-    print(f"fpids {fpids}")
-    print(f"fname {fname}")
-    print(f"usess {usess}")
-
-    return render_template('index.html', fpids=fpids, kpi=kpi, 
+    return render_template('index.html', status=status, fpids=fpids, kpi=kpi, 
                                          session=session, fname=fname,
                                          usess=usess )
+
+
+
+
+
+
+
+@app.route('/updatedb', methods=['GET', 'POST'])
+def updatedb():
+    if not status["running"]:
+
+        udb_thread = Thread(target=UpdatePlaylist, args=(m3u_url, pl_name, db_name, ))
+        udb_thread.start()
+
+    return redirect(url_for('index'))
+
+
 
 
 
@@ -80,23 +100,17 @@ def index():
 @app.route('/download/<path:type>/<path:long_url>')
 def download(type, long_url):
 
-    # Based on long_url, find stream name 
+    # Find stream name 
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
     cursor.execute("SELECT tvg_name FROM smartersiptv WHERE st_uri = ?", (long_url,))    
     st_name = cursor.fetchall()
     st_nm = st_name[0][0]
 
+    conn.close()
+
     # Extract the file extension from lon_url
     _, file_extension = os.path.splitext(long_url)
-
-    # Output the file extension
-    print(file_extension)  # Output: .mkv
-
-
-    # Write the variable to the file
-    with open(flag_file, "w") as file:
-        file.write(st_nm)
 
     # Example video URL and file name
     file_url = long_url
@@ -105,12 +119,14 @@ def download(type, long_url):
     print(f"file_nm : {file_nm}")
 
     # Start the download in a separate thread
-    download_thread = threading.Thread(target=download_video, args=(file_url, file_nm))
+    download_thread = Thread(target=DownloadVod, args=(file_url, file_nm))
     download_thread.start()
 
-    time.sleep(1)  # Sleep for 2 seconds
+    time.sleep(1)  
 
     return redirect(url_for('index'))
+
+
 
 
 
@@ -141,9 +157,11 @@ def manage():
     print(f"fpids {fpids}")
     print(f"fname {fname}")
   
-    return render_template('manage.html', fpids=fpids, kpi=kpi, 
+    return render_template('manage.html', status=status, fpids=fpids, kpi=kpi, 
                                           session=session, fname=fname, 
                                           usess=usess )
+
+
 
 
 
@@ -183,11 +201,12 @@ def logout():
 def qjob(type, long_url):
 
     # Based on long_url, find stream name 
-    conn = sqlite3.connect(db)
+    conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
     cursor.execute("SELECT tvg_name FROM smartersiptv WHERE st_uri = ?", (long_url,))    
     st_name = cursor.fetchall()
     st_nm = st_name[0][0]
+    conn.close()
 
     # Write the variable to the file
     with open(flag_file, "w") as file:
@@ -207,6 +226,8 @@ def qjob(type, long_url):
 
 
 
+
+
 # Cancel ffmpeg job
 @app.route('/delete/<id>')
 def delete(id):
@@ -218,6 +239,7 @@ def delete(id):
 
     time.sleep(5)  # Sleep for 3 seconds
     return redirect(url_for('index'))
+
 
 
 
@@ -260,7 +282,7 @@ def search():
     # Prepare the values for the placeholders
     like_values = ['%' + term + '%' for term in search_terms]
     
-    conn = sqlite3.connect(db)
+    conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
 
     cursor.execute(sql_query, like_values)
@@ -283,148 +305,13 @@ def search():
     print(f"fpids {fpids}")
     print(f"fname {fname}")
   
-    return render_template('manage.html', items=items, fpids=fpids, kpi=kpi,
+    return render_template('manage.html', status=status, items=items, fpids=fpids, kpi=kpi,
                                           session=session, fname=fname,
                                           usess=usess )
 
 
 
 
-
-
-
-
-
-# Explore best hot
-@app.route('/exploremov', methods=['GET', 'POST'])
-def exploremov():
-    fpids = GetFfmpegPid()
-    fname = GetStreamName()    
-    usess = GetUserSession()
-
-    search_query = request.form.get('search_query')
-    conn = sqlite3.connect(db)
-    cursor = conn.cursor()
-
-    cursor.execute("""SELECT 
-    s.tvg_id,
-    s.tvg_name,
-    s.vod_name,
-    s.tvg_logo,
-    s.group_title,
-    s.st_uri,
-    s.st_type,
-    m.genres,
-    ROUND(m.vote_average, 1),
-    m.tagline,
-    m.popularity,
-    m.original_language,
-    CASE
-        WHEN m.original_language IN ('fr', 'en') AND m.vote_average >= 7.5 THEN 1
-        ELSE 0
-    END AS hot
-FROM
-    smartersiptv AS s
-        LEFT OUTER JOIN
-    movies AS m ON s.vod_name = m.original_title
-WHERE
-    s.group_title IN ('EN - NEW RELEASE')
-    -- s.group_title IN ('ENGLISH SERIES','FRANCE SÉRIES','NETFLIX  SERIES','APPLE+ SERIES','NORDIC SERIES', 'QUÉBEC SERIES')
-    
-    AND hot = 1
-ORDER BY
-    m.vote_average DESC;""")
-
-    items = cursor.fetchall()
-    conn.close()
-
-    exp_type = "movies"
- 
-    if len(fpids) == 0 :
-        fpids = None
-        fname = None
-
-        if os.path.exists(flag_file):
-            os.remove(flag_file)
-
-    print("- - - - - - - - - - - - - - - - - - - - - - - - - - - ")
-    print(f"fpids {fpids}")
-    print(f"fname {fname}")
-
-    return render_template('explore.html',items=items,fpids=fpids,
-                                          kpi=kpi,exp_type=exp_type,fname=fname,
-                                          usess=usess  )
-
-
-
-
-
-
-
-# Explore best hot
-@app.route('/exploretv', methods=['GET', 'POST'])
-def exploretv():
-    fpids = GetFfmpegPid()
-    fname = GetStreamName()
-    usess = GetUserSession()
-
-    search_query = request.form.get('search_query')
-    conn = sqlite3.connect(db)
-    cursor = conn.cursor()
-
-    cursor.execute("""
-
-SELECT 
-    s.tvg_id,
-    s.tvg_name,
-    s.vod_name,
-    s.tvg_logo,
-    s.group_title,
-    s.st_uri,
-    s.st_type,
-    m.genres,
-    ROUND(m.vote_average, 1),
-    m.tagline,
-    m.popularity,
-    m.original_language,
-    CASE
-        WHEN m.original_language IN ('fr', 'en') AND m.vote_average >= 6 THEN 1
-        ELSE 0
-    END AS hot
-FROM
-    smartersiptv AS s
-        LEFT OUTER JOIN
-    movies AS m ON s.vod_name = m.original_title
-WHERE
-    -- s.group_title IN ('EN - NEW RELEASE')
-    s.group_title IN ('ENGLISH SERIES','FRANCE SÉRIES','NETFLIX  SERIES','APPLE+ SERIES','NORDIC SERIES', 'QUÉBEC SERIES')
-    
-    AND hot = 1
-    
-GROUP BY vod_name
-
-ORDER BY
-    m.vote_average DESC;""")
-
-    items = cursor.fetchall()
-    conn.close()
-
-    exp_type = "tv shows"
-
-    if len(fpids) == 0 :
-        fpids = None
-        fname = None
-
-        if os.path.exists(flag_file):
-            os.remove(flag_file)
-
-    print("- - - - - - - - - - - - - - - - - - - - - - - - - - - ")
-    print(f"fpids {fpids}")
-    print(f"fname {fname}")
-
-    return render_template('explore.html',items=items,fpids=fpids,
-                                          kpi=kpi,exp_type=exp_type,fname=fname,
-                                          usess=usess )
 
 
 

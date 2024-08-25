@@ -15,25 +15,26 @@
 
             <div class="hero-wrapper-column">
 
+                {% if fpids is none %}
+
                 <div class="hero">
 
                     <h3>streaming <span>{for}</span></h3> 
                     <h1>hackers_</h1> 
 
                     <p>
-                        Stream any content with Open-source technology and Docker.
-                        Recommended mobile App for your TV_
+                         Stream your content to your mobile app or TV using open-source 
+                         technology and Docker_
                     </p>
 
-
-                    {% if fpids is none %}
                         <div class="hero-no-streaming">
 
                             <!-- Include the template here -->
                             {% include 'base-kpi.html' %}
             
                         </div>
-                    {% endif %}
+
+                {% endif %}
 
 
                 </div>
@@ -43,8 +44,6 @@
         </div>
 
     </div>
-
-
 
 
 
@@ -103,8 +102,6 @@
 
 
     {% endif %}
-
-
 
 
 

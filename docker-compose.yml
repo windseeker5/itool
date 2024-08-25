@@ -24,7 +24,7 @@ services:
     ports:
       - "80:8096"
     volumes:
-      - /run/media/kdresdell/030ce0ef-7ea0-4060-9b0d-5f6889860420:/media
+      - /run/media/kdresdell/030ce0ef-7ea0-4060-9b0d-5f68898604201:/media
       - /home/kdresdell/jellyfin_config:/config
       - /home/kdresdell/jellyfin_cache:/cache
     restart: unless-stopped

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Movie Search</h1>
+        <div class="search-container">
+            <form id="search-form">
+                <div class="search-wrapper">
+                    <input type="text" id="movie-search" placeholder="Search for a movie..." autocomplete="off">
+                    <i class="ri-search-line search-icon"></i> <!-- Add the icon here -->
+                </div>
+            </form>
+            <ul id="suggestions-list"></ul>
+        </div>
+    </div>
+    <script>
+        // Your JavaScript code here
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+    <script>
+        // Your JavaScript code here
+
+
+        const searchForm = document.getElementById('search-form');
+            const searchInput = document.getElementById('movie-search');
+            const suggestionsList = document.getElementById('suggestions-list');
+
+            let selectedIndex = -1;
+            const MAX_SUGGESTIONS = 10;
+
+            function handleSuggestions(data) {
+                suggestionsList.innerHTML = '';
+                const limitedSuggestions = data.slice(0, MAX_SUGGESTIONS); // Limit suggestions to MAX_SUGGESTIONS
+                limitedSuggestions.forEach((movie, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = movie;
+                    li.dataset.index = index;
+                    li.onclick = () => {
+                        window.location.href = `/search?q=${encodeURIComponent(movie)}`;
+                    };
+                    suggestionsList.appendChild(li);
+                });
+            }
+
+            searchInput.addEventListener('input', function () {
+                const query = this.value;
+                if (query.length < 3) {
+                    suggestionsList.innerHTML = '';
+                    return;
+                }
+                fetch(`/suggest?q=${query}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        const data = Array.from(new DOMParser().parseFromString(html, 'text/html').querySelectorAll('li'))
+                            .map(li => li.textContent);
+                        handleSuggestions(data);
+                    });
+            });
+
+            searchInput.addEventListener('keydown', function (event) {
+                const items = suggestionsList.querySelectorAll('li');
+                if (event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    if (selectedIndex < items.length - 1) {
+                        selectedIndex++;
+                        updateSelected();
+                    }
+                } else if (event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    if (selectedIndex > 0) {
+                        selectedIndex--;
+                        updateSelected();
+                    }
+                } else if (event.key === 'Enter') {
+                    event.preventDefault();
+                    if (selectedIndex > -1 && selectedIndex < items.length) {
+                        window.location.href = `/search?q=${encodeURIComponent(items[selectedIndex].textContent)}`;
+                    } else {
+                        const query = searchInput.value;
+                        if (query) {
+                            window.location.href = `/search?q=${encodeURIComponent(query)}`;
+                        }
+                    }
+                }
+            });
+
+            function updateSelected() {
+                const items = suggestionsList.querySelectorAll('li');
+                items.forEach(item => item.classList.remove('selected'));
+                if (selectedIndex > -1 && selectedIndex < items.length) {
+                    items[selectedIndex].classList.add('selected');
+                    items[selectedIndex].scrollIntoView({ block: 'nearest' });
+                }
+            }
+
+            searchForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const query = searchInput.value;
+                if (query) {
+                    window.location.href = `/search?q=${encodeURIComponent(query)}`;
+                }
+            });
+
+
+
+
+
+
+    </script>
+
+
+
+
+</body>
+
+</html>

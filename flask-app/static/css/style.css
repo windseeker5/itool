@@ -28,10 +28,10 @@ body{
 
 .logo{
     
-    width: 120px;
+    width: 65px;
     cursor: pointer;
     /* Adjust margins */
-    margin-top: 20px; /* Adjust as needed */
+    margin-top: 5px; /* Adjust as needed */
     margin-left: 5%; 
 
 }
@@ -101,6 +101,26 @@ nav ul li a:hover{
 }
 
 
+/* Terminal styles */
+.terminal {
+    background-color: black;
+    color: rgb(0, 255, 0);
+    font-family: monospace;
+    font-size: xx-small;
+    padding: 5px;
+    max-width: 1000px;
+    border: 1px solid rgb(22, 73, 0);
+    border-radius: 5px;
+    max-height: 100px;
+    overflow-y: auto;
+    text-align: center;
+}
+
+.terminal p {
+    margin: 2px 0;
+}
+
+
 
 
 
@@ -122,7 +142,6 @@ nav ul li a:hover{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: left;
     min-width: 800px;
     max-width: 800px;
     padding: 30px 30px;
@@ -357,6 +376,7 @@ nav ul li a:hover{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    min-height: 40vh;
 }
 
 .footer-message{
@@ -412,8 +432,7 @@ nav ul li a:hover{
     color: #683865;
     width: 40px;
     font-size: 2rem;
-    margin-left: 20px;
-    margin-right: -60;  
+    margin-left: 20px; 
 }
 
 
@@ -442,7 +461,7 @@ nav ul li a:hover{
 
 
 .manage--wrapper{
-    min-height: 70vh;
+    min-height: 55vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -532,6 +551,9 @@ nav ul li a:hover{
 
 
 
+/* TESTING DYNAMIC SEARCH  BEGIN */
+
+
 .search form{
     min-width: 700px;
     max-width: 700px;
@@ -546,9 +568,6 @@ nav ul li a:hover{
 
 }
 
-.search form:active{
-    box-shadow: 0 0 10px rgb(255, 84, 232), 0 0 10px rgb(151, 38, 167) inset;
-}
 
 
 .search form input{
@@ -584,6 +603,98 @@ nav ul li a:hover{
 
 
 
+
+/* Search form styling */
+
+
+.search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 700px;
+    position: relative;
+
+}
+
+#search-form {
+    min-width: 700px;
+    max-width: 700px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 0 15px rgb(146, 255, 5);
+
+}
+
+
+
+
+#movie-search {
+    border: 0;
+    outline: 0px;
+    width: 100%;
+    padding-left: 10px;
+    font-family: "Roboto Slab", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 16px;
+}
+
+.search-icon {
+    position: absolute;
+    right: 20px;
+    font-size: 1.6em;
+    color: #898989;
+}
+
+
+
+
+/* Suggestions list styling */
+#suggestions-list {
+    font-family: "Roboto Slab", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 12px;
+    width: 100%;
+    max-width: 700px;
+    position: absolute;
+    margin-top: -35px;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 0px solid #ddd;
+    border-radius: 5px;
+}
+
+#suggestions-list li {
+    padding: 5px 20px;
+    border-bottom: 0px solid #ddd;
+    cursor: pointer;
+}
+
+#suggestions-list li:last-child {
+    border-bottom: none;
+}
+
+#suggestions-list li:hover,
+#suggestions-list li.selected {
+    background-color: #f0f0f0;
+}
+
+
+
+
+
+
+/* TESTING DYNAMIC SEARCH  END */
 
 
 
