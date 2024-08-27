@@ -51,7 +51,7 @@
             
             {% if fpids is not none %}
                 {% for fid in fpids %}
-                    <p> $> {{ fname }} 
+                    <p> {{ fname }} 
                         {% if 'username' in session %}
                             <a href="{{ url_for('delete', id=fid) }}"> <i class="ri-delete-bin-fill"></i></a>  
                         {% endif %}

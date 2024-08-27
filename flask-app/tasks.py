@@ -480,9 +480,12 @@ def GetFfmpegPid():
 
 
 def start_ffmpeg_liv(url):
+    # New bog with audio codec issue
+    # ffmpeg -i input_file -c:v copy -c:a aac -b:a 128k output.flv
+
     return subprocess.Popen(['ffmpeg', '-v', 'verbose', 
             '-thread_queue_size', '4096', '-i', url,
-            '-c', 'copy', '-f', 'flv', 'rtmp://127.0.0.1/live/live'])
+            '-c:v', 'copy', '-c:a', 'aac', '-f', 'flv', 'rtmp://127.0.0.1/live/live'])
 
 
 
