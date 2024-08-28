@@ -242,8 +242,9 @@ nav ul li a:hover{
 
 
 .streamn-url-wrapper h4{
+    margin-top: 15%;
     color: rgb(207, 207, 207);
-    font-size: 18px;
+    font-size: 24px;
     font-family: "Roboto Slab", serif;
     font-weight: 400;
     margin-bottom: 10px;
