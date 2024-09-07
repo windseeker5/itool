@@ -101,7 +101,7 @@ def updatedb():
 def download(type, long_url):
 
     # Find stream name 
-    conn = sqlite3.connect(db)
+    conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
     cursor.execute("SELECT tvg_name FROM smartersiptv WHERE st_uri = ?", (long_url,))    
     st_name = cursor.fetchall()

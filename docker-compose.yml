@@ -4,6 +4,7 @@ services:
     container_name: redis-server
     ports:
       - "6379:6379"
+    restart: unless-stopped
 
   flask-app:
     build: ./flask-app
@@ -16,6 +17,7 @@ services:
       - redis
     volumes:
       - /home/kdresdell/Documents/DEV/itool/flask-app/iptv_data:/nginx/app/iptv_data
+    restart: unless-stopped
 
   jellyfin:
     image: jellyfin/jellyfin
