@@ -9,8 +9,6 @@ from tqdm import tqdm
 from time import sleep
 import psutil
 import json
-
-
 import time
 import ffmpeg
 from datetime import datetime
@@ -555,6 +553,19 @@ def KillProc(pid_str):
     # Convert the PID string to an integer
     pid = int(pid_str)
     p = os.kill(pid, 15)
+
+    # Add a delay of 3 seconds
+    time.sleep(3)
+
+
+    # List all files in the directory
+    files = os.listdir('/nginx/hls/')
+
+    # Delete each file in the directory
+    for file in files:
+        file_path = os.path.join('/nginx/hls/', file)
+        os.remove(file_path)
+
     return(p)
     #return
 

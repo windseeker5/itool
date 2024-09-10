@@ -55,6 +55,9 @@ def index():
     fpids = GetFfmpegPid()
     fname = GetStreamName()
     usess = GetUserSession()
+    
+    # GetKpi from db
+    kpi = GetKpi(db_name)
 
     # Init variable if no streaming
     if len(fpids) == 0 :
@@ -237,9 +240,7 @@ def delete(id):
 
     k = KillProc(id)
 
-    time.sleep(5)  # Sleep for 3 seconds
     return redirect(url_for('index'))
-
 
 
 
@@ -250,7 +251,12 @@ def delete(id):
 @app.route('/search', methods=['POST'])
 def search():
     search_query = request.form.get('search_query')
-    
+
+    if not search_query:
+        flash('Please enter an asset to search !', category='error')
+        return redirect(url_for('manage'))
+
+
     # Split the search query into individual words
     search_terms = search_query.split()
     
