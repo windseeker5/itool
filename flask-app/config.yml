@@ -1,6 +1,0 @@
----
-m3u_service: http://cf.7563kc.cloud/get.php?username=c8bb0d2998&password=297afed6ea&type=m3u_plus&output=ts
-m3u_file_fullsize: Smartersiptv.m3u
-m3u_file_downsized: kdc.m3u
-db_file: smartersiptv.db
-data_folder: iptv_data

@@ -1,7 +1,39 @@
-ffmpeg -thread_queue_size 4096 \
--i https://15053.live.streamtheworld.com/QC_EVENTAAC_SC -thread_queue_size 4096 \
--i http://slip50863.cdngold.me:80/c8bb0d2998/297afed6ea/632736 \
--map 0:a -map 1:v -c:v copy -af "adelay=42000|42000" -c:a aac -strict experimental -f flv rtmp://127.0.0.1/live/live
+ffmpeg -timeout 3000000 \
+-thread_queue_size 4096 \
+-i https://26103.live.streamtheworld.com/QC_EVENTAAC_SC -thread_queue_size 4096 \
+-i http://cf.7563kc.cloud:80/c8bb0d2998/297afed6ea/632746 \
+-map 0:a -map 1:v -c:v copy -af "adelay=65000|65000" -c:a aac -strict experimental -f flv rtmp://127.0.0.1/live/live
+
+
+
+
+## Chat GPT
+
+ffmpeg -timeout 3000000 \
+-thread_queue_size 4096 \
+-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 \
+-i https://26103.live.streamtheworld.com/QC_EVENTAAC_SC \
+-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 \
+-i http://cf.7563kc.cloud:80/c8bb0d2998/297afed6ea/632744 \
+-map 0:a -map 1:v -c:v copy -af "adelay=65000|65000" \
+-c:a aac -strict experimental -flvflags no_duration_filesize \
+-f flv rtmp://127.0.0.1/live/live
+
+
+
+http://cf.7563kc.cloud:80/c8bb0d2998/297afed6ea/498806  --  TV A SPORT
+
+http://cf.7563kc.cloud:80/c8bb0d2998/297afed6ea/632751  --  Rimouski
+
+http://cf.7563kc.cloud:80/c8bb0d2998/297afed6ea/632744  --  Chicoutimi
+
+https://www.iheart.com/live/le-hockey-des-sagueneens-7749/
+
+
+STREAM AUDIO
+
+https://26103.live.streamtheworld.com/QC_EVENTAAC_SC
+
 
 
 ffmpeg -loglevel error -i input.mp4 -c:v copy -c:a copy -f flv rtmp://server/live/stream 2> ffmpeg.log
@@ -11,5 +43,3 @@ ffmpeg -i rtmp://iptv_provider_url/stream_key -c:v libx264 -preset veryfast -tun
 ffmpeg -v verbose -thread_queue_size 4096 -i http://slip50863.cdngold.me:80/c8bb0d2998/297afed6ea/498806 \
 -c copy -f flv rtmp://127.0.0.1/live/live 
 
-
-http://slip50863.cdngold.me:80/c8bb0d2998/297afed6ea/632736
