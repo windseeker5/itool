@@ -13,8 +13,8 @@ app = Flask(__name__)
 
 app.secret_key = 'your_secret_key_here'
 
-#redis_conn = Redis(host='redis', port=6379)
-redis_conn = Redis(host='localhost', port=6379)
+redis_conn = Redis(host='redis', port=6379)
+#redis_conn = Redis(host='localhost', port=6379)
 q = Queue(connection=redis_conn)
 
 

@@ -16,8 +16,8 @@ logger.addHandler(handler)
 
 def run_worker():
     try:
-        #redis_conn = Redis(host='redis', port=6379)
-        redis_conn = Redis(host='localhost', port=6379)
+        redis_conn = Redis(host='redis', port=6379)
+        #redis_conn = Redis(host='localhost', port=6379)
 
         queue = Queue(connection=redis_conn)  # Explicitly pass the connection
         worker = Worker([queue])  # Pass the queue as a list
