@@ -1,0 +1,184 @@
+2025-01-10 14:39:28,913 - ERROR - Worker failed with exception: Error -2 connecting to redis:6379. Name or service not known.
+Traceback (most recent call last):
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/retry.py", line 62, in call_with_retry
+    return do()
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 698, in _connect
+    for res in socket.getaddrinfo(
+               ~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, self.socket_type, socket.SOCK_STREAM
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/usr/lib/python3.13/socket.py", line 975, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/kdresdell/Documents/DEV/itool/flask-app/myworker.py", line 20, in run_worker
+    worker = Worker([queue])  # Pass the queue as a list
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/rq/worker.py", line 230, in __init__
+    connection.client_setname(self.name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/commands/core.py", line 702, in client_setname
+    return self.execute_command("CLIENT SETNAME", name, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 1422, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error -2 connecting to redis:6379. Name or service not known.
+2025-01-10 14:44:06,127 - ERROR - Worker failed with exception: Error -2 connecting to redis:6379. Name or service not known.
+Traceback (most recent call last):
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/retry.py", line 62, in call_with_retry
+    return do()
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 698, in _connect
+    for res in socket.getaddrinfo(
+               ~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, self.socket_type, socket.SOCK_STREAM
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/usr/lib/python3.13/socket.py", line 975, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/kdresdell/Documents/DEV/itool/flask-app/myworker.py", line 20, in run_worker
+    worker = Worker([queue])  # Pass the queue as a list
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/rq/worker.py", line 230, in __init__
+    connection.client_setname(self.name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/commands/core.py", line 702, in client_setname
+    return self.execute_command("CLIENT SETNAME", name, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 1422, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error -2 connecting to redis:6379. Name or service not known.
+2025-01-10 14:44:22,127 - ERROR - Worker failed with exception: Error -2 connecting to redis:6379. Name or service not known.
+Traceback (most recent call last):
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/retry.py", line 62, in call_with_retry
+    return do()
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 698, in _connect
+    for res in socket.getaddrinfo(
+               ~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, self.socket_type, socket.SOCK_STREAM
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/usr/lib/python3.13/socket.py", line 975, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/kdresdell/Documents/DEV/itool/flask-app/myworker.py", line 20, in run_worker
+    worker = Worker([queue])  # Pass the queue as a list
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/rq/worker.py", line 230, in __init__
+    connection.client_setname(self.name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/commands/core.py", line 702, in client_setname
+    return self.execute_command("CLIENT SETNAME", name, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 1422, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error -2 connecting to redis:6379. Name or service not known.
+2025-01-10 14:44:37,377 - ERROR - Worker failed with exception: Error -2 connecting to redis:6379. Name or service not known.
+Traceback (most recent call last):
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/retry.py", line 62, in call_with_retry
+    return do()
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 698, in _connect
+    for res in socket.getaddrinfo(
+               ~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, self.socket_type, socket.SOCK_STREAM
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/usr/lib/python3.13/socket.py", line 975, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/kdresdell/Documents/DEV/itool/flask-app/myworker.py", line 20, in run_worker
+    worker = Worker([queue])  # Pass the queue as a list
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/rq/worker.py", line 230, in __init__
+    connection.client_setname(self.name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/commands/core.py", line 702, in client_setname
+    return self.execute_command("CLIENT SETNAME", name, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 1422, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/kdresdell/Documents/DEV/venv/lib/python3.13/site-packages/redis/connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error -2 connecting to redis:6379. Name or service not known.

@@ -1,18 +1,20 @@
-from flask import ( Flask, render_template, session, redirect, request,
-                    url_for, flash, abort, logging, jsonify )
-import sqlite3
-from rq import Worker, Queue, Connection
+from flask import Flask, render_template, session, redirect, request, url_for, flash, abort, logging, jsonify
 from redis import Redis
+from rq import Worker, Queue
 import sqlite3, subprocess, os, time
 from threading import Thread
 from tasks import *
+
+
+
 
 
 app = Flask(__name__)
 
 app.secret_key = 'your_secret_key_here'
 
-redis_conn = Redis(host='redis', port=6379)
+#redis_conn = Redis(host='redis', port=6379)
+redis_conn = Redis(host='localhost', port=6379)
 q = Queue(connection=redis_conn)
 
 

@@ -1,11 +1,8 @@
 import logging
-from rq import Worker, Queue, Connection
+from rq import Worker, Queue
 from redis import Redis
-import os
 import sys
 import time
-
-
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -16,13 +13,15 @@ formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
+
 def run_worker():
     try:
-        redis_conn = Redis(host='redis', port=6379)
-        with Connection(redis_conn):
-            queue = Queue()
-            worker = Worker(queue)
-            worker.work()
+        #redis_conn = Redis(host='redis', port=6379)
+        redis_conn = Redis(host='localhost', port=6379)
+
+        queue = Queue(connection=redis_conn)  # Explicitly pass the connection
+        worker = Worker([queue])  # Pass the queue as a list
+        worker.work()
     except Exception as e:
         logger.exception("Worker failed with exception: %s", e)
         sys.exit(1)

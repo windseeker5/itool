@@ -20,7 +20,7 @@ services:
     restart: unless-stopped
 
   jellyfin:
-    image: jellyfin/jellyfin
+    image: jellyfin/jellyfin:latest
     container_name: jellyfin
     ports:
       - "80:8096"
@@ -29,5 +29,9 @@ services:
       - /home/kdresdell/jellyfin_config:/config
       - /home/kdresdell/jellyfin_cache:/cache
     restart: unless-stopped
+  
+
+
+  
 
  
