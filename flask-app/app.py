@@ -1,11 +1,13 @@
-from flask import Flask, render_template, session, redirect, request, url_for, flash, abort, logging, jsonify
+from flask import Flask, render_template, session, redirect, request, url_for, flash, abort, logging, jsonify, send_from_directory
 from redis import Redis
 from rq import Worker, Queue
 import sqlite3, subprocess, os, time
 from threading import Thread
 from tasks import *
-
-
+import requests
+import gzip
+import xml.etree.ElementTree as ET
+import schedule
 
 
 
@@ -33,6 +35,17 @@ db_name = conf['data_folder'] + "/" + conf['db_file'] # "iptv_data/smartersiptv.
 # GetKpi from db
 kpi = GetKpi(db_name)
 
+# Store credentials securely (use environment variables or a config file)
+USERNAME = conf['xmltv_username']
+PASSWORD = conf['xmltv_password']
+XMLTV_URL = f"http://cf.1575-cdn.me/xmltv.php?username={USERNAME}&password={PASSWORD}"
+
+ToKeep = conf['to_keep']
+
+
+# Start the guide update process
+print(f"Starting guide update process with URL: {XMLTV_URL}, folder: {folder}, ToKeep: {ToKeep}")
+start_schedule_thread(XMLTV_URL, folder, ToKeep)
 
 
 ##################################################################################
@@ -40,6 +53,23 @@ kpi = GetKpi(db_name)
 ## ROUTES AND PAGES
 ##
 ##################################################################################
+
+
+
+@app.route('/xmltv')
+def serve_xmltv():
+    directory = folder
+    filename = "smallGuide.xml"
+    file_path = os.path.join(directory, filename)
+    print(f"Serving file from: {file_path}")
+    if not os.path.exists(file_path):
+        print(f"File not found: {file_path}")
+        # Trigger the download and filtering process
+        run_process(XMLTV_URL, folder, ToKeep)
+        if not os.path.exists(file_path):
+            return "File not found", 404
+    return send_from_directory(directory, filename)
+
 
 
 
@@ -327,4 +357,3 @@ def search():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=True)
-

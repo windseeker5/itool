@@ -17,6 +17,17 @@ import yaml
 from rq import Queue
 from redis import Redis
 
+import requests
+import gzip
+import xml.etree.ElementTree as ET
+import schedule
+from threading import Thread
+
+
+
+
+
+
 
 status = {
     "task_name": None,
@@ -463,8 +474,6 @@ def GetStreamName():
 
 
 
-
-
 def GetFfmpegPid():
     pid_list = []
 
@@ -473,7 +482,6 @@ def GetFfmpegPid():
         if 'ffmpeg' in process.info['name'] or any('ffmpeg' in arg for arg in process.info['cmdline']):
             pid_list.append(process.pid)
     return(pid_list)
-
 
 
 
@@ -493,11 +501,9 @@ def start_ffmpeg_vod(url):
 
 
 
-
 def ffmpeg_should_continue():
     flag_file = "ffmpeg_proc.pid"
     return os.path.exists(flag_file)
-
 
 
 
@@ -537,7 +543,6 @@ def ReStream(type, url):
 
 
 
-
 def KillProc(pid_str):
 
     flag_file = "ffmpeg_proc.pid"
@@ -569,3 +574,91 @@ def KillProc(pid_str):
     return(p)
     #return
 
+
+
+##
+## Function  for xmtv smaller guide
+##
+
+def download_xmltv(url, output_file):
+    response = requests.get(url, stream=True)
+    if response.status_code == 200:
+        content_type = response.headers.get('Content-Type')
+        if 'application/gzip' in content_type:
+            with open(output_file, "wb") as f:
+                f.write(response.content)
+            print(f"Download complete: {output_file}")
+            return output_file
+        else:
+            output_file = output_file.replace(".gz", "")
+            with open(output_file, "wb") as f:
+                f.write(response.content)
+            print(f"Downloaded file is not gzipped. Saved as: {output_file}")
+            return output_file
+    else:
+        print(f"Failed to download XMLTV (HTTP {response.status_code})")
+        return None
+
+def extract_gz(input_file, output_file):
+    try:
+        with gzip.open(input_file, "rb") as f_in:
+            with open(output_file, "wb") as f_out:
+                f_out.write(f_in.read())
+        print(f"Extraction complete: {output_file}")
+        return output_file
+    except gzip.BadGzipFile:
+        print(f"{input_file} is not a valid gzipped file.")
+        return None
+
+def filter_xml(xml_file, output_file, to_keep):
+    try:
+        tree = ET.parse(xml_file)
+        root = tree.getroot()
+
+        # Filter channels
+        for channel in root.findall('channel'):
+            channel_id = channel.get('id')
+            if channel_id not in to_keep:
+                root.remove(channel)
+
+        # Filter programmes
+        for programme in root.findall('programme'):
+            channel_id = programme.get('channel')
+            if channel_id not in to_keep:
+                root.remove(programme)
+
+        # Save filtered XML
+        tree.write(output_file)
+        print(f"Filtered XML saved to: {output_file}")
+        return output_file
+
+    except ET.ParseError:
+        print(f"Failed to parse {xml_file}. The file may be corrupted or not a valid XML.")
+        return None
+
+def run_process(xmltv_url, data_folder, to_keep):
+    output_file_gz = os.path.join(data_folder, "guide.xml.gz")
+    output_file_xml = os.path.join(data_folder, "guide.xml")
+    output_file_small = os.path.join(data_folder, "smallGuide.xml")
+
+    downloaded_file = download_xmltv(xmltv_url, output_file_gz)
+    if downloaded_file == output_file_gz:
+        extracted_file = extract_gz(downloaded_file, output_file_xml)
+        if extracted_file:
+            filter_xml(extracted_file, output_file_small, to_keep)
+    elif downloaded_file == output_file_xml:
+        filter_xml(downloaded_file, output_file_small, to_keep)
+
+    print(f"Files created: {output_file_gz}, {output_file_xml}, {output_file_small}")
+
+def schedule_runner(xmltv_url, data_folder, to_keep):
+    schedule.every(6).hours.do(run_process, xmltv_url, data_folder, to_keep)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+def start_schedule_thread(xmltv_url, data_folder, to_keep):
+    schedule_thread = Thread(target=schedule_runner, args=(xmltv_url, data_folder, to_keep))
+    schedule_thread.start()
+    schedule_thread = Thread(target=schedule_runner, args=(xmltv_url, data_folder, to_keep))
+    schedule_thread.start()

@@ -30,6 +30,11 @@ COPY . .
 # Install required Python packages
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
+#RUN --mount=type=cache,target=/root/.cache/pip pip install --no-cache-dir -r requirements.txt
+
+
+
+
 
 # Define environment variable
 ENV FLASK_APP=app.py

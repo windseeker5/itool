@@ -10,3 +10,6 @@ psutil
 gunicorn
 Flask
 tqdm
+schedule
+requests
+yt-dlp
