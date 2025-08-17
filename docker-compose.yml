@@ -19,19 +19,5 @@ services:
       - /home/kdresdell/Documents/DEV/itool/flask-app/iptv_data:/nginx/app/iptv_data
     restart: unless-stopped
 
-  jellyfin:
-    image: jellyfin/jellyfin:latest
-    container_name: jellyfin
-    ports:
-      - "80:8096"
-    volumes:
-      - /mnt/media:/media
-      - /home/kdresdell/jellyfin_config:/config
-      - /home/kdresdell/jellyfin_cache:/cache
-    restart: unless-stopped
-  
 
 
-  
-
- 
